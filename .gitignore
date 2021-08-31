@@ -1,3 +1,6 @@
 /.idea/
 *.class
 *.jar
+*.classpath
+*.project
+/bin/
