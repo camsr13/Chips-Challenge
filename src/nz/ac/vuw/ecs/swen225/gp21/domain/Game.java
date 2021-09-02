@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
+import java.util.List;
+
 /**
  * @author Rhys Adcock
  *
@@ -14,6 +16,7 @@ public class Game {
 
 	private Tile[][] tilemap;
 	private Player player;
+	private List<Observer> observers;
 
 	/**
 	 * @return The player
@@ -42,6 +45,10 @@ public class Game {
 	 */
 	public void tick() {
 
+	}
+
+	public void addObserver(Observer obs) {
+		observers.add(obs);
 	}
 
 	@SuppressWarnings("javadoc")
