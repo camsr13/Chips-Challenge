@@ -17,9 +17,7 @@ public class GameWindowImp implements GameWindow, Observer {
 	private JMenuBar mb = new JMenuBar();
 	private JMenu menu = new JMenu("Menu");
 
-    public GameWindowImp(Game game) {
-		this.game = game;
-		this.game.addObserver(this);
+    public GameWindowImp() {
 		initGUI();
 	}
 
