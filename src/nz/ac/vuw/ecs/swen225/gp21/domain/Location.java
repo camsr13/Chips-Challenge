@@ -14,6 +14,7 @@ public class Location {
 	 * @param y
 	 */
 	public Location(int x, int y) {
+		// TODO: check x and y aren't negative
 		this.x = x;
 		this.y = y;
 	}

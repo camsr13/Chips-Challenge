@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -10,17 +11,24 @@ import java.util.List;
  */
 public class Game {
 
-	public Game() {
+	public static Game instance;
 
-	}
+	private Tile[][] tilemap;
+	private Player player;
+	private List<Observer> observers;
+	private HashMap<KeyColour, Boolean> keysHeld;
 
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT
 	}
 
-	private Tile[][] tilemap;
-	private Player player;
-	private List<Observer> observers;
+	public enum KeyColour {
+		BLUE, YELLOW
+	}
+
+	public Game() {
+		instance = this;
+	}
 
 	/**
 	 * @return The player
@@ -34,6 +42,10 @@ public class Game {
 	 */
 	public Tile[][] getTilemap() {
 		return tilemap;
+	}
+
+	public void setTile(Tile tile) {
+		tilemap[tile.getLocation().getX()][tile.getLocation().getY()] = tile;
 	}
 
 	/**
@@ -61,14 +73,19 @@ public class Game {
 	 * @param tilemap
 	 * @param player
 	 */
-	public void setupGame(Tile[][] tilemap, Player player) {
+	public void setupGame(Tile[][] tilemap, Player player, HashMap<KeyColour, Boolean> keysHeld) {
 		// TODO: null checks
 		this.tilemap = tilemap;
 		this.player = player;
+		this.keysHeld = keysHeld;
 	}
 
-	@SuppressWarnings("javadoc")
-	public static void main(String[] args) {
-		System.out.println("hello world!");
+	public HashMap<KeyColour, Boolean> getKeysHeld() {
+		return keysHeld;
+
+	}
+
+	public void addKey(KeyColour colour) {
+		keysHeld.put(colour, true);
 	}
 }
