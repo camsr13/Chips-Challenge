@@ -10,6 +10,10 @@ import java.util.List;
  */
 public class Game {
 
+	public Game() {
+
+	}
+
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT
 	}
@@ -49,6 +53,18 @@ public class Game {
 
 	public void addObserver(Observer obs) {
 		observers.add(obs);
+	}
+
+	/**
+	 * setups up the initial state of the game
+	 * 
+	 * @param tilemap
+	 * @param player
+	 */
+	public void setupGame(Tile[][] tilemap, Player player) {
+		// TODO: null checks
+		this.tilemap = tilemap;
+		this.player = player;
 	}
 
 	@SuppressWarnings("javadoc")
