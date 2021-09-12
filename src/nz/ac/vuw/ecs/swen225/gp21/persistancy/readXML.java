@@ -36,7 +36,7 @@ public class readXML {
 
         //Get player info (location)
         List<Element> playerInfo = map.getChildren("player");
-        player = new Player(new Location(4, 3));
+        player = new Player(new Location(Integer.parseInt(playerInfo.get(0).getText()), Integer.parseInt(playerInfo.get(1).getText())));
 
         //Loop through the file and goes through all the tileRows
         List<Element> rowsList = map.getChildren("tileRow");
