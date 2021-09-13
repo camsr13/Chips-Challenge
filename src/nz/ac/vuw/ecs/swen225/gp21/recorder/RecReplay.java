@@ -4,8 +4,15 @@ import nz.ac.vuw.ecs.swen225.gp21.persistancy.readXML;
 import nz.ac.vuw.ecs.swen225.gp21.domain.*;
 import nz.ac.vuw.ecs.swen225.gp21.app.*;
 import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayDeque;
+import java.util.List;
 import java.util.Queue;
 
 public class RecReplay {
@@ -15,6 +22,12 @@ public class RecReplay {
     private static boolean isRecording;
     private static int DELAY = 200;
 
+
+    /*
+    TODO :
+        - need a getGame() method from app
+        -
+     */
 
     /**
      * Sets the playback delay to the int specified
@@ -45,9 +58,15 @@ public class RecReplay {
     /**
      * Saves a recording
      */
-    public static void saveRecording() {
-        if (isRecording) {
+    public static void saveRecording(String saveName) {
 
+
+        if (isRecording) {
+            Document doc = new Document();
+
+            for (int i = 0; i < actionHistory.size(); i++) {
+
+            }
         }
     }
 
@@ -70,10 +89,57 @@ public class RecReplay {
     public void loadRecording(String filename) {
         //readXML.readXMLFile(filename);
         Document xmlFile; // get this from read XML
+        List<Element> movesList = null;
 
+        try {
+            // TODO need to load the game state via persistence
+            readXML.readXMLFile();
 
+            // Load in actions
+            actionHistory.clear();
 
+            try {
+                SAXBuilder sax = new SAXBuilder();
 
+                // XML as local file
+                Document doc = sax.build(new File(filename));
+
+                // Elements
+                Element root = doc.getRootElement();
+                movesList = root.getChildren("moves");
+
+            } catch (IOException | JDOMException e) {
+                e.printStackTrace();
+                System.out.println("Error reading file: " + e);
+                return;
+            }
+
+            if(movesList != null) {
+                for (Element elem : movesList) {
+
+                    String direction = elem.getText();
+
+                    switch(direction) {
+                        case "Left":
+                            actionHistory.add(Game.Direction.LEFT);
+                            break;
+                        case "Right":
+                            actionHistory.add(Game.Direction.RIGHT);
+                            break;
+                        case "Up":
+                            actionHistory.add(Game.Direction.UP);
+                            break;
+                        case "Down":
+                            actionHistory.add(Game.Direction.DOWN);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        } catch (IOException | JDOMException e) {
+            e.printStackTrace();
+        }
     }
 
 
