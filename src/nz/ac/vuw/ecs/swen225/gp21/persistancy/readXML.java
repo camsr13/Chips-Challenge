@@ -36,7 +36,12 @@ public class readXML {
 
         //Get player info (location)
         List<Element> playerInfo = map.getChildren("player");
-        player = new Player(new Location(Integer.parseInt(playerInfo.get(0).getText()), Integer.parseInt(playerInfo.get(1).getText())));
+        for(int i = 0; i < playerInfo.size(); i++){
+            rowElement = (Element) playerInfo.get(i);
+            Iterator<Element> Iterator = rowElement.getChildren("location").iterator();
+            //There will always be two location elements in the XML file for the players x and y coords
+            player = new Player(new Location(Integer.parseInt(Iterator.next().getText()), Integer.parseInt(Iterator.next().getText())));
+        }
 
         //Loop through the file and goes through all the tileRows
         List<Element> rowsList = map.getChildren("tileRow");
@@ -77,10 +82,6 @@ public class readXML {
             }
         }
         Game.instance.setupGame(tilemap, player, new HashMap<Game.KeyColour, Boolean>());
-    }
-
-    public Player getPlayer(){
-        return player;
     }
 
     private Game.KeyColour getColour(String colour){

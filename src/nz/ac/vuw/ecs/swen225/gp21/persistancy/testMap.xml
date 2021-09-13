@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <map>
 	<player>
-		<locationX>4</locationX>
-		<locationY>2</locationY>
+		<location>4</location>
+		<location>2</location>
 	</player>
 	<tileRow>
 		<tile>wall</tile>
