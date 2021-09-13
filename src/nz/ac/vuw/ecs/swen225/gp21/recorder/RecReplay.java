@@ -1,11 +1,16 @@
 package nz.ac.vuw.ecs.swen225.gp21.recorder;
 
+import nz.ac.vuw.ecs.swen225.gp21.persistancy.readXML;
+import nz.ac.vuw.ecs.swen225.gp21.domain.*;
+import nz.ac.vuw.ecs.swen225.gp21.app.*;
+import org.jdom2.Document;
+
 import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class RecReplay {
 
-    private static Queue<?> actionHistory = new ArrayDeque<>();
+    private static Queue<Game.Direction> actionHistory = new ArrayDeque<>();
     private static boolean isRunning;
     private static boolean isRecording;
     private static int DELAY = 200;
@@ -41,7 +46,9 @@ public class RecReplay {
      * Saves a recording
      */
     public static void saveRecording() {
+        if (isRecording) {
 
+        }
     }
 
 
@@ -60,7 +67,12 @@ public class RecReplay {
     /**
      * Loads saved recording from file
      */
-    public static void loadRecording() {
+    public void loadRecording(String filename) {
+        //readXML.readXMLFile(filename);
+        Document xmlFile; // get this from read XML
+
+
+
 
     }
 
@@ -87,10 +99,16 @@ public class RecReplay {
     //=================================================
 
     /**
-     * Add a player action to actionHistory
+     * Add a player action to actionHistory.
+     * TODO Should be called by app??? on movement???
+     *
+     * @param direction the direction of action
      */
-    public static void addAction() {
+    public static void addAction(Game.Direction direction) {
         // adds to actionHistory
+        if (isRecording) {
+            actionHistory.add(direction);
+        }
     }
 
 
@@ -98,7 +116,7 @@ public class RecReplay {
      * Returns the queue of player actions
      * @return
      */
-    public static Queue<?> getActionHistory() {
+    public static Queue<Game.Direction> getActionHistory() {
         return actionHistory;
     }
 
