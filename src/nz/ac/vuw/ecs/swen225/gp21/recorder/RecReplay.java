@@ -75,7 +75,7 @@ public class RecReplay {
      * Ends a recording
      */
     public static void endRecording() {
-        // ends recording and resets vars
+        // TODO ends recording and resets vars
     }
 
 
@@ -146,8 +146,16 @@ public class RecReplay {
     /**
      * Steps the replay forward by one
      */
-    public static void stepReplay() {
-
+    public static void stepReplay(Game g) {
+        // If the game is running and there are moves left to replay, step forward by one
+        if (isRunning && actionHistory.size() > 0) {
+            //game move player method -> (actionHistory.poll())
+        }
+        // When there are no moves left to replay, the game should no longer be running
+        if (actionHistory.size() == 0) {
+            isRunning = false;
+            // TODO send message to Game?? or app?
+        }
     }
 
 
