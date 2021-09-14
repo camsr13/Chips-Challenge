@@ -93,4 +93,8 @@ public class readXML {
         return null;
     }
 
+    public Game getGameInstance(){
+        return Game.instance;
+    }
+
 }
