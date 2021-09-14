@@ -11,6 +11,8 @@ import org.jdom2.input.SAXBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Queue;
@@ -26,7 +28,10 @@ public class RecReplay {
     /*
     TODO :
         - need a getGame() method from app
-        -
+        - what do I need from app and persistence? -> make a list
+        - decide on naming conventions for recording file names -> where do we save to?
+
+
      */
 
     /**
@@ -46,12 +51,13 @@ public class RecReplay {
     /**
      * Creates a new recording
      */
-    public static void newRecording() {
+    public static void newRecording(Game g, String ) {
         isRecording = true;
-        // some kind of naming convention (date??)
-        // clear any outstanding collections/variables from last recording
-        // gets the game state from PERSISTENCE
-
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH-mm-ss");
+        LocalDateTime now = LocalDateTime.now();
+        String saveName = "Chaps_Challenge_Save_" + dtf.format(now);
+        actionHistory.clear();
+        // TODO gets the game state from PERSISTENCE
     }
 
 
@@ -76,6 +82,9 @@ public class RecReplay {
      */
     public static void endRecording() {
         // TODO ends recording and resets vars
+        isRecording = false;
+        isRunning = false;
+        actionHistory.clear();
     }
 
 
@@ -164,6 +173,7 @@ public class RecReplay {
      * Stops once replay is complete
      */
     public static void runReplay() {
+
 
     }
 
