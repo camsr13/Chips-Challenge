@@ -24,6 +24,8 @@ public class RecReplay {
     private static boolean isRecording;
     private static int DELAY = 200;
 
+    static Thread thread;
+
 
     /*
     TODO :
@@ -172,9 +174,22 @@ public class RecReplay {
      * Runs through the recorded actions
      * Stops once replay is complete
      */
-    public static void runReplay() {
+    public static void runReplay(Game g) {
+        Runnable run = () -> {
+            while (isRunning && actionHistory.size() > 0) {
+                try {
+                    Thread.sleep(DELAY);
+                    stepReplay(g);
 
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            isRunning = false;
 
+        };
+        thread = new Thread(run);
+        thread.start();
     }
 
 
