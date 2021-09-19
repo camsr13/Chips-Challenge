@@ -4,6 +4,8 @@ import java.util.*;
 import javax.swing.*;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
+import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
+import nz.ac.vuw.ecs.swen225.gp21.domain.Tile;
 
 import java.awt.*;
 
@@ -52,11 +54,11 @@ public class BoardRender {
 		//Chap images
 		ImageIcon c1 = new ImageIcon(this.getClass().getResource("images/Chap.png"));
 		chapImages.add(c1.getImage());
-		ImageIcon c2 = new ImageIcon(this.getClass().getResource("images/Chap.png"));
+		ImageIcon c2 = new ImageIcon(this.getClass().getResource("images/Chap_R.png"));
 		chapImages.add(c2.getImage());
-		ImageIcon c3 = new ImageIcon(this.getClass().getResource("images/Chap.png"));
+		ImageIcon c3 = new ImageIcon(this.getClass().getResource("images/Chap_B.png"));
 		chapImages.add(c3.getImage());
-		ImageIcon c4 = new ImageIcon(this.getClass().getResource("images/Chap.png"));
+		ImageIcon c4 = new ImageIcon(this.getClass().getResource("images/Chap_L.png"));
 		chapImages.add(c4.getImage());
 		
 		//wall
@@ -76,6 +78,14 @@ public class BoardRender {
 		doorImages.add(dg.getImage());
 		doorImages.add(db.getImage());
 		doorImages.add(dl.getImage());
+		
+	}
+	
+	private void drawBoard(Graphics boardg) {
+		Graphics2D board2D = (Graphics2D) boardg;
+		Tile[][] boardTiles = game.getTilemap();
+		Location chapPos = game.getPlayer().getLocation();
+		
 		
 	}
 }
