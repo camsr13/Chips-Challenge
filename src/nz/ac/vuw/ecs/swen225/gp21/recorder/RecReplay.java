@@ -38,12 +38,12 @@ public class RecReplay {
 
     /**
      * Sets the playback delay to the int specified
+     *
      * @param delay
      */
     public static void setDelay(int delay) {
         DELAY = delay;
     }
-
 
 
     //=================================================
@@ -53,7 +53,7 @@ public class RecReplay {
     /**
      * Creates a new recording
      */
-    public static void newRecording(Game g, String ) {
+    public static void newRecording(Game g, String) {
         isRecording = true;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH-mm-ss");
         LocalDateTime now = LocalDateTime.now();
@@ -67,12 +67,19 @@ public class RecReplay {
      * Saves a recording
      */
     public static void saveRecording(String saveName) {
-
+        /*
+        TODO:
+            - make a new Doc
+            - add elements??
+            - iterate through action history to add in the moves
+            - what level??
+         */
 
         if (isRecording) {
-            Document doc = new Document();
+            Element moves;
 
             for (int i = 0; i < actionHistory.size(); i++) {
+                moves.addContent()
 
             }
         }
@@ -97,60 +104,61 @@ public class RecReplay {
     /**
      * Loads saved recording from file
      */
-    public void loadRecording(String filename) {
+    public void loadRecording(String filename) throws IOException { // when called needs a try catch??
         //readXML.readXMLFile(filename);
         Document xmlFile; // get this from read XML
         List<Element> movesList = null;
+        /*
+        TODO:
+            - get the level ->
+            - get persistence to start the level
+            - get the moves from xml -> put them into action history queue
+            - stack for forward back undo redo????
+            -
 
-        try {
-            // TODO need to load the game state via persistence
-            readXML.readXMLFile();
+         */
 
-            // Load in actions
-            actionHistory.clear();
+        // TODO need to load the game state via persistence
+        readXML.readXMLFile(); // read the level file
 
-            try {
-                SAXBuilder sax = new SAXBuilder();
+        // Load in actions
+        actionHistory.clear();
 
-                // XML as local file
-                Document doc = sax.build(new File(filename));
 
-                // Elements
-                Element root = doc.getRootElement();
-                movesList = root.getChildren("moves");
+        SAXBuilder sax = new SAXBuilder();
 
-            } catch (IOException | JDOMException e) {
-                e.printStackTrace();
-                System.out.println("Error reading file: " + e);
-                return;
-            }
+        // XML as local file
+        Document doc = sax.build(new File(filename));
 
-            if(movesList != null) {
-                for (Element elem : movesList) {
+        // Elements
+        Element root = doc.getRootElement();
+        movesList = root.getChildren("moves");
 
-                    String direction = elem.getText();
 
-                    switch(direction) {
-                        case "Left":
-                            actionHistory.add(Game.Direction.LEFT);
-                            break;
-                        case "Right":
-                            actionHistory.add(Game.Direction.RIGHT);
-                            break;
-                        case "Up":
-                            actionHistory.add(Game.Direction.UP);
-                            break;
-                        case "Down":
-                            actionHistory.add(Game.Direction.DOWN);
-                            break;
-                        default:
-                            break;
-                    }
+        if (movesList != null) {
+            for (Element elem : movesList) {
+
+                String direction = elem.getText();
+
+                switch (direction) {
+                    case "Left":
+                        actionHistory.add(Game.Direction.LEFT);
+                        break;
+                    case "Right":
+                        actionHistory.add(Game.Direction.RIGHT);
+                        break;
+                    case "Up":
+                        actionHistory.add(Game.Direction.UP);
+                        break;
+                    case "Down":
+                        actionHistory.add(Game.Direction.DOWN);
+                        break;
+                    default:
+                        break;
                 }
             }
-        } catch (IOException | JDOMException e) {
-            e.printStackTrace();
         }
+
     }
 
 
@@ -213,6 +221,7 @@ public class RecReplay {
 
     /**
      * Returns the queue of player actions
+     *
      * @return
      */
     public static Queue<Game.Direction> getActionHistory() {
