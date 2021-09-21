@@ -6,8 +6,8 @@ package nz.ac.vuw.ecs.swen225.gp21.domain;
  */
 public class Location {
 
-	int x;
-	int y;
+	private int x;
+	private int y;
 
 	/**
 	 * @param x
