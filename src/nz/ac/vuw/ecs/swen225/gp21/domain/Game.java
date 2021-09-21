@@ -18,6 +18,10 @@ public class Game {
 	private List<Observer> observers;
 	private HashMap<KeyColour, Boolean> keysHeld;
 
+	/**
+	 * @author Rhysa
+	 *
+	 */
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT
 	}
@@ -26,6 +30,9 @@ public class Game {
 		BLUE, YELLOW
 	}
 
+	/**
+	 * Singleton pattern.
+	 */
 	public Game() {
 		instance = this;
 	}
@@ -44,6 +51,11 @@ public class Game {
 		return tilemap;
 	}
 
+	/**
+	 * Overwrites the tile in tilemap using given tiles location.
+	 * 
+	 * @param tile
+	 */
 	public void setTile(Tile tile) {
 		tilemap[tile.getLocation().getX()][tile.getLocation().getY()] = tile;
 	}
@@ -63,6 +75,11 @@ public class Game {
 
 	}
 
+	/**
+	 * Add an observer to the list of observers
+	 * 
+	 * @param obs
+	 */
 	public void addObserver(Observer obs) {
 		observers.add(obs);
 	}
@@ -80,11 +97,20 @@ public class Game {
 		this.keysHeld = keysHeld;
 	}
 
+	/**
+	 * 
+	 * @return The keys already collected.
+	 */
 	public HashMap<KeyColour, Boolean> getKeysHeld() {
 		return keysHeld;
 
 	}
 
+	/**
+	 * Add a key of the specified colour to the heldKeys list.
+	 * 
+	 * @param colour
+	 */
 	public void addKey(KeyColour colour) {
 		keysHeld.put(colour, true);
 	}
