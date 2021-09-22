@@ -1,11 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp21.recorder;
 
-import nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction;
-import nz.ac.vuw.ecs.swen225.gp21.persistancy.readXML;
 import nz.ac.vuw.ecs.swen225.gp21.domain.*;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.input.SAXBuilder;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -19,14 +14,12 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayDeque;
-import java.util.List;
 import java.util.Queue;
 
 public class RecReplay {
@@ -38,15 +31,9 @@ public class RecReplay {
 
     static Thread thread;
 
-
-    /*
-    TODO :
-        - need a getGame() method from app
-        - what do I need from app and persistence? -> make a list
-        - decide on naming conventions for recording file names -> where do we save to?
-
-
-     */
+    public enum Direction {
+        UP, DOWN, LEFT, RIGHT
+    }
 
     /**
      * Sets the playback delay to the int specified
@@ -55,6 +42,35 @@ public class RecReplay {
      */
     public static void setDelay(int delay) {
         DELAY = delay;
+    }
+
+
+
+    //=================================================
+    //                    ACTION
+    //=================================================
+
+    /**
+     * Add a player action to actionHistory.
+     * TODO Should be called by app??? on movement???
+     *
+     * @param direction the direction of action
+     */
+    public static void addAction(Direction direction) {
+        // adds to actionHistory
+        if (isRecording) {
+            moveHistory.add(direction);
+        }
+    }
+
+
+    /**
+     * Returns the queue of player actions
+     *
+     * @return
+     */
+    public static Queue<Direction> getMoveHistory() {
+        return moveHistory;
     }
 
 
@@ -271,32 +287,5 @@ public class RecReplay {
         thread.start();
     }
 
-
-    //=================================================
-    //                    ACTION
-    //=================================================
-
-    /**
-     * Add a player action to actionHistory.
-     * TODO Should be called by app??? on movement???
-     *
-     * @param direction the direction of action
-     */
-    public static void addAction(Direction direction) {
-        // adds to actionHistory
-        if (isRecording) {
-            moveHistory.add(direction);
-        }
-    }
-
-
-    /**
-     * Returns the queue of player actions
-     *
-     * @return
-     */
-    public static Queue<Direction> getMoveHistory() {
-        return moveHistory;
-    }
 
 }
