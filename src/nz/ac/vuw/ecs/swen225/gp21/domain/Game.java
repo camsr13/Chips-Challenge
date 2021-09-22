@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -10,13 +11,31 @@ import java.util.List;
  */
 public class Game {
 
-	public enum Direction {
-		UP, DOWN, LEFT, RIGHT
-	}
+	public static Game instance;
 
 	private Tile[][] tilemap;
 	private Player player;
 	private List<Observer> observers;
+	private HashMap<KeyColour, Boolean> keysHeld;
+
+	/**
+	 * @author Rhysa
+	 *
+	 */
+	public enum Direction {
+		UP, DOWN, LEFT, RIGHT
+	}
+
+	public enum KeyColour {
+		BLUE, YELLOW
+	}
+
+	/**
+	 * Singleton pattern.
+	 */
+	public Game() {
+		instance = this;
+	}
 
 	/**
 	 * @return The player
@@ -30,6 +49,15 @@ public class Game {
 	 */
 	public Tile[][] getTilemap() {
 		return tilemap;
+	}
+
+	/**
+	 * Overwrites the tile in tilemap using given tiles location.
+	 * 
+	 * @param tile
+	 */
+	public void setTile(Tile tile) {
+		tilemap[tile.getLocation().getX()][tile.getLocation().getY()] = tile;
 	}
 
 	/**
@@ -47,12 +75,43 @@ public class Game {
 
 	}
 
+	/**
+	 * Add an observer to the list of observers
+	 * 
+	 * @param obs
+	 */
 	public void addObserver(Observer obs) {
 		observers.add(obs);
 	}
 
-	@SuppressWarnings("javadoc")
-	public static void main(String[] args) {
-		System.out.println("hello world!");
+	/**
+	 * setups up the initial state of the game
+	 * 
+	 * @param tilemap
+	 * @param player
+	 */
+	public void setupGame(Tile[][] tilemap, Player player, HashMap<KeyColour, Boolean> keysHeld) {
+		// TODO: null checks
+		this.tilemap = tilemap;
+		this.player = player;
+		this.keysHeld = keysHeld;
+	}
+
+	/**
+	 * 
+	 * @return The keys already collected.
+	 */
+	public HashMap<KeyColour, Boolean> getKeysHeld() {
+		return keysHeld;
+
+	}
+
+	/**
+	 * Add a key of the specified colour to the heldKeys list.
+	 * 
+	 * @param colour
+	 */
+	public void addKey(KeyColour colour) {
+		keysHeld.put(colour, true);
 	}
 }

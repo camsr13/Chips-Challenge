@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
 <map>
 	<player>
-		<locationX>4</locationX>
-		<locationY>2</locationY>
+		<location>4</location>
+		<location>2</location>
 	</player>
-
 	<tileRow>
 		<tile>wall</tile>
 		<tile>wall</tile>
@@ -38,11 +37,11 @@
 	<tileRow>
 		<tile>wall</tile>
 		<tile>free</tile>
-		<tile>key</tile>
+		<tile colour = "blue">key</tile>
 		<tile>free</tile>
 		<tile>free</tile>
 		<tile>free</tile>
-		<tile>door</tile>
+		<tile colour = "blue">door</tile>
 		<tile>free</tile>
 		<tile>info</tile>
 		<tile>treasure</tile>

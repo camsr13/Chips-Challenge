@@ -36,4 +36,11 @@ public abstract class Tile {
 	public boolean isPathable() {
 		return pathable;
 	}
+
+	/**
+	 * For testing purposes
+	 * 
+	 * @return A char representation of this tile
+	 */
+	public abstract String toChar();
 }

@@ -53,8 +53,11 @@ public class Player {
 		if (x < 0 || y < 0) {
 			// TODO: bad movement case
 		} else {
-			this.location = new Location(x, y);
-			tilemap[x][y].onPlayerEnter();
+			Tile newTile = tilemap[x][y];
+			if (newTile.isPathable()) {
+				setLocation(new Location(x, y));
+				tilemap[x][y].onPlayerEnter();
+			}
 		}
 	}
 }
