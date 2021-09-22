@@ -78,7 +78,7 @@ public class RecReplay {
         isRecording = true;
         moveHistory.clear();
         // TODO populates moveHistory
-        Direction arr[] = new Direction[]{Direction.LEFT, Direction.UP, Direction.UP, Direction.RIGHT};
+        Direction[] arr = new Direction[]{Direction.LEFT, Direction.UP, Direction.UP, Direction.RIGHT};
         for (Direction d : arr) {
             moveHistory.offer(d);
         }
@@ -218,27 +218,25 @@ public class RecReplay {
                     System.out.println("level : " + level);
                     System.out.println("moves : " + moves);
 
-                    String arr[] = moves.split(" ");
+                    String[] arr = moves.split(" ");
 
-                    if (arr != null) {
-                        for (String direction : arr) {
+                    for (String direction : arr) {
 
-                            switch (direction) {
-                                case "Left":
-                                    moveHistory.add(Direction.LEFT);
-                                    break;
-                                case "Right":
-                                    moveHistory.add(Direction.RIGHT);
-                                    break;
-                                case "Up":
-                                    moveHistory.add(Direction.UP);
-                                    break;
-                                case "Down":
-                                    moveHistory.add(Direction.DOWN);
-                                    break;
-                                default:
-                                    break;
-                            }
+                        switch (direction) {
+                            case "Left":
+                                moveHistory.add(Direction.LEFT);
+                                break;
+                            case "Right":
+                                moveHistory.add(Direction.RIGHT);
+                                break;
+                            case "Up":
+                                moveHistory.add(Direction.UP);
+                                break;
+                            case "Down":
+                                moveHistory.add(Direction.DOWN);
+                                break;
+                            default:
+                                break;
                         }
                     }
                     System.out.println(moveHistory);
