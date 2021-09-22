@@ -5,12 +5,23 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.*;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayDeque;
@@ -19,7 +30,7 @@ import java.util.Queue;
 
 public class RecReplay {
 
-    private static Queue<Game.Direction> moveHistory = new ArrayDeque<>();
+    private static Queue<Game.Direction> moveHistory = new ArrayDeque<>(); // needs to be Game.Direction, String for testing
     private static boolean isRunning;
     private static boolean isRecording;
     private static int DELAY = 200;
@@ -66,7 +77,7 @@ public class RecReplay {
     /**
      * Saves a recording
      */
-    public static void saveRecording(String saveName) {
+    public static void saveRecording(String saveName) throws ParserConfigurationException, TransformerException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newDefaultInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
@@ -101,6 +112,20 @@ public class RecReplay {
     }
 
 
+    public static void writeSaveXML(org.w3c.dom.Document doc, OutputStream out) throws TransformerException {
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+
+        // pretty print XML
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+        DOMSource source = new DOMSource(doc);
+        StreamResult result = new StreamResult(out);
+
+        transformer.transform(source, result);
+    }
+
+
     /**
      * Ends a recording
      */
@@ -116,62 +141,70 @@ public class RecReplay {
     //                     REPLAY
     //=================================================
 
-    /**
-     * Loads saved recording from file
-     */
-    public void loadRecording(String filename) throws IOException { // when called needs a try catch??
-        //readXML.readXMLFile(filename);
-        Document xmlFile; // get this from read XML
-        List<Element> movesList = null;
-        /*
-        TODO:
-            - get the level ->
-            - get persistence to start the level
-            - get the moves from xml -> put them into action history queue
-            - stack for forward back undo redo????
-            -
 
-         */
+    public static void loadRecording() {
 
-        // TODO need to load the game state via persistence
-        readXML.readXMLFile(); // read the level file
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newDefaultInstance();
 
-        // Load in actions
-        moveHistory.clear();
+        try {
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
-        // TODO essentially read the XML
-        SAXBuilder sax = new SAXBuilder();
+            org.w3c.dom.Document doc = docBuilder.parse("C:\\Users\\Hazel\\Documents\\VUW 2021 TRI 2\\SWEN225\\Assignments\\Project\\xmlTEST\\testout\\Chaps_Challenge_Save_2021-09-21_162606.xml");
+            doc.getDocumentElement().normalize();
 
-        // XML as local file
-        Document doc = sax.build(new File(filename));
+            System.out.println("Root Element :" + doc.getDocumentElement().getNodeName());
+            System.out.println("------");
 
-        // Elements
-        Element root = doc.getRootElement();
-        movesList = root.getChildren("moves");
+            NodeList list = doc.getElementsByTagName("save");
 
+            for (int temp = 0; temp < list.getLength(); temp++) {
 
-        if (movesList != null) {
-            for (Element elem : movesList) {
+                Node node = list.item(temp);
 
-                String direction = elem.getText();
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
 
-                switch (direction) {
-                    case "Left":
-                        moveHistory.add(Game.Direction.LEFT);
-                        break;
-                    case "Right":
-                        moveHistory.add(Game.Direction.RIGHT);
-                        break;
-                    case "Up":
-                        moveHistory.add(Game.Direction.UP);
-                        break;
-                    case "Down":
-                        moveHistory.add(Game.Direction.DOWN);
-                        break;
-                    default:
-                        break;
+                    org.w3c.dom.Element element = (org.w3c.dom.Element) node;
+
+                    // get level
+                    String level = element.getElementsByTagName("level").item(0).getTextContent();
+
+                    // get moves list
+                    String moves = element.getElementsByTagName("moves").item(0).getTextContent();
+
+                    // TESTING
+                    System.out.println("Current Element : " + node.getNodeName());
+                    System.out.println("level : " + level);
+                    System.out.println("moves : " + moves);
+
+                    String arr[] = moves.split(" ");
+
+                    if (arr != null) {
+                        for (String direction : arr) {
+
+                            switch (direction) {
+                                case "Left":
+                                    moveHistory.add(Game.Direction.LEFT);
+                                    break;
+                                case "Right":
+                                    moveHistory.add(Game.Direction.RIGHT);
+                                    break;
+                                case "Up":
+                                    moveHistory.add(Game.Direction.UP);
+                                    break;
+                                case "Down":
+                                    moveHistory.add(Game.Direction.DOWN);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                    System.out.println(moveHistory);
                 }
             }
+
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
         }
 
     }
