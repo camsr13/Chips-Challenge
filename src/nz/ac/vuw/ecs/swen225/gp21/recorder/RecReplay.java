@@ -2,15 +2,15 @@ package nz.ac.vuw.ecs.swen225.gp21.recorder;
 
 import nz.ac.vuw.ecs.swen225.gp21.persistancy.readXML;
 import nz.ac.vuw.ecs.swen225.gp21.domain.*;
-import nz.ac.vuw.ecs.swen225.gp21.app.*;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayDeque;
@@ -19,7 +19,7 @@ import java.util.Queue;
 
 public class RecReplay {
 
-    private static Queue<Game.Direction> actionHistory = new ArrayDeque<>();
+    private static Queue<Game.Direction> moveHistory = new ArrayDeque<>();
     private static boolean isRunning;
     private static boolean isRecording;
     private static int DELAY = 200;
@@ -58,7 +58,7 @@ public class RecReplay {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH-mm-ss");
         LocalDateTime now = LocalDateTime.now();
         String saveName = "Chaps_Challenge_Save_" + dtf.format(now);
-        actionHistory.clear();
+        moveHistory.clear();
         // TODO gets the game state from PERSISTENCE
     }
 
@@ -67,21 +67,36 @@ public class RecReplay {
      * Saves a recording
      */
     public static void saveRecording(String saveName) {
-        /*
-        TODO:
-            - make a new Doc
-            - add elements??
-            - iterate through action history to add in the moves
-            - what level??
-         */
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newDefaultInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
-        if (isRecording) {
-            Element moves;
+        // root
+        org.w3c.dom.Document doc = docBuilder.newDocument();
+        org.w3c.dom.Element rootElem = doc.createElement("save");
+        doc.appendChild(rootElem);
 
-            for (int i = 0; i < actionHistory.size(); i++) {
-                moves.addContent()
+        // contents
+        org.w3c.dom.Element levelElem = doc.createElement("level");
+        rootElem.appendChild(levelElem);
+        levelElem.appendChild(doc.createTextNode("1"));
 
-            }
+        org.w3c.dom.Element movesElem = doc.createElement("moves");
+        rootElem.appendChild(movesElem);
+
+        movesElem.appendChild(doc.createTextNode(moveHistory.poll()));
+        for (String move : moveHistory) {
+            movesElem.appendChild(doc.createTextNode(" " + moveHistory.poll()));
+        }
+
+        // write dom document to a file
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
+        LocalDateTime now = LocalDateTime.now();
+        String fn = "Chaps_Challenge_Save_" + dtf.format(now);
+        try (FileOutputStream output =
+                     new FileOutputStream("C:\\Users\\Hazel\\Documents\\VUW 2021 TRI 2\\SWEN225\\Assignments\\Project\\xmlTEST\\testout\\" + fn + ".xml")) {
+            writeSaveXML(doc, output);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -93,7 +108,7 @@ public class RecReplay {
         // TODO ends recording and resets vars
         isRecording = false;
         isRunning = false;
-        actionHistory.clear();
+        moveHistory.clear();
     }
 
 
@@ -122,9 +137,9 @@ public class RecReplay {
         readXML.readXMLFile(); // read the level file
 
         // Load in actions
-        actionHistory.clear();
+        moveHistory.clear();
 
-
+        // TODO essentially read the XML
         SAXBuilder sax = new SAXBuilder();
 
         // XML as local file
@@ -142,16 +157,16 @@ public class RecReplay {
 
                 switch (direction) {
                     case "Left":
-                        actionHistory.add(Game.Direction.LEFT);
+                        moveHistory.add(Game.Direction.LEFT);
                         break;
                     case "Right":
-                        actionHistory.add(Game.Direction.RIGHT);
+                        moveHistory.add(Game.Direction.RIGHT);
                         break;
                     case "Up":
-                        actionHistory.add(Game.Direction.UP);
+                        moveHistory.add(Game.Direction.UP);
                         break;
                     case "Down":
-                        actionHistory.add(Game.Direction.DOWN);
+                        moveHistory.add(Game.Direction.DOWN);
                         break;
                     default:
                         break;
@@ -167,11 +182,11 @@ public class RecReplay {
      */
     public static void stepReplay(Game g) {
         // If the game is running and there are moves left to replay, step forward by one
-        if (isRunning && actionHistory.size() > 0) {
+        if (isRunning && moveHistory.size() > 0) {
             //game move player method -> (actionHistory.poll())
         }
         // When there are no moves left to replay, the game should no longer be running
-        if (actionHistory.size() == 0) {
+        if (moveHistory.size() == 0) {
             isRunning = false;
             // TODO send message to Game?? or app?
         }
@@ -184,7 +199,7 @@ public class RecReplay {
      */
     public static void runReplay(Game g) {
         Runnable run = () -> {
-            while (isRunning && actionHistory.size() > 0) {
+            while (isRunning && moveHistory.size() > 0) {
                 try {
                     Thread.sleep(DELAY);
                     stepReplay(g);
@@ -214,7 +229,7 @@ public class RecReplay {
     public static void addAction(Game.Direction direction) {
         // adds to actionHistory
         if (isRecording) {
-            actionHistory.add(direction);
+            moveHistory.add(direction);
         }
     }
 
@@ -224,8 +239,8 @@ public class RecReplay {
      *
      * @return
      */
-    public static Queue<Game.Direction> getActionHistory() {
-        return actionHistory;
+    public static Queue<Game.Direction> getMoveHistory() {
+        return moveHistory;
     }
 
 }
