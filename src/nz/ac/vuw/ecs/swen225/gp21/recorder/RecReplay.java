@@ -143,6 +143,8 @@ public class RecReplay {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        endRecording(); // clean up
     }
 
 
