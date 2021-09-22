@@ -66,11 +66,8 @@ public class RecReplay {
      */
     public static void newRecording(Game g, String) {
         isRecording = true;
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH-mm-ss");
-        LocalDateTime now = LocalDateTime.now();
-        String saveName = "Chaps_Challenge_Save_" + dtf.format(now);
         moveHistory.clear();
-        // TODO gets the game state from PERSISTENCE
+        // TODO populates moveHistory
     }
 
 
@@ -152,6 +149,7 @@ public class RecReplay {
             org.w3c.dom.Document doc = docBuilder.parse("C:\\Users\\Hazel\\Documents\\VUW 2021 TRI 2\\SWEN225\\Assignments\\Project\\xmlTEST\\testout\\Chaps_Challenge_Save_2021-09-21_162606.xml");
             doc.getDocumentElement().normalize();
 
+            // TESTING
             System.out.println("Root Element :" + doc.getDocumentElement().getNodeName());
             System.out.println("------");
 
