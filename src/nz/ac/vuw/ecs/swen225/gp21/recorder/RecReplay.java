@@ -1,10 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp21.recorder;
 
-import nz.ac.vuw.ecs.swen225.gp21.domain.*;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -45,16 +43,13 @@ public class RecReplay {
     }
 
 
-
-    //=================================================
-    //                    ACTION
-    //=================================================
+    // ACTION
 
     /**
      * Add a player action to actionHistory.
      * TODO Should be called by app??? on movement???
      *
-     * @param direction the direction of action
+     * @param direction the direction of action.
      */
     public static void addAction(Direction direction) {
         // adds to actionHistory
@@ -65,21 +60,19 @@ public class RecReplay {
 
 
     /**
-     * Returns the queue of player actions
+     * Returns the queue of player actions.
      *
-     * @return
+     * @return moveHistory queue.
      */
     public static Queue<Direction> getMoveHistory() {
         return moveHistory;
     }
 
 
-    //=================================================
-    //                    RECORD
-    //=================================================
+    // RECORD
 
     /**
-     * Creates a new recording
+     * Creates a new recording.
      */
     public static void newRecording() {
         isRecording = true;
@@ -93,9 +86,12 @@ public class RecReplay {
 
 
     /**
-     * Saves a recording
+     * Saves a recording.
+     *
+     * @throws ParserConfigurationException
+     * @throws TransformerException
      */
-    public static void saveRecording(String saveName) throws ParserConfigurationException, TransformerException {
+    public static void saveRecording() throws ParserConfigurationException, TransformerException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newDefaultInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
@@ -150,6 +146,13 @@ public class RecReplay {
     }
 
 
+    /**
+     * Writes the save file information to the XML and saves the XML to disk.
+     *
+     * @param doc document object to write.
+     * @param out output stream.
+     * @throws TransformerException
+     */
     public static void writeSaveXML(org.w3c.dom.Document doc, OutputStream out) throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
@@ -175,11 +178,11 @@ public class RecReplay {
     }
 
 
-    //=================================================
-    //                     REPLAY
-    //=================================================
+    // REPLAY
 
-
+    /**
+     * Loads the recording file ready for replay.
+     */
     public static void loadRecording() {
 
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newDefaultInstance();
@@ -252,7 +255,7 @@ public class RecReplay {
     /**
      * Steps the replay forward by one
      */
-    public static void stepReplay(Game g) {
+    public static void stepReplay() {
         // If the game is running and there are moves left to replay, step forward by one
         if (isRunning && moveHistory.size() > 0) {
             //game move player method -> (actionHistory.poll())
@@ -269,12 +272,13 @@ public class RecReplay {
      * Runs through the recorded actions
      * Stops once replay is complete
      */
-    public static void runReplay(Game g) {
+    public static void runReplay() {
+        // FIXME
         Runnable run = () -> {
             while (isRunning && moveHistory.size() > 0) {
                 try {
                     Thread.sleep(DELAY);
-                    stepReplay(g);
+                    stepReplay();
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -286,6 +290,4 @@ public class RecReplay {
         thread = new Thread(run);
         thread.start();
     }
-
-
 }
