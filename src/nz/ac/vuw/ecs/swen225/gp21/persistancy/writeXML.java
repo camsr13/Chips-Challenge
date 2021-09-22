@@ -23,7 +23,12 @@ public class writeXML {
     private Player player;
     private Tile[][] tileMap;
 
-    public void writeXMLFile(Game instance){
+    /**
+     *
+     * writeXMLFile writes the current state of tilemap and player to an xmlFile
+     *
+     */
+    public void writeXMLFile(){
         //sets up variables from Game
         player = Game.instance.getPlayer();
         tileMap = Game.instance.getTilemap();
@@ -32,6 +37,8 @@ public class writeXML {
         Document document = new Document();
         Element mapElement = new Element("map");
         document.setRootElement(mapElement);
+        //call generateMapSize() to write the tileMap size
+        generateMapSize(mapElement);
         //call generatePlayer() to write the playerinfo section with location
         generatePlayer(mapElement);
         //call generateTileRow() for each tileRow in tileMap
@@ -49,6 +56,31 @@ public class writeXML {
         }
     }
 
+    /**
+     *
+     * generateMapSize gets the number of rows and columns in tileMap and writes them to the xml file under 'size' within 'mapSize'
+     *
+     * @param mapElement
+     */
+    private void generateMapSize(Element mapElement){
+        Element mapSizeElement = new Element("mapSize");
+        mapElement.addContent(mapSizeElement);
+        //write the number of rows in tileRow
+        Element sizeElement = new Element("size");
+        sizeElement.addContent(String.valueOf(tileMap.length));
+        mapSizeElement.addContent(sizeElement);
+        //write the number of columns in tileRow
+        sizeElement = new Element("size");
+        sizeElement.addContent(String.valueOf(tileMap[0].length));
+        mapSizeElement.addContent(sizeElement);
+    }
+
+    /**
+     *
+     * generatePlayer gets the x, y location of the player and it to the xml file under 'location' within 'player'
+     *
+     * @param mapElement
+     */
     private void generatePlayer(Element mapElement){
         Element playerElement = new Element("player");
         mapElement.addContent(playerElement);
@@ -62,6 +94,13 @@ public class writeXML {
         playerElement.addContent(locationElement);
     }
 
+    /**
+     *
+     * generateTileRow cycles through each row of tileMap and writes each tile type to the xml file
+     *
+     * @param mapElement
+     * @param row
+     */
     private void generateTileRow(Element mapElement, Tile[] row){
         //create new tileRowElement for each tileRow
         Element tileRowElement = new Element("tileRow");
@@ -74,6 +113,14 @@ public class writeXML {
         }
     }
 
+    /**
+     *
+     * getTileType checks what tile type the current tile is and saves returns a corresponding string word
+     *
+     * @param tile
+     * @param tileElement
+     * @return a string representing the tile type
+     */
     private String getTileType(Tile tile, Element tileElement){
         if(tile instanceof FreeTile){
             return "free";
@@ -85,42 +132,55 @@ public class writeXML {
         }else if(tile instanceof KeyTile){
             tileElement.setAttribute("colour", getKeyColour(tile));
             return "key";
-        }/**else if(tile instanceof TreasureTile){
+        }else if(tile instanceof TreasureTile){
             return "treasure";
         }else if(tile instanceof InfoTile){
             return "info";
-        }else if(tile instanceof GateTile){
+        }else if(tile instanceof ExitLockTile){
             return "gate";
         }else if(tile instanceof ExitTile){
             return "exit";
-        }**/
+        }
+        //Incase error or unknown tile type occurs save as wall tile
         else{
             return "wall";
         }
     }
 
+    /**
+     *
+     * getLockColour is passed a tile then returns a colour string from a corresponding colour enum
+     * passed tile is set to be a LockTile as this method is only called when its known the tile is a locked tile
+     *
+     * @param tile
+     * @return a colour string
+     */
     private String getLockColour(Tile tile){
-        //commented out section due to getKeyColour not existing
-        /**if(((LockTile)tile).getKeyColour() == Game.KeyColour.BLUE){
+        if(((LockTile)tile).getKeyColour() == Game.KeyColour.BLUE){
             return "blue";
         }else if(((LockTile)tile).getKeyColour() == Game.KeyColour.YELLOW){
             return "yellow";
         }else{
             return null;
-        }**/
-        return "blue";
+        }
     }
 
+    /**
+     *
+     * getKeyColour is passed a tile then returns a colour string from a corresponding colour enum
+     * passed tile is set to be a KeyTile as this method is only called when its known the tile is a key tile
+     *
+     * @param tile
+     * @return a colour string
+     */
     private String getKeyColour(Tile tile){
-        //commented out section due to getKeyColour not existing
-        /**if(((KeyTile)tile).getKeyColour() == Game.KeyColour.BLUE){
+        if(((KeyTile)tile).getKeyColour() == Game.KeyColour.BLUE){
             return "blue";
         }else if(((KeyTile)tile).getKeyColour() == Game.KeyColour.YELLOW){
             return "yellow";
         }else{
             return null;
-        }**/
-        return "blue";
+        }
     }
 
 }
