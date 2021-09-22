@@ -6,7 +6,13 @@ package nz.ac.vuw.ecs.swen225.gp21.domain;
  */
 public abstract class Tile {
 
+	/**
+	 * This tiles location
+	 */
 	Location location;
+	/**
+	 * Whether the player can move onto this tile
+	 */
 	boolean pathable;
 
 	/**

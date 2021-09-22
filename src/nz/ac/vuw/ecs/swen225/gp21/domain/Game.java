@@ -11,7 +11,10 @@ import java.util.List;
  */
 public class Game {
 
-	public static Game instance;
+	/**
+	 * Singleton pattern
+	 */
+	static Game instance;
 
 	private Tile[][] tilemap;
 	private Player player;
@@ -26,12 +29,16 @@ public class Game {
 		UP, DOWN, LEFT, RIGHT
 	}
 
+	/**
+	 * @author Rhysa
+	 *
+	 */
 	public enum KeyColour {
 		BLUE, YELLOW
 	}
 
 	/**
-	 * Singleton pattern.
+	 * Sets singleton instance to this
 	 */
 	public Game() {
 		instance = this;
@@ -45,7 +52,7 @@ public class Game {
 	}
 
 	/**
-	 * @return The tilemap
+	 * @return The tilemap array
 	 */
 	public Tile[][] getTilemap() {
 		return tilemap;
@@ -89,6 +96,7 @@ public class Game {
 	 * 
 	 * @param tilemap
 	 * @param player
+	 * @param keysHeld
 	 */
 	public void setupGame(Tile[][] tilemap, Player player, HashMap<KeyColour, Boolean> keysHeld) {
 		// TODO: null checks

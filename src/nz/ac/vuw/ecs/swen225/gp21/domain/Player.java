@@ -6,6 +6,9 @@ package nz.ac.vuw.ecs.swen225.gp21.domain;
  */
 public class Player {
 
+	/**
+	 * Players current location
+	 */
 	Location location;
 
 	/**
