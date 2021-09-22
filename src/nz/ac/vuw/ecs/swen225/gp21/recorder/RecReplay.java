@@ -91,7 +91,7 @@ public class RecReplay {
      * @throws ParserConfigurationException
      * @throws TransformerException
      */
-    public static void saveRecording() throws ParserConfigurationException, TransformerException {
+    public static void saveRecording(String filePath) throws ParserConfigurationException, TransformerException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newDefaultInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
@@ -138,7 +138,7 @@ public class RecReplay {
         LocalDateTime now = LocalDateTime.now();
         String fn = "Chaps_Challenge_Save_" + dtf.format(now);
         try (FileOutputStream output =
-                     new FileOutputStream("C:\\Users\\Hazel\\Documents\\VUW 2021 TRI 2\\SWEN225\\Assignments\\Project\\xmlTEST\\testout\\" + fn + ".xml")) {
+                     new FileOutputStream(filePath + fn + ".xml")) {
             writeSaveXML(doc, output);
         } catch (IOException e) {
             e.printStackTrace();
