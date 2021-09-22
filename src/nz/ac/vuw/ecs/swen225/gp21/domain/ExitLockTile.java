@@ -1,17 +1,17 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
 /**
- * An empty tile.
+ * TODO: everything
  *
  * @author Rhysa
  *
  */
-public class FreeTile extends Tile {
+public class ExitLockTile extends Tile {
 
 	/**
 	 * @param location
 	 */
-	public FreeTile(Location location) {
+	public ExitLockTile(Location location) {
 		super(location, true);
 	}
 
@@ -22,7 +22,7 @@ public class FreeTile extends Tile {
 
 	@Override
 	public String toChar() {
-		return "-";
+		return "E";
 	}
 
 }
