@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp21.fuzz;
+package test.nz.ac.vuw.ecs.swen225.gp21.fuzz;
 
 import nz.ac.vuw.ecs.swen225.gp21.app.GUIImp;
 import org.junit.jupiter.api.BeforeEach;
