@@ -19,7 +19,20 @@ public class BoardRender {
 	private static final int panelWidth = panelHeight;
 	
 	/**
+	 * A Simple enum to keep track of what direction non board objects are facing
+	 * @author Jac Clarke
+	 *
+	 */
+	public enum Direction  {
+			UP,
+			RIGHT,
+			LEFT,
+			DOWN
+	}
+	
+	/**
 	 * Generates board objects and puts them into the output layered pane
+	 * @param game
 	 */
 	public BoardRender(Game game) {
 		//this.game = game;
@@ -40,10 +53,10 @@ public class BoardRender {
 	
 	/**
 	 * Observer that refreshes the board based off either player movement or tick
-	 * @return
+	 * @param dir Direction moved
 	 */
-	public void update(int direction) {
-		chapIcon.update(direction);
+	public void update(Direction dir) {
+		chapIcon.update(dir.ordinal());
 		boardPanel.revalidate();
 		boardPanel.repaint();
 	}
