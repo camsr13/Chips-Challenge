@@ -28,4 +28,8 @@ public class LockTile extends Tile {
 		return "L";
 	}
 
+	public Game.KeyColour getKeyColour() {
+		return this.keyColour;
+	}
+
 }

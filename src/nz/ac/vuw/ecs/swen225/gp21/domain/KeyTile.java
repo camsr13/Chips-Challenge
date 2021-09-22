@@ -21,4 +21,8 @@ public class KeyTile extends Tile {
 		return "k";
 	}
 
+	public Game.KeyColour getKeyColour() {
+		return this.keyColour;
+	}
+
 }
