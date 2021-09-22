@@ -43,7 +43,7 @@ class BoardPanel extends JPanel {
 	/**
 	 * Method which retrieves game data to draw the board. 
 	 * Draws an extra hidden tile to allow for animation without full board refresh
-	 * TODO: add smooth board updates
+	 * TODO: add smooth animated board updates
 	 * @param g
 	 */
 	private void draw (Graphics g) {
