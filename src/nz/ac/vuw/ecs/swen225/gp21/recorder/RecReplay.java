@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp21.recorder;
 
+import nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction;
 import nz.ac.vuw.ecs.swen225.gp21.persistancy.readXML;
 import nz.ac.vuw.ecs.swen225.gp21.domain.*;
 import org.jdom2.Document;
@@ -30,7 +31,7 @@ import java.util.Queue;
 
 public class RecReplay {
 
-    private static Queue<Game.Direction> moveHistory = new ArrayDeque<>(); // needs to be Game.Direction, String for testing
+    private static Queue<Direction> moveHistory = new ArrayDeque<>(); // needs to be Game.Direction, String for testing
     private static boolean isRunning;
     private static boolean isRecording;
     private static int DELAY = 200;
@@ -64,10 +65,14 @@ public class RecReplay {
     /**
      * Creates a new recording
      */
-    public static void newRecording(Game g, String) {
+    public static void newRecording() {
         isRecording = true;
         moveHistory.clear();
         // TODO populates moveHistory
+        Direction arr[] = new Direction[]{Direction.LEFT, Direction.UP, Direction.UP, Direction.RIGHT};
+        for (Direction d : arr) {
+            moveHistory.offer(d);
+        }
     }
 
 
@@ -91,9 +96,29 @@ public class RecReplay {
         org.w3c.dom.Element movesElem = doc.createElement("moves");
         rootElem.appendChild(movesElem);
 
-        movesElem.appendChild(doc.createTextNode(moveHistory.poll()));
-        for (String move : moveHistory) {
-            movesElem.appendChild(doc.createTextNode(" " + moveHistory.poll()));
+        Queue<String> moveQ = new ArrayDeque<>();
+        for (Direction direction : moveHistory) {
+            switch (direction) {
+                case LEFT:
+                    moveQ.offer("Left");
+                    break;
+                case RIGHT:
+                    moveQ.offer("Right");
+                    break;
+                case UP:
+                    moveQ.offer("Up");
+                    break;
+                case DOWN:
+                    moveQ.offer("Down");
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        movesElem.appendChild(doc.createTextNode(moveQ.poll()));
+        for (String move : moveQ) {
+            movesElem.appendChild(doc.createTextNode(" " + moveQ.poll()));
         }
 
         // write dom document to a file
@@ -181,16 +206,16 @@ public class RecReplay {
 
                             switch (direction) {
                                 case "Left":
-                                    moveHistory.add(Game.Direction.LEFT);
+                                    moveHistory.add(Direction.LEFT);
                                     break;
                                 case "Right":
-                                    moveHistory.add(Game.Direction.RIGHT);
+                                    moveHistory.add(Direction.RIGHT);
                                     break;
                                 case "Up":
-                                    moveHistory.add(Game.Direction.UP);
+                                    moveHistory.add(Direction.UP);
                                     break;
                                 case "Down":
-                                    moveHistory.add(Game.Direction.DOWN);
+                                    moveHistory.add(Direction.DOWN);
                                     break;
                                 default:
                                     break;
@@ -257,7 +282,7 @@ public class RecReplay {
      *
      * @param direction the direction of action
      */
-    public static void addAction(Game.Direction direction) {
+    public static void addAction(Direction direction) {
         // adds to actionHistory
         if (isRecording) {
             moveHistory.add(direction);
@@ -270,7 +295,7 @@ public class RecReplay {
      *
      * @return
      */
-    public static Queue<Game.Direction> getMoveHistory() {
+    public static Queue<Direction> getMoveHistory() {
         return moveHistory;
     }
 
