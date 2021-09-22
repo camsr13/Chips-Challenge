@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
 <map>
+	<mapSize>
+		<size>5</size>
+		<size>13</size>
+	</mapSize>
 	<player>
 		<location>4</location>
 		<location>2</location>
