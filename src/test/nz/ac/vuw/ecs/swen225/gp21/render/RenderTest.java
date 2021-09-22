@@ -13,6 +13,8 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Player;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.WallTile;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender;
+import nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction;
+
 import java.util.concurrent.TimeUnit;/**
  * Test file to load the render class independently of the rest of the game for testing
  * @author Jac Clarke
@@ -48,10 +50,15 @@ public class RenderTest {
 		
 		TimeUnit.SECONDS.sleep(1);
 		p.setLocation(new Location(4,5));
-		render.update(3);
+		render.update(Direction.LEFT);
 		TimeUnit.SECONDS.sleep(1);
 		p.setLocation(new Location(3,5));
-		render.update(1);
+		render.update(Direction.LEFT);
+		TimeUnit.SECONDS.sleep(1);
+		p.setLocation(new Location(3,4));
+		render.update(Direction.UP);
+		p.setLocation(new Location(4,4));
+		render.update(Direction.RIGHT);
 		
 	}
 }
