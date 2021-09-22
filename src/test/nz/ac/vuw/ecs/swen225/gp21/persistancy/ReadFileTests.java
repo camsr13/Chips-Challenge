@@ -22,13 +22,20 @@ public class ReadFileTests {
             }
             System.out.println();
         }
+        //Check to see if all tile types were created and in correct locations
         assert (tilemap[2][0] instanceof WallTile);
         assert (tilemap[2][1] instanceof FreeTile);
         assert (tilemap[2][2] instanceof KeyTile);
         assert (tilemap[2][6] instanceof LockTile);
+        assert (tilemap[2][8] instanceof InfoTile);
+        assert (tilemap[2][9] instanceof TreasureTile);
+        assert (tilemap[2][11] instanceof ExitLockTile);
+        assert (tilemap[2][12] instanceof ExitTile);
 
         //get the created player from Game and check it
         Player player = Game.instance.getPlayer();
+        System.out.println("Player located at x: " + player.getLocation().getX() + ", y: " + player.getLocation().getY());
+
         assert (player.getLocation().getX() == 4);
         assert (player.getLocation().getY() == 2);
     }

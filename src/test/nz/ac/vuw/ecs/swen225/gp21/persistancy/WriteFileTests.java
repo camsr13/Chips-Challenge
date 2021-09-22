@@ -16,7 +16,7 @@ public class WriteFileTests {
         readXML readXML = new readXML();
         readXML.readXMLFile();
         writeXML instance = new writeXML();
-        instance.writeXMLFile(game);
+        instance.writeXMLFile();
 
         assert(new File("src/nz/ac/vuw/ecs/swen225/gp21/persistancy/currentSave.xml").isFile());
     }
