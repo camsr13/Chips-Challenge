@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp21.fuzz;
 
+import nz.ac.vuw.ecs.swen225.gp21.app.GUIImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,13 +32,6 @@ public class FuzzTest {
 
     private final int MOVES = 100;
     private final int TIMEOUT = 30;
-
-    @BeforeEach
-    void setUp() {
-
-
-
-    }
 
     private MouseAdapter getAdapterFromDirection(Direction d) {
         switch(d) {
@@ -145,13 +139,21 @@ public class FuzzTest {
 //        System.out.println(gridToString());
     }
 
+    @BeforeEach
+    void setUp() {
+
+
+
+    }
+
     /**
      * Tests level 1.
      */
     @Test
     void test1() {
         // Load in level 1
-
+        GUIImp gui = new GUIImp();
+        gui.getMainWindow().setVisible(true);
 
 
         final ExecutorService es = Executors.newSingleThreadExecutor();
