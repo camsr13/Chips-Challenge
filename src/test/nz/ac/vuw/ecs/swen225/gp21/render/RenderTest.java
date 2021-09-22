@@ -39,17 +39,15 @@ public class RenderTest {
 		JFrame frame = new JFrame();
 		frame.setSize(1280, 1024);
 		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(render.getPane());
-		//render.update();
 		
 		TimeUnit.SECONDS.sleep(1);
 		p.setLocation(new Location(4,5));
-		render.update();
+		render.update(3);
 		TimeUnit.SECONDS.sleep(1);
 		p.setLocation(new Location(3,5));
-		render.update();
-		//frame.revalidate();
-		//frame.repaint();
+		render.update(1);
 		
 	}
 }
