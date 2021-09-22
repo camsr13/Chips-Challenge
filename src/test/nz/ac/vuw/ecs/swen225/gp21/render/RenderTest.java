@@ -9,8 +9,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Player;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.WallTile;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender;
-
-/**
+import java.util.concurrent.TimeUnit;/**
  * Test file to load the render class independently of the rest of the game for testing
  * @author Jac Clarke
  *
@@ -30,19 +29,27 @@ public class RenderTest {
 	/**
 	 * Creates a new instance of the renderer, and displays it in a frame
 	 * @param args
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		Game g = new Game();
-		Player p = new Player(new Location(1,1));
+		Player p = new Player(new Location(5,5));
 		g.setupGame(board, p, null);
 		BoardRender render = new BoardRender(g);
 		JFrame frame = new JFrame();
 		frame.setSize(1280, 1024);
 		frame.setVisible(true);
-		frame.add(render.getPanel());
-		//p.setLocation(new Location(5,5));
+		frame.add(render.getPane());
 		//render.update();
-		frame.revalidate();
-		frame.repaint();
+		
+		TimeUnit.SECONDS.sleep(1);
+		p.setLocation(new Location(4,5));
+		render.update();
+		TimeUnit.SECONDS.sleep(1);
+		p.setLocation(new Location(3,5));
+		render.update();
+		//frame.revalidate();
+		//frame.repaint();
+		
 	}
 }
