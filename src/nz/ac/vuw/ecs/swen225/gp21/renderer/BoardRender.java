@@ -12,29 +12,51 @@ public class BoardRender {
 	//private Game game;
 	private JPanel boardPanel;
 	private JLayeredPane basePane = new JLayeredPane();
-
+	private ChapRender chapIcon;
+	
+	private static final int squareSize = 128;
+	private static final int panelHeight = 5;
+	private static final int panelWidth = panelHeight;
+	
+	/**
+	 * A Simple enum to keep track of what direction non board objects are facing
+	 * @author Jac Clarke
+	 *
+	 */
+	public enum Direction  {
+			UP,
+			RIGHT,
+			LEFT,
+			DOWN
+	}
 	
 	/**
 	 * Generates board objects and puts them into the output layered pane
+	 * @param game
 	 */
 	public BoardRender(Game game) {
 		//this.game = game;
 		//loadImages();
-		
+		chapIcon = new ChapRender(game);
+		chapIcon.setBounds(panelHeight/2 * squareSize, panelWidth/2 * squareSize, squareSize, squareSize);
+		chapIcon.setOpaque(false);
+
 		boardPanel = new BoardPanel(game);
 		boardPanel.setVisible(true);
-		boardPanel.setBounds(0,0, 128*5, 128*5);
+		boardPanel.setBounds(0,0, panelWidth * squareSize, panelHeight * squareSize);
+		
 		basePane.add(boardPanel,JLayeredPane.DEFAULT_LAYER);
-		System.out.println(basePane.getPosition(boardPanel));
+		basePane.add(chapIcon,JLayeredPane.PALETTE_LAYER);
 		basePane.setVisible(true);
 		
 	}
 	
 	/**
 	 * Observer that refreshes the board based off either player movement or tick
-	 * @return
+	 * @param dir Direction moved
 	 */
-	public void update(Integer... direction) {
+	public void update(Direction dir) {
+		chapIcon.update(dir.ordinal());
 		boardPanel.revalidate();
 		boardPanel.repaint();
 	}
@@ -47,21 +69,6 @@ public class BoardRender {
 	public JLayeredPane getPane() {
 		return basePane;
 	}
-	
-	
-	/**
-	 * Tries to load the images used for board display
-	 * TODO: migrate images from individual to a sprite sheet
-	 */
-	/*private void loadImages() {
-		//Chap images
-		ImageIcon c1 = new ImageIcon(this.getClass().getResource("images/Chap.png"));
-		ImageIcon c2 = new ImageIcon(this.getClass().getResource("images/Chap_R.png"));
-		ImageIcon c3 = new ImageIcon(this.getClass().getResource("images/Chap_B.png"));
-		ImageIcon c4 = new ImageIcon(this.getClass().getResource("images/Chap_L.png"));
-		Image[] chapImages = {c1.getImage(), c2.getImage(), c3.getImage(), c4.getImage()};
-		
-	}*/
 	
 	
 }
