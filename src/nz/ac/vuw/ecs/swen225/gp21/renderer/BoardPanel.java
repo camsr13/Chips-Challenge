@@ -63,9 +63,9 @@ class BoardPanel extends JPanel {
 		Tile[][] boardTiles = game.getTilemap();
 		Location chapPos = game.getPlayer().getLocation();
 		int i = 0;
-		for(int y = chapPos.getY() - 3; y < chapPos.getY() + 4; y++) {
+		for(int y = chapPos.getY() - 4; y < chapPos.getY() + 5; y++) {
 			int j = 0;
-			for(int x = chapPos.getX() - 3; x < chapPos.getX() + 4; x++) {
+			for(int x = chapPos.getX() - 4; x < chapPos.getX() + 5; x++) {
 				//Get the tile if possible otherwise return null for the empty screen space
 				Tile paintTile;
 				Image toPaint;

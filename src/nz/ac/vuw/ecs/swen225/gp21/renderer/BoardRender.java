@@ -15,7 +15,7 @@ public class BoardRender {
 	private ChapRender chapIcon;
 	
 	private static final int squareSize = 128;
-	private static final int panelHeight = 5;
+	private static final int panelHeight = 9;
 	private static final int panelWidth = panelHeight;
 	
 	/**
