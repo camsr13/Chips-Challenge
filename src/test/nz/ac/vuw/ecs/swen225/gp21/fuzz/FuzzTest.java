@@ -1,14 +1,10 @@
 package test.nz.ac.vuw.ecs.swen225.gp21.fuzz;
 
-//import nz.ac.vuw.ecs.swen225.gp21.app.GUIImp;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import java.awt.event.KeyAdapter;
-import java.awt.event.MouseAdapter;
 import java.util.*;
 import java.util.concurrent.*;
-
-import static org.mockito.Mockito.mock;
+import nz.ac.vuw.ecs.swen225.gp21.app.GUIImp;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Contains a test for each of the game's two levels.
@@ -19,13 +15,7 @@ public class FuzzTest {
         NORTH, SOUTH, EAST, WEST
     }
 
-    // Placeholders
-    private final MouseAdapter north = mock(MouseAdapter.class);
-    private final MouseAdapter east = mock(MouseAdapter.class);
-    private final MouseAdapter south = mock(MouseAdapter.class);
-    private final MouseAdapter west = mock(MouseAdapter.class);
-    private final KeyAdapter reset = mock(KeyAdapter.class);
-//    private final List<MouseAdapter> directions = Arrays.asList(north, east, south, west);
+    private Runnable north, east, south, west;
 
     private final int GRID_WIDTH = 21;
     private final int[] grid = new int[GRID_WIDTH * GRID_WIDTH];
@@ -38,11 +28,11 @@ public class FuzzTest {
     private final int TIMEOUT = 30;
 
     /**
-     * Converts a specified direction to the MouseAdapter used to move in that direction.
+     * Converts a specified direction to the Runnable used to move in that direction.
      * @param d The direction.
-     * @return The MouseAdapter.
+     * @return The Runnable.
      */
-    private MouseAdapter getAdapterFromDirection(Direction d) {
+    private Runnable getRunnableFromDirection(Direction d) {
         switch(d) {
             case NORTH: return north;
             case EAST: return east;
@@ -132,10 +122,10 @@ public class FuzzTest {
      * Explores a set number of random paths from the start, resetting the level after each path.
      */
     private void exploreGrid() {
-        for (int i = 0; i < 200; i++) {
+//        for (int i = 0; i < 200; i++) {
             explorePath();
-            reset.keyPressed(null);
-        }
+//            reset.keyPressed(null);
+//        }
 //        System.out.println(gridToString());
     }
 
@@ -154,17 +144,18 @@ public class FuzzTest {
         for (int i = 0; i < GRID_WIDTH / 2; i++) {
             List<Direction> directions = getPreferredDirections(currRow, currCol);
             Direction direction = directions.get(random.nextInt(directions.size()));
-            MouseAdapter adapter = getAdapterFromDirection(direction);
-            adapter.mouseClicked(null);
-            if (adapter == north) {
-                currRow--;
-            } else if (adapter == east) {
-                currCol++;
-            } else if (adapter == west) {
-                currCol--;
-            } else if (adapter == south) {
-                currRow++;
+            Runnable runnable = getRunnableFromDirection(direction);
+
+            // Execute move
+            runnable.run();
+
+            switch(direction) {
+                case NORTH: currRow--; break;
+                case EAST: currCol++; break;
+                case WEST: currCol--; break;
+                case SOUTH: currRow++; break;
             }
+
             incrementGridAt(currRow, currCol);
         }
 
@@ -185,8 +176,12 @@ public class FuzzTest {
     @Test
     void test1() {
         // Load in level 1
-//        GUIImp gui = new GUIImp();
-//        gui.getMainWindow().setVisible(true);
+        GUIImp gui = new GUIImp();
+        gui.getMainWindow().setVisible(true);
+        north = gui::doNorthMove;
+        east = gui::doEastMove;
+        south = gui::doSouthMove;
+        west = gui::doWestMove;
 
 
         // This code block runs exploreGrid() until either it finishes, or a certain time limit is reached.
