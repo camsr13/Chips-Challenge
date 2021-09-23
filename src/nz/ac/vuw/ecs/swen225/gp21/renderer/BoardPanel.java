@@ -65,6 +65,7 @@ class BoardPanel extends JPanel {
 		for(int y = chapPos.getY() - 3; y < chapPos.getY() + 4; y++) {
 			int j = 0;
 			for(int x = chapPos.getX() - 3; x < chapPos.getX() + 4; x++) {
+				//Get the tile if possible otherwise return null for the empty screen space
 				Tile paintTile;
 				Image toPaint;
 				try {
@@ -73,6 +74,7 @@ class BoardPanel extends JPanel {
 					paintTile = null;
 				}
 				
+				//Get the image of that tile type
 				if (paintTile == null) {
 					toPaint = images.get(null)[0];
 				} else if(paintTile instanceof LockTile || paintTile instanceof KeyTile) {
@@ -89,7 +91,8 @@ class BoardPanel extends JPanel {
 					toPaint = images.get(paintTile.getClass())[0];
 				} 	
 				
-				g.drawImage(toPaint, i * 128, j * 128 , this);
+				//Draw the image in the required location
+				g.drawImage(toPaint, j * 128, i * 128 , this);
 				
 				j++;
 			}
@@ -125,7 +128,7 @@ class BoardPanel extends JPanel {
 		Image[] blankIcons = {blankIcon.getImage()};
 		images.put(null,  blankIcons);
 		
-		//
+		//infomation icon
 		ImageIcon infoIcon = new ImageIcon(this.getClass().getResource("images/Help.png"));
 		images.put(InfoTile.class, new Image[] {infoIcon.getImage()});
 		
