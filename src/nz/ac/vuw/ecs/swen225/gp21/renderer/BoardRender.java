@@ -37,7 +37,7 @@ public class BoardRender {
 	public BoardRender(Game game) {
 		//this.game = game;
 		//loadImages();
-		chapIcon = new ChapRender(game);
+		chapIcon = new ChapRender();
 		chapIcon.setBounds(panelHeight/2 * squareSize, panelWidth/2 * squareSize, squareSize, squareSize);
 		chapIcon.setOpaque(false);
 
