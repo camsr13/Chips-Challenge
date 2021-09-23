@@ -26,8 +26,8 @@ public class BoardRender {
 	public enum Direction  {
 			UP,
 			RIGHT,
-			LEFT,
-			DOWN
+			DOWN,
+			LEFT
 	}
 	
 	/**

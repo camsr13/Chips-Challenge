@@ -13,6 +13,7 @@ import java.io.IOException;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -26,13 +27,15 @@ import javax.swing.border.EmptyBorder;
 import org.jdom2.JDOMException;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
+import nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction;
 import nz.ac.vuw.ecs.swen225.gp21.persistancy.readXML;
+import nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.*;
 
 
 public class GUIImp implements GUIAbstract{
 
-    
+
 
     //Swing variable declarations
 
@@ -42,8 +45,9 @@ public class GUIImp implements GUIAbstract{
     private int levelTimeMax;
     private int timeRemaining = 1000;
     private String level;
-    
-    
+
+    //
+
 
 
 	//The game frame
@@ -80,14 +84,18 @@ public class GUIImp implements GUIAbstract{
 
 	//Temp board placeholder
 	private final JPanel board = new CustomPanel(500, 500);
-	private BoardPanel gameBoard = new BoardPanel(null);
-	
+	private JLayeredPane gameBoard = new JLayeredPane();
+	private BoardRender boardRender;
+
 	//Game
 	private Game game = new Game();
 	private readXML currXML = new readXML();
 
+
+
 	//Content Panel
 	private final JPanel area = new CustomPanel(700, 500);
+
 
     public GUIImp() {
 		initGUI();
@@ -235,7 +243,7 @@ public class GUIImp implements GUIAbstract{
 
 		board.setBackground(Color.PINK);
 
-	    area.add(gameBoard, BorderLayout.CENTER);
+	    area.add(gameBoard);
 
     }
 
@@ -351,23 +359,32 @@ public class GUIImp implements GUIAbstract{
 	}
 
 	protected void doWestMove() {
-		
+
+		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.LEFT);
+		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.LEFT);
+		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.LEFT);
 
 	}
 
 	protected void doEastMove() {
 		// TODO Auto-generated method stub
-
+		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.RIGHT);
+		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.RIGHT);
+		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.RIGHT);
 	}
 
 	protected void doSouthMove() {
 		// TODO Auto-generated method stub
-
+		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.DOWN);
+		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.DOWN);
+		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.DOWN);
 	}
 
 	protected void doNorthMove() {
 		// TODO Auto-generated method stub
-
+		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.UP);
+		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.UP);
+		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.UP);
 	}
 
 	/**
@@ -429,22 +446,23 @@ public class GUIImp implements GUIAbstract{
     			break;
     	}
 	}
-	
+
 	private void loadGame(){
-		
+
 		try {
 			currXML.readXMLFile();
 		} catch (JDOMException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
+
 		game = currXML.getGameInstance();
-		gameBoard = new BoardPanel(game);
-		
-	
+		boardRender = new BoardRender(game);
+		gameBoard = boardRender.getPane();
+		RecReplay.newRecording();
+
 	}
 }
-}
+
 
