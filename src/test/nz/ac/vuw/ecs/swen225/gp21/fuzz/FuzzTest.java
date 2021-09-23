@@ -172,15 +172,10 @@ public class FuzzTest {
 
             incrementGridAt(currRow, currCol);
 
-            System.out.println(direction); // SOUTH
-            System.out.println("(" + currRow + ", " +  currCol + ")"); // (20, 16)
-
             // Execute move
             TimeUnit.MILLISECONDS.sleep(MOVE_DELAY);
             runnable.run();
         }
-
-        System.out.println(gridToString());
     }
 
     @BeforeEach
