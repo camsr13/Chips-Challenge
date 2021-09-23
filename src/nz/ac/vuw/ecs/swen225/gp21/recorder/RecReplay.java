@@ -78,10 +78,10 @@ public class RecReplay {
         isRecording = true;
         moveHistory.clear();
         // TODO populates moveHistory
-        Direction[] arr = new Direction[]{Direction.LEFT, Direction.UP, Direction.UP, Direction.RIGHT};
+/*        Direction[] arr = new Direction[]{Direction.LEFT, Direction.UP, Direction.UP, Direction.RIGHT};
         for (Direction d : arr) {
             moveHistory.offer(d);
-        }
+        }*/
     }
 
 
@@ -143,7 +143,6 @@ public class RecReplay {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         endRecording(); // clean up
     }
 
