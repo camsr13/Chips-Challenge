@@ -1,0 +1,34 @@
+package test.nz.ac.vuw.ecs.swen225.gp21.fuzz;
+
+import nz.ac.vuw.ecs.swen225.gp21.app.GUIImp;
+
+/**
+ * Gui implementation without dialog
+ */
+public class GUITestImp extends GUIImp {
+
+  @Override
+  protected void startPopUp() {
+    loadGame();
+  }
+
+  @Override
+  public void doWestMove() {
+    super.doWestMove();
+  }
+
+  @Override
+  public void doEastMove() {
+    super.doEastMove();
+  }
+
+  @Override
+  public void doSouthMove() {
+    super.doSouthMove();
+  }
+
+  @Override
+  protected void doNorthMove() {
+    super.doNorthMove();
+  }
+}
