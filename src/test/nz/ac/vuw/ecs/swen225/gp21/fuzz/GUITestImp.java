@@ -9,6 +9,7 @@ public class GUITestImp extends GUIImp {
 
   @Override
   protected void startPopUp() {
+    this.currFile = "level1.xml";
     loadGame();
   }
 

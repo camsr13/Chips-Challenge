@@ -86,7 +86,7 @@ public class GUIImp implements GUIAbstract{
 	//Game
 	private Game game = new Game();
 	private readXML currXML = new readXML();
-	private String currFile;
+	protected String currFile;
 	
 
 
