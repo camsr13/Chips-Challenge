@@ -17,7 +17,9 @@ public class TreasureTile extends Tile {
 
 	@Override
 	public void onPlayerEnter() {
-
+		Game.instance.collectTreasure();
+		FreeTile newTile = new FreeTile(Location.copy(location));
+		Game.instance.setTile(newTile);
 	}
 
 	@Override

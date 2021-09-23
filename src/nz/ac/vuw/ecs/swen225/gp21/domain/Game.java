@@ -20,6 +20,9 @@ public class Game {
 	private Player player;
 	private List<Observer> observers;
 	private HashMap<KeyColour, Boolean> keysHeld;
+	private int totalTreasures;
+	private int collectedTreasures;
+	private ExitLockTile exitLock;
 
 	/**
 	 * @author Rhysa
@@ -121,5 +124,13 @@ public class Game {
 	 */
 	public void addKey(KeyColour colour) {
 		keysHeld.put(colour, true);
+	}
+
+	public void collectTreasure() {
+		collectedTreasures++;
+		// TODO: pre and post condition checks
+		if (collectedTreasures == totalTreasures) {
+			exitLock.removeTile();
+		}
 	}
 }
