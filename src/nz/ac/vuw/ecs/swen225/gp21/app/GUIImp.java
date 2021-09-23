@@ -46,10 +46,6 @@ public class GUIImp implements GUIAbstract{
     private int timeRemaining = 1000;
     private String level;
 
-    //
-
-
-
 	//The game frame
 	private final JFrame frame = new JFrame("Game");
 
@@ -90,6 +86,8 @@ public class GUIImp implements GUIAbstract{
 	//Game
 	private Game game = new Game();
 	private readXML currXML = new readXML();
+	private String currFile;
+	
 
 
 
@@ -115,7 +113,7 @@ public class GUIImp implements GUIAbstract{
 
     	Object[] options = {"Load Level 1",
                 "Load Level 2",
-                "Load from a file", };
+                "Load TestFile", };
 
     	int n = JOptionPane.showOptionDialog(frame,
     		    "Welcome",
@@ -128,10 +126,16 @@ public class GUIImp implements GUIAbstract{
 
     	switch(n){
     		case 0:
+    			currFile = "level1.xml"; 
     			loadGame();
     			break;
     		case 1:
-    			doExitGameX();
+    			currFile = "level2.xml"; 
+    			loadGame();
+    			break;
+    		case 2:
+    			currFile = "testMap.xml"; 
+    			loadGame();
     			break;
     	}
 	}
@@ -212,12 +216,13 @@ public class GUIImp implements GUIAbstract{
 
 
 	protected void doStartLevel2() {
-		// TODO Auto-generated method stub
-
+		currFile = "level2.xml";
+		loadGame();
 	}
 
 	protected void doStartLevel1() {
-		// TODO Auto-generated method stub
+		currFile = "level1.xml";
+		loadGame();
 
 	}
 
@@ -228,6 +233,7 @@ public class GUIImp implements GUIAbstract{
 
 	protected void doExitGameS() {
 		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -450,7 +456,7 @@ public class GUIImp implements GUIAbstract{
 	protected void loadGame(){
 
 		try {
-			currXML.readXMLFile();
+			currXML.readXMLFile(currFile);
 		} catch (JDOMException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
