@@ -1,12 +1,7 @@
 package test.nz.ac.vuw.ecs.swen225.gp21.fuzz;
 
-import java.awt.AWTException;
-import java.awt.Robot;
 import java.util.*;
 import java.util.concurrent.*;
-import nz.ac.vuw.ecs.swen225.gp21.app.GUIImp;
-import nz.ac.vuw.ecs.swen225.gp21.app.Main;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,9 +10,6 @@ import org.junit.jupiter.api.Test;
  * @author Rhys Macdonald - 300516792
  */
 public class FuzzTest {
-    private enum Direction {
-        NORTH, SOUTH, EAST, WEST
-    }
 
     private Runnable north, east, south, west;
 
@@ -30,6 +22,7 @@ public class FuzzTest {
      * The number of seconds the random exploration should run (at the most).
      */
     private final int TIMEOUT = 30;
+    private final int MOVE_DELAY = 50;
 
     /**
      * Converts a specified direction to the Runnable used to move in that direction.
@@ -54,7 +47,7 @@ public class FuzzTest {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < grid.length; i++) {
             sb.append(grid[i]).append(" ");
-            if (i % GRID_WIDTH == 20) {
+            if (i % GRID_WIDTH == GRID_WIDTH-1) {
                 sb.append("\n");
             }
         }
@@ -81,10 +74,23 @@ public class FuzzTest {
      */
     private Map<Direction, Integer> getNeighbours(int row, int col) {
         Map<Direction, Integer> r = new HashMap<>();
-        r.put(Direction.NORTH, getGridAt(row-1, col));
-        r.put(Direction.EAST, getGridAt(row, col+1));
-        r.put(Direction.SOUTH, getGridAt(row+1, col));
-        r.put(Direction.WEST, getGridAt(row, col-1));
+
+        if (row > 0) {
+            r.put(Direction.NORTH, getGridAt(row-1, col));
+        }
+        if (col < GRID_WIDTH - 1) {
+            r.put(Direction.EAST, getGridAt(row, col+1));
+        }
+        if (col > 0) {
+            r.put(Direction.WEST, getGridAt(row, col-1));
+        }
+        if (row < GRID_WIDTH - 1) {
+            r.put(Direction.SOUTH, getGridAt(row+1, col));
+        }
+
+
+
+
         return r;
     }
 
@@ -125,45 +131,56 @@ public class FuzzTest {
     /**
      * Explores a set number of random paths from the start, resetting the level after each path.
      */
-    private void exploreGrid() {
+    private void exploreGrid() throws InterruptedException {
 //        for (int i = 0; i < 200; i++) {
             explorePath();
 //            reset.keyPressed(null);
 //        }
-        System.out.println(gridToString());
     }
 
     /**
      * Explores a random path, noting on the grid where it has already been.
      */
-    private void explorePath() {
+    private void explorePath() throws InterruptedException {
         Random random = new Random();
 
-        int currRow = 10;
-        int currCol = 10;
+        int currRow = GRID_WIDTH / 2;
+        int currCol = GRID_WIDTH / 2;
 
         incrementGridAt(currRow, currCol);
 
 
-        for (int i = 0; i < GRID_WIDTH / 2; i++) {
+        for (int i = 0; i < 200; i++) {
             List<Direction> directions = getPreferredDirections(currRow, currCol);
             Direction direction = directions.get(random.nextInt(directions.size()));
             Runnable runnable = getRunnableFromDirection(direction);
 
-            // Execute move
-            runnable.run();
-
-            switch(direction) {
-                case NORTH: currRow--; break;
-                case EAST: currCol++; break;
-                case WEST: currCol--; break;
-                case SOUTH: currRow++; break;
+            switch (direction) {
+                case NORTH:
+                    currRow--;
+                    break;
+                case EAST:
+                    currCol++;
+                    break;
+                case WEST:
+                    currCol--;
+                    break;
+                case SOUTH:
+                    currRow++;
+                    break;
             }
 
             incrementGridAt(currRow, currCol);
+
+            System.out.println(direction); // SOUTH
+            System.out.println("(" + currRow + ", " +  currCol + ")"); // (20, 16)
+
+            // Execute move
+            TimeUnit.MILLISECONDS.sleep(MOVE_DELAY);
+            runnable.run();
         }
 
-//        System.out.println(gridToString());
+        System.out.println(gridToString());
     }
 
     @BeforeEach
@@ -198,11 +215,16 @@ public class FuzzTest {
 
         // This code block runs exploreGrid() until either it finishes, or a certain time limit is reached.
         final ExecutorService es = Executors.newSingleThreadExecutor();
-        Future<?> future = es.submit(this::exploreGrid);
+        Future<?> future = es.submit((Callable<Void>) () -> {
+            exploreGrid();
+            return null;
+        });
         try {
             future.get(TIMEOUT, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+        } catch (TimeoutException e) {
+            System.out.println("Timeout: " + TIMEOUT + "s elapsed.");
         }
         es.shutdownNow();
 
@@ -215,5 +237,12 @@ public class FuzzTest {
     @Test
     void test2() {
 
+    }
+
+    /**
+     * Represents a cardinal direction.
+     */
+    private enum Direction {
+      NORTH, SOUTH, EAST, WEST
     }
 }
