@@ -16,13 +16,14 @@ public class ReadFileTests {
         readXML.readXMLFile();
         //get the created tilemap from Game and print it
         Tile[][] tilemap = Game.instance.getTilemap();
-        for(Tile[] y : tilemap){
-            for(Tile x : y){
-                System.out.print(x.toChar() + "");
+        for(int y = 0; y < tilemap[0].length; y++){
+            for(int x = 0; x < tilemap.length; x++){
+                System.out.print(tilemap[x][y].toChar() + "");
             }
             System.out.println();
         }
         //Check to see if all tile types were created and in correct locations
+
         assert (tilemap[0][2] instanceof WallTile);
         assert (tilemap[1][2] instanceof FreeTile);
         assert (tilemap[2][2] instanceof KeyTile);
@@ -38,5 +39,49 @@ public class ReadFileTests {
 
         assert (player.getLocation().getX() == 4);
         assert (player.getLocation().getY() == 2);
+    }
+
+    @Test
+    public void testReadLevel1_01() throws JDOMException, IOException {
+        new Game();
+        readXML readXML = new readXML();
+        readXML.readXMLFile("level1.xml");
+        //get the created tilemap from Game and print it
+        Tile[][] tilemap = Game.instance.getTilemap();
+        for(int y = 0; y < tilemap[0].length; y++){
+            for(int x = 0; x < tilemap.length; x++){
+                System.out.print(tilemap[x][y].toChar() + "");
+            }
+            System.out.println();
+        }
+
+        //get the created player from Game and check it
+        Player player = Game.instance.getPlayer();
+        System.out.println("Player located at x: " + player.getLocation().getX() + ", y: " + player.getLocation().getY());
+
+        assert (player.getLocation().getX() == 3);
+        assert (player.getLocation().getY() == 9);
+    }
+
+    @Test
+    public void testReadLevel2_01() throws JDOMException, IOException {
+        new Game();
+        readXML readXML = new readXML();
+        readXML.readXMLFile("level2.xml");
+        //get the created tilemap from Game and print it
+        Tile[][] tilemap = Game.instance.getTilemap();
+        for(int y = 0; y < tilemap[0].length; y++){
+            for(int x = 0; x < tilemap.length; x++){
+                System.out.print(tilemap[x][y].toChar() + "");
+            }
+            System.out.println();
+        }
+
+        //get the created player from Game and check it
+        Player player = Game.instance.getPlayer();
+        System.out.println("Player located at x: " + player.getLocation().getX() + ", y: " + player.getLocation().getY());
+
+        assert (player.getLocation().getX() == 15);
+        assert (player.getLocation().getY() == 20);
     }
 }

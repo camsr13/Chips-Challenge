@@ -27,6 +27,18 @@ public class readXML {
     private Tile[][] tilemap;
     private Player player;
 
+
+    /**
+     *
+     * incase ReadXMLFile is called without a filename it will call the real ReadXMLFile with the testmap as the filename
+     *
+     * @throws JDOMException
+     * @throws IOException
+     */
+    public void readXMLFile() throws JDOMException, IOException {
+        readXMLFile("testMap.xml");
+    }
+
     /**
      *
      * readXMLFile takes a fileName as a string input, then reads that file to create a tilemap and player object
@@ -34,11 +46,11 @@ public class readXML {
      * @throws JDOMException
      * @throws IOException
      */
-    public void readXMLFile(/**String fileName**/) throws JDOMException, IOException {
+    public void readXMLFile(String fileName) throws JDOMException, IOException {
         //Variables to hold the position where the file is up to
         Element rowElement = null;
         Element tileElement = null;
-        Element map = ((Document) (new SAXBuilder()).build(new File("src/nz/ac/vuw/ecs/swen225/gp21/persistancy/testMap.xml" /**fileName**/))).getRootElement();
+        Element map = ((Document) (new SAXBuilder()).build(new File("src/nz/ac/vuw/ecs/swen225/gp21/persistancy/" + fileName))).getRootElement();
 
         //Get map size
         List<Element> mapSize = map.getChildren("mapSize");
