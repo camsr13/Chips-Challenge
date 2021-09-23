@@ -101,7 +101,7 @@ public class GUIImp implements GUIAbstract{
 		initGUI();
 	}
 
-    private void initGUI(){
+    protected void initGUI(){
 
     	startPopUp();
 	    initFrame();
@@ -111,7 +111,7 @@ public class GUIImp implements GUIAbstract{
 	    countdown();
     }
 
-    private void startPopUp() {
+    protected void startPopUp() {
 
     	Object[] options = {"Load Level 1",
                 "Load Level 2",
@@ -136,7 +136,7 @@ public class GUIImp implements GUIAbstract{
     	}
 	}
 
-	private void initFrame() {
+	protected void initFrame() {
 		frame.setResizable(true);
 		frame.setContentPane(area);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -144,7 +144,7 @@ public class GUIImp implements GUIAbstract{
 		frame.pack();
 	}
 
-    private void initMenu(){
+    protected void initMenu(){
     	//Create menuBar options
     	JMenu menuGame = new JMenu("Game");
     	JMenu menuOptions = new JMenu("Options");
@@ -235,7 +235,7 @@ public class GUIImp implements GUIAbstract{
 		System.exit(0);
 	}
 
-	private void initBoard(){
+	protected void initBoard(){
 
     	//padding around the board
 		area.setLayout(new BorderLayout(3, 3));
@@ -247,7 +247,7 @@ public class GUIImp implements GUIAbstract{
 
     }
 
-    private void initSideBar(){
+    protected void initSideBar(){
 
     	levelPanel.add(levelLabel);
     	timePanel.add(timeTitleLabel);
@@ -358,7 +358,7 @@ public class GUIImp implements GUIAbstract{
 
 	}
 
-	public void doWestMove() {
+	protected void doWestMove() {
 
 		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.LEFT);
 		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.LEFT);
@@ -366,21 +366,21 @@ public class GUIImp implements GUIAbstract{
 
 	}
 
-	public void doEastMove() {
+	protected void doEastMove() {
 		// TODO Auto-generated method stub
 		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.RIGHT);
 		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.RIGHT);
 		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.RIGHT);
 	}
 
-	public void doSouthMove() {
+	protected void doSouthMove() {
 		// TODO Auto-generated method stub
 		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.DOWN);
 		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.DOWN);
 		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.DOWN);
 	}
 
-	public void doNorthMove() {
+	protected void doNorthMove() {
 		// TODO Auto-generated method stub
 		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.UP);
 		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.UP);
@@ -404,7 +404,7 @@ public class GUIImp implements GUIAbstract{
 		return frame;
 	}
 
-    private void countdown() {
+    protected void countdown() {
         timer = new Timer(1000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	timeFigureLabel.setText(String.valueOf(timeRemaining--));
@@ -447,7 +447,7 @@ public class GUIImp implements GUIAbstract{
     	}
 	}
 
-	public void loadGame(){
+	protected void loadGame(){
 
 		try {
 			currXML.readXMLFile();

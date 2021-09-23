@@ -1,8 +1,12 @@
 package test.nz.ac.vuw.ecs.swen225.gp21.fuzz;
 
+import java.awt.AWTException;
+import java.awt.Robot;
 import java.util.*;
 import java.util.concurrent.*;
 import nz.ac.vuw.ecs.swen225.gp21.app.GUIImp;
+import nz.ac.vuw.ecs.swen225.gp21.app.Main;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -126,7 +130,7 @@ public class FuzzTest {
             explorePath();
 //            reset.keyPressed(null);
 //        }
-//        System.out.println(gridToString());
+        System.out.println(gridToString());
     }
 
     /**
@@ -169,6 +173,13 @@ public class FuzzTest {
 
     }
 
+//    @AfterEach
+//    void tearDown() {
+//        while (true) {
+//
+//        }
+//    }
+
     /**
      * Tests level 1. Starts by traversing random paths from the start, then purposely tries to break the level using
      * hardcoded paths.
@@ -176,13 +187,14 @@ public class FuzzTest {
     @Test
     void test1() {
         // Load in level 1
-        GUIImp gui = new GUIImp();
+        GUITestImp gui = new GUITestImp();
         gui.getMainWindow().setVisible(true);
+
+//        // Setup directional actions
         north = gui::doNorthMove;
         east = gui::doEastMove;
         south = gui::doSouthMove;
         west = gui::doWestMove;
-
 
         // This code block runs exploreGrid() until either it finishes, or a certain time limit is reached.
         final ExecutorService es = Executors.newSingleThreadExecutor();
