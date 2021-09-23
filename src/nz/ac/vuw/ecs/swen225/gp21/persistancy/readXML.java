@@ -27,6 +27,18 @@ public class readXML {
     private Tile[][] tilemap;
     private Player player;
 
+
+    /**
+     *
+     * incase ReadXMLFile is called without a filename it will call the real ReadXMLFile with the testmap as the filename
+     *
+     * @throws JDOMException
+     * @throws IOException
+     */
+    public void readXMLFile() throws JDOMException, IOException {
+        readXMLFile("testMap.xml");
+    }
+
     /**
      *
      * readXMLFile takes a fileName as a string input, then reads that file to create a tilemap and player object
@@ -34,11 +46,11 @@ public class readXML {
      * @throws JDOMException
      * @throws IOException
      */
-    public void readXMLFile(/**String fileName**/) throws JDOMException, IOException {
+    public void readXMLFile(String fileName) throws JDOMException, IOException {
         //Variables to hold the position where the file is up to
         Element rowElement = null;
         Element tileElement = null;
-        Element map = ((Document) (new SAXBuilder()).build(new File("src/nz/ac/vuw/ecs/swen225/gp21/persistancy/testMap.xml" /**fileName**/))).getRootElement();
+        Element map = ((Document) (new SAXBuilder()).build(new File("src/nz/ac/vuw/ecs/swen225/gp21/persistancy/" + fileName))).getRootElement();
 
         //Get map size
         List<Element> mapSize = map.getChildren("mapSize");
@@ -71,25 +83,25 @@ public class readXML {
 
                 //check for what the tile type is then add it to the tile map
                 if(tileElement.getText().equals("free")){
-                    tilemap[i][count] = new FreeTile(new Location(count, i));
+                    tilemap[count][i] = new FreeTile(new Location(count, i));
                 }else if(tileElement.getText().equals("wall")){
-                    tilemap[i][count] = new WallTile(new Location(count, i));
+                    tilemap[count][i] = new WallTile(new Location(count, i));
                 }else if(tileElement.getText().equals("door")){
-                    tilemap[i][count] = new LockTile(new Location(count, i), getColour(tileElement.getAttributeValue("colour")));
+                    tilemap[count][i] = new LockTile(new Location(count, i), getColour(tileElement.getAttributeValue("colour")));
                 }else if(tileElement.getText().equals("key")){
-                    tilemap[i][count] = new KeyTile(new Location(count, i), getColour(tileElement.getAttributeValue("colour")));
+                    tilemap[count][i] = new KeyTile(new Location(count, i), getColour(tileElement.getAttributeValue("colour")));
                 }else if(tileElement.getText().equals("treasure")){
-                    tilemap[i][count] = new TreasureTile(new Location(count, i));
+                    tilemap[count][i] = new TreasureTile(new Location(count, i));
                 }else if(tileElement.getText().equals("info")){
-                    tilemap[i][count] = new InfoTile(new Location(count, i));
+                    tilemap[count][i] = new InfoTile(new Location(count, i));
                 }else if(tileElement.getText().equals("gate")){
-                    tilemap[i][count] = new ExitLockTile(new Location(count, i));
+                    tilemap[count][i] = new ExitLockTile(new Location(count, i));
                 }else if(tileElement.getText().equals("exit")){
-                    tilemap[i][count] = new ExitTile(new Location(count, i));
+                    tilemap[count][i] = new ExitTile(new Location(count, i));
                 }
                 //Incase an error happens/or missing tile type put a wall tile instead
                 else{
-                    tilemap[i][count] = new WallTile(new Location(count, i));
+                    tilemap[count][i] = new WallTile(new Location(count, i));
                 }
 
                 //count increase to loop through the file

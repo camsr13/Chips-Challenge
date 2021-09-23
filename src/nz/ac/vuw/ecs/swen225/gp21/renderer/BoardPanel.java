@@ -19,6 +19,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.KeyTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
 import nz.ac.vuw.ecs.swen225.gp21.domain.LockTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Tile;
+import nz.ac.vuw.ecs.swen225.gp21.domain.TreasureTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.WallTile;
 
 /**
@@ -62,9 +63,10 @@ class BoardPanel extends JPanel {
 		Tile[][] boardTiles = game.getTilemap();
 		Location chapPos = game.getPlayer().getLocation();
 		int i = 0;
-		for(int y = chapPos.getX() - 3; y < chapPos.getX() + 4; y++) {
+		for(int y = chapPos.getY() - 4; y < chapPos.getY() + 5; y++) {
 			int j = 0;
-			for(int x = chapPos.getY() - 3; x < chapPos.getY() + 4; x++) {
+			for(int x = chapPos.getX() - 4; x < chapPos.getX() + 5; x++) {
+				//Get the tile if possible otherwise return null for the empty screen space
 				Tile paintTile;
 				Image toPaint;
 				try {
@@ -73,6 +75,9 @@ class BoardPanel extends JPanel {
 					paintTile = null;
 				}
 				
+				
+				//Get the image of that tile type
+				toPaint = images.get(null)[0];
 				if (paintTile == null) {
 					toPaint = images.get(null)[0];
 				} else if(paintTile instanceof LockTile || paintTile instanceof KeyTile) {
@@ -85,11 +90,15 @@ class BoardPanel extends JPanel {
 						colour = tile.getKeyColour().ordinal();
 					}
 					toPaint = images.get(paintTile.getClass())[colour];
+				} else if(images.get(paintTile.getClass()) == null) {
+					int xy = x + y;
+					System.out.println("error" + paintTile.getClass());
 				} else {
 					toPaint = images.get(paintTile.getClass())[0];
 				} 	
 				
-				g.drawImage(toPaint, i * 128, j * 128 , this);
+				//Draw the image in the required location
+				g.drawImage(toPaint, j * 128, i * 128 , this);
 				
 				j++;
 			}
@@ -125,13 +134,17 @@ class BoardPanel extends JPanel {
 		Image[] blankIcons = {blankIcon.getImage()};
 		images.put(null,  blankIcons);
 		
-		//
+		//infomation icon
 		ImageIcon infoIcon = new ImageIcon(this.getClass().getResource("images/Help.png"));
 		images.put(InfoTile.class, new Image[] {infoIcon.getImage()});
 		
 		//Exit tile
 		ImageIcon e = new ImageIcon(this.getClass().getResource("images/exit.png"));
 		images.put(ExitTile.class, new Image[]{e.getImage()});
+		
+		//Exit tile
+		ImageIcon tres = new ImageIcon(this.getClass().getResource("images/treasure.png"));
+		images.put(TreasureTile.class, new Image[]{tres.getImage()});
 		
 		//doors
 		ImageIcon dr = new ImageIcon(this.getClass().getResource("images/Red_door.png"));

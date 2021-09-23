@@ -27,10 +27,8 @@ class ChapRender extends Animatable {
 	private static final long serialVersionUID = 2763313205526639958L;
 	/**
 	 * Creates a JPanel type object which represents the player
-	 * @param game
 	 */
-	protected ChapRender(Game game) {
-		this.game = game;
+	protected ChapRender() {
 		
 		loadImages();
 		this.setIcon(images[0]);
