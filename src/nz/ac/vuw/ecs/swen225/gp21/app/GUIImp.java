@@ -447,7 +447,7 @@ public class GUIImp implements GUIAbstract{
     	}
 	}
 
-	private void loadGame(){
+	public void loadGame(){
 
 		try {
 			currXML.readXMLFile();
