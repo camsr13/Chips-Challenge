@@ -358,7 +358,7 @@ public class GUIImp implements GUIAbstract{
 
 	}
 
-	protected void doWestMove() {
+	public void doWestMove() {
 
 		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.LEFT);
 		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.LEFT);
@@ -366,21 +366,21 @@ public class GUIImp implements GUIAbstract{
 
 	}
 
-	protected void doEastMove() {
+	public void doEastMove() {
 		// TODO Auto-generated method stub
 		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.RIGHT);
 		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.RIGHT);
 		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.RIGHT);
 	}
 
-	protected void doSouthMove() {
+	public void doSouthMove() {
 		// TODO Auto-generated method stub
 		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.DOWN);
 		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.DOWN);
 		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.DOWN);
 	}
 
-	protected void doNorthMove() {
+	public void doNorthMove() {
 		// TODO Auto-generated method stub
 		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.UP);
 		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.UP);
