@@ -19,6 +19,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.KeyTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
 import nz.ac.vuw.ecs.swen225.gp21.domain.LockTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Tile;
+import nz.ac.vuw.ecs.swen225.gp21.domain.TreasureTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.WallTile;
 
 /**
@@ -74,7 +75,9 @@ class BoardPanel extends JPanel {
 					paintTile = null;
 				}
 				
+				
 				//Get the image of that tile type
+				toPaint = images.get(null)[0];
 				if (paintTile == null) {
 					toPaint = images.get(null)[0];
 				} else if(paintTile instanceof LockTile || paintTile instanceof KeyTile) {
@@ -87,6 +90,9 @@ class BoardPanel extends JPanel {
 						colour = tile.getKeyColour().ordinal();
 					}
 					toPaint = images.get(paintTile.getClass())[colour];
+				} else if(images.get(paintTile.getClass()) == null) {
+					int xy = x + y;
+					System.out.println("error" + paintTile.getClass());
 				} else {
 					toPaint = images.get(paintTile.getClass())[0];
 				} 	
@@ -135,6 +141,10 @@ class BoardPanel extends JPanel {
 		//Exit tile
 		ImageIcon e = new ImageIcon(this.getClass().getResource("images/exit.png"));
 		images.put(ExitTile.class, new Image[]{e.getImage()});
+		
+		//Exit tile
+		ImageIcon tres = new ImageIcon(this.getClass().getResource("images/treasure.png"));
+		images.put(TreasureTile.class, new Image[]{tres.getImage()});
 		
 		//doors
 		ImageIcon dr = new ImageIcon(this.getClass().getResource("images/Red_door.png"));
