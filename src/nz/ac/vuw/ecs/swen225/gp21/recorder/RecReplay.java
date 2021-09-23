@@ -55,6 +55,7 @@ public class RecReplay {
         // adds to actionHistory
         if (isRecording) {
             moveHistory.add(direction);
+            System.out.println(direction); // INTEGRATION DAY PRINT
         }
     }
 
@@ -127,6 +128,8 @@ public class RecReplay {
                     break;
             }
         }
+
+        System.out.println(moveHistory); // INTEGRATION DAY PRINT
 
         movesElem.appendChild(doc.createTextNode(moveQ.poll()));
         for (String move : moveQ) {
