@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp21.persistancy;
+package nz.ac.vuw.ecs.swen225.gp21.persistency;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.*;
 import org.jdom2.Document;
@@ -47,7 +47,7 @@ public class writeXML {
         }
         //Set outputStream and write generated XML file
         XMLOutputter xmlOutputter = new XMLOutputter();
-        try(FileOutputStream fileOutputStream = new FileOutputStream("src/nz/ac/vuw/ecs/swen225/gp21/persistancy/currentSave.xml")){
+        try(FileOutputStream fileOutputStream = new FileOutputStream("src/nz/ac/vuw/ecs/swen225/gp21/persistency/currentSave.xml")){
             xmlOutputter.output(document, fileOutputStream);
         } catch (FileNotFoundException e) {
             e.printStackTrace();

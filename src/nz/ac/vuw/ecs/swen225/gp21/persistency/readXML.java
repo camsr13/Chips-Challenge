@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp21.persistancy;
+package nz.ac.vuw.ecs.swen225.gp21.persistency;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.*;
 import org.jdom2.Document;
@@ -50,7 +50,7 @@ public class readXML {
         //Variables to hold the position where the file is up to
         Element rowElement = null;
         Element tileElement = null;
-        Element map = ((Document) (new SAXBuilder()).build(new File("src/nz/ac/vuw/ecs/swen225/gp21/persistancy/" + fileName))).getRootElement();
+        Element map = ((Document) (new SAXBuilder()).build(new File("src/nz/ac/vuw/ecs/swen225/gp21/persistency/" + fileName))).getRootElement();
 
         //Get map size
         List<Element> mapSize = map.getChildren("mapSize");
