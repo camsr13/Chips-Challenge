@@ -24,10 +24,10 @@ public class BoardRender {
 	 *
 	 */
 	public enum Direction  {
-			UP,
-			RIGHT,
-			DOWN,
-			LEFT
+		DOWN,	
+		RIGHT,
+		UP,
+		LEFT
 	}
 	
 	/**
@@ -60,6 +60,10 @@ public class BoardRender {
 		boardPanel.revalidate();
 		boardPanel.repaint();
 	}
+	
+	//public void setScale(int width) {
+	//	
+	//}
 	
 	
 	/**
