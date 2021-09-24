@@ -103,13 +103,14 @@ public class Game {
 	 * @param keysHeld
 	 */
 	public void setupGame(Tile[][] tilemap, Player player, HashMap<KeyColour, Integer> keysHeld, int totalTreasure,
-			int collectedTreasures, List<Actor> actors) {
+			int collectedTreasures, ExitLockTile exitLock, List<Actor> actors) {
 		// TODO: null checks
 		this.tilemap = tilemap;
 		this.player = player;
 		this.keysHeld = keysHeld;
 		this.totalTreasures = totalTreasure;
 		this.collectedTreasures = collectedTreasures;
+		this.exitLock = exitLock;
 		this.actors = actors;
 	}
 
