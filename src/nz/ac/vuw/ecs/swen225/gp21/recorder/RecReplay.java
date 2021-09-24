@@ -56,6 +56,7 @@ public class RecReplay {
         if (isRecording) {
             moveHistory.add(direction);
             System.out.println(direction); // INTEGRATION DAY PRINT
+            System.out.println(moveHistory);
         }
     }
 
