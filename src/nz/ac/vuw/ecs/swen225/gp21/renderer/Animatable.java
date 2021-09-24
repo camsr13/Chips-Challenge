@@ -19,7 +19,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
  *
  */
 abstract class Animatable extends JLabel {
-	protected Game game;
+	//protected Game game;
 	protected ImageIcon[] images = {null, null, null, null};
 	protected JLabel imageContainer;
 	

@@ -1,21 +1,41 @@
 package nz.ac.vuw.ecs.swen225.gp21.app;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.*;
-import javax.swing.*;
+import java.io.IOException;
+
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
+
+import org.jdom2.JDOMException;
+
+import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
+import nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction;
+import nz.ac.vuw.ecs.swen225.gp21.persistancy.readXML;
+import nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay;
+import nz.ac.vuw.ecs.swen225.gp21.renderer.*;
 
 
 public class GUIImp implements GUIAbstract{
 
-    // the game object
-    //Game game;
+
 
     //Swing variable declarations
 
@@ -25,7 +45,6 @@ public class GUIImp implements GUIAbstract{
     private int levelTimeMax;
     private int timeRemaining = 1000;
     private String level;
-
 
 	//The game frame
 	private final JFrame frame = new JFrame("Game");
@@ -61,16 +80,28 @@ public class GUIImp implements GUIAbstract{
 
 	//Temp board placeholder
 	private final JPanel board = new CustomPanel(500, 500);
+	private JLayeredPane gameBoard = new JLayeredPane();
+	private BoardRender boardRender;
+
+	//Game
+	private Game game = new Game();
+	private readXML currXML = new readXML();
+	protected String currFile;
+	
+
+
 
 	//Content Panel
 	private final JPanel area = new CustomPanel(700, 500);
+
 
     public GUIImp() {
 		initGUI();
 	}
 
-    private void initGUI() {
+    protected void initGUI(){
 
+    	startPopUp();
 	    initFrame();
 	    initMenu();
 	    initBoard();
@@ -78,7 +109,38 @@ public class GUIImp implements GUIAbstract{
 	    countdown();
     }
 
-    private void initFrame() {
+    protected void startPopUp() {
+
+    	Object[] options = {"Load Level 1",
+                "Load Level 2",
+                "Load TestFile", };
+
+    	int n = JOptionPane.showOptionDialog(frame,
+    		    "Welcome",
+    		    "Hello",
+    		    JOptionPane.YES_NO_CANCEL_OPTION,
+    		    JOptionPane.QUESTION_MESSAGE,
+    		    null,
+    		    options,
+    		    options[0]);
+
+    	switch(n){
+    		case 0:
+    			currFile = "level1.xml"; 
+    			loadGame();
+    			break;
+    		case 1:
+    			currFile = "level2.xml"; 
+    			loadGame();
+    			break;
+    		case 2:
+    			currFile = "testMap.xml"; 
+    			loadGame();
+    			break;
+    	}
+	}
+
+	protected void initFrame() {
 		frame.setResizable(true);
 		frame.setContentPane(area);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -86,7 +148,7 @@ public class GUIImp implements GUIAbstract{
 		frame.pack();
 	}
 
-    private void initMenu(){
+    protected void initMenu(){
     	//Create menuBar options
     	JMenu menuGame = new JMenu("Game");
     	JMenu menuOptions = new JMenu("Options");
@@ -154,31 +216,32 @@ public class GUIImp implements GUIAbstract{
 
 
 	protected void doStartLevel2() {
-		// TODO Auto-generated method stub
-
+		currFile = "level2.xml";
+		loadGame();
 	}
 
 	protected void doStartLevel1() {
-		// TODO Auto-generated method stub
+		currFile = "level1.xml";
+		loadGame();
 
 	}
 
 	protected void doResumeGame() {
-		// TODO Auto-generated method stub
+		timer.start();
 
 	}
 
 	protected void doExitGameS() {
 		// TODO Auto-generated method stub
+		
 
 	}
 
 	protected void doExitGameX() {
-		// TODO Auto-generated method stub
-
+		System.exit(0);
 	}
 
-	private void initBoard(){
+	protected void initBoard(){
 
     	//padding around the board
 		area.setLayout(new BorderLayout(3, 3));
@@ -186,11 +249,11 @@ public class GUIImp implements GUIAbstract{
 
 		board.setBackground(Color.PINK);
 
-	    area.add(board, BorderLayout.CENTER);
+	    area.add(gameBoard);
 
     }
 
-    private void initSideBar(){
+    protected void initSideBar(){
 
     	levelPanel.add(levelLabel);
     	timePanel.add(timeTitleLabel);
@@ -283,16 +346,14 @@ public class GUIImp implements GUIAbstract{
     		case 0:
     			doResumeFromPause();
     		case 1:
-    			System.out.print("1");
+    			doExitGameS();
     			break;
     		case 2:
-    			System.out.print("2");
+    			doExitGameX();
     			break;
     		case 3:
-    			System.out.print("3");
+    			loadGame();
     			break;
-
-
 
     	}
 
@@ -304,23 +365,32 @@ public class GUIImp implements GUIAbstract{
 	}
 
 	protected void doWestMove() {
-		// TODO Auto-generated method stub
+
+		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.LEFT);
+		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.LEFT);
+		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.LEFT);
 
 	}
 
 	protected void doEastMove() {
 		// TODO Auto-generated method stub
-
+		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.RIGHT);
+		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.RIGHT);
+		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.RIGHT);
 	}
 
 	protected void doSouthMove() {
 		// TODO Auto-generated method stub
-
+		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.DOWN);
+		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.DOWN);
+		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.DOWN);
 	}
 
 	protected void doNorthMove() {
 		// TODO Auto-generated method stub
-
+		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.UP);
+		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.UP);
+		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.UP);
 	}
 
 	/**
@@ -340,7 +410,7 @@ public class GUIImp implements GUIAbstract{
 		return frame;
 	}
 
-    private void countdown() {
+    protected void countdown() {
         timer = new Timer(1000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	timeFigureLabel.setText(String.valueOf(timeRemaining--));
@@ -358,6 +428,47 @@ public class GUIImp implements GUIAbstract{
 	private void doTimeExpired() {
 		// TODO Auto-generated method stub
 
+    	//stop game
+    	timer.stop();
+
+    	Object[] options = {"Restart Level",
+                "Exit Game X",};
+
+    	int n = JOptionPane.showOptionDialog(frame,
+    		    "The game is over, time is out, you have lost",
+    		    "Game Over",
+    		    JOptionPane.YES_NO_CANCEL_OPTION,
+    		    JOptionPane.QUESTION_MESSAGE,
+    		    null,
+    		    options,
+    		    options[2]);
+
+    	switch(n){
+    		case 0:
+    			loadGame();
+    			break;
+    		case 1:
+    			doExitGameX();
+    			break;
+    	}
+	}
+
+	protected void loadGame(){
+
+		try {
+			currXML.readXMLFile(currFile);
+		} catch (JDOMException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		game = currXML.getGameInstance();
+		boardRender = new BoardRender(game);
+		gameBoard = boardRender.getPane();
+		RecReplay.newRecording();
+
 	}
 }
+
 

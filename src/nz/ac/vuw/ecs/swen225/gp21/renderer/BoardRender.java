@@ -15,7 +15,7 @@ public class BoardRender {
 	private ChapRender chapIcon;
 	
 	private static final int squareSize = 128;
-	private static final int panelHeight = 5;
+	private static final int panelHeight = 9;
 	private static final int panelWidth = panelHeight;
 	
 	/**
@@ -24,10 +24,10 @@ public class BoardRender {
 	 *
 	 */
 	public enum Direction  {
-			UP,
-			RIGHT,
-			LEFT,
-			DOWN
+		DOWN,	
+		RIGHT,
+		UP,
+		LEFT
 	}
 	
 	/**
@@ -37,7 +37,7 @@ public class BoardRender {
 	public BoardRender(Game game) {
 		//this.game = game;
 		//loadImages();
-		chapIcon = new ChapRender(game);
+		chapIcon = new ChapRender();
 		chapIcon.setBounds(panelHeight/2 * squareSize, panelWidth/2 * squareSize, squareSize, squareSize);
 		chapIcon.setOpaque(false);
 
@@ -60,6 +60,10 @@ public class BoardRender {
 		boardPanel.revalidate();
 		boardPanel.repaint();
 	}
+	
+	//public void setScale(int width) {
+	//	
+	//}
 	
 	
 	/**
