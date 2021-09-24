@@ -19,10 +19,11 @@ public class Game {
 	private Tile[][] tilemap;
 	private Player player;
 	private List<Observer> observers;
-	private HashMap<KeyColour, Boolean> keysHeld;
+	private HashMap<KeyColour, Integer> keysHeld;
 	private int totalTreasures;
 	private int collectedTreasures;
 	private ExitLockTile exitLock;
+	private List<Actor> actors;
 
 	/**
 	 * @author Rhysa
@@ -101,18 +102,22 @@ public class Game {
 	 * @param player
 	 * @param keysHeld
 	 */
-	public void setupGame(Tile[][] tilemap, Player player, HashMap<KeyColour, Boolean> keysHeld) {
+	public void setupGame(Tile[][] tilemap, Player player, HashMap<KeyColour, Integer> keysHeld, int totalTreasure,
+			int collectedTreasures, List<Actor> actors) {
 		// TODO: null checks
 		this.tilemap = tilemap;
 		this.player = player;
 		this.keysHeld = keysHeld;
+		this.totalTreasures = totalTreasure;
+		this.collectedTreasures = collectedTreasures;
+		this.actors = actors;
 	}
 
 	/**
 	 * 
 	 * @return The keys already collected.
 	 */
-	public HashMap<KeyColour, Boolean> getKeysHeld() {
+	public HashMap<KeyColour, Integer> getKeysHeld() {
 		return keysHeld;
 
 	}
@@ -123,7 +128,13 @@ public class Game {
 	 * @param colour
 	 */
 	public void addKey(KeyColour colour) {
-		keysHeld.put(colour, true);
+		// TODO: checks
+		keysHeld.put(colour, keysHeld.get(colour) + 1);
+	}
+
+	public void removeKey(KeyColour colour) {
+		// TODO: checks
+		keysHeld.put(colour, keysHeld.get(colour) - 1);
 	}
 
 	public void collectTreasure() {

@@ -20,7 +20,7 @@ public class LockTile extends Tile {
 
 	@Override
 	public boolean isPathable() {
-		if (Game.instance.getKeysHeld().containsKey(keyColour) && Game.instance.getKeysHeld().get(keyColour)) {
+		if (Game.instance.getKeysHeld().get(keyColour) > 0) {
 			return true;
 		}
 		return false;

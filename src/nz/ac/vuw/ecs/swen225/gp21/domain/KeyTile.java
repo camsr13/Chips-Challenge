@@ -22,9 +22,11 @@ public class KeyTile extends Tile {
 
 	@Override
 	public void onPlayerEnter() {
+		// TODO: checks
 		Game.instance.addKey(keyColour);
 		FreeTile newTile = new FreeTile(Location.copy(location));
 		Game.instance.setTile(newTile);
+		Game.instance.removeKey(keyColour);
 	}
 
 	@Override
