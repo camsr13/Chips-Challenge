@@ -1,7 +1,7 @@
-package test.nz.ac.vuw.ecs.swen225.gp21.persistancy;
+package test.nz.ac.vuw.ecs.swen225.gp21.persistency;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.*;
-import nz.ac.vuw.ecs.swen225.gp21.persistancy.readXML;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.readXML;
 import org.jdom2.JDOMException;
 import org.junit.jupiter.api.Test;
 
