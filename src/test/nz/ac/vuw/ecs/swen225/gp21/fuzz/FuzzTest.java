@@ -17,11 +17,11 @@ public class FuzzTest {
     private final int[] grid = new int[GRID_WIDTH * GRID_WIDTH];
 
 
-//    private final int MOVES = 100;
+    private final int MOVES = 9999999;
     /**
      * The number of seconds the random exploration should run (at the most).
      */
-    private final int TIMEOUT = 30;
+    private final int TIMEOUT = 60;
     private final int MOVE_DELAY = 50;
 
     /**
@@ -88,9 +88,6 @@ public class FuzzTest {
             r.put(Direction.SOUTH, getGridAt(row+1, col));
         }
 
-
-
-
         return r;
     }
 
@@ -120,28 +117,28 @@ public class FuzzTest {
         return preferredDirections;
     }
 
-//    private void performRandomMoves() {
-//        Random random = new Random();
-//        for (int i = 0; i < MOVES; i++) {
-//            MouseAdapter direction = directions.get(random.nextInt(directions.size()));
-//            direction.mouseClicked(null);
-//        }
-//    }
+    private Runnable getRandomDirectionRunnable(Random random) {
+        Direction[] directions = Direction.values();
+
+        Direction direction = directions[random.nextInt(directions.length)];
+        return getRunnableFromDirection(direction);
+    }
 
     /**
-     * Explores a set number of random paths from the start, resetting the level after each path.
+     * Simple algorithm to play random moves.
      */
-    private void exploreGrid() throws InterruptedException {
-//        for (int i = 0; i < 200; i++) {
-            explorePath();
-//            reset.keyPressed(null);
-//        }
+    private void performRandomMoves() {
+        Random random = new Random();
+
+        for (int i = 0; i < MOVES; i++) {
+            getRandomDirectionRunnable(random).run();
+        }
     }
 
     /**
      * Explores a random path, noting on the grid where it has already been.
      */
-    private void explorePath() throws InterruptedException {
+    private void exploreGrid() {
         Random random = new Random();
 
         int currRow = GRID_WIDTH / 2;
@@ -150,10 +147,10 @@ public class FuzzTest {
         incrementGridAt(currRow, currCol);
 
 
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < MOVES; i++) {
             List<Direction> directions = getPreferredDirections(currRow, currCol);
             Direction direction = directions.get(random.nextInt(directions.size()));
-            Runnable runnable = getRunnableFromDirection(direction);
+            Runnable move = getRunnableFromDirection(direction);
 
             switch (direction) {
                 case NORTH:
@@ -173,61 +170,77 @@ public class FuzzTest {
             incrementGridAt(currRow, currCol);
 
             // Execute move
-            TimeUnit.MILLISECONDS.sleep(MOVE_DELAY);
-            runnable.run();
+            move.run();
         }
     }
 
-    @BeforeEach
-    void setUp() {
-
-
-
+    /**
+     * Move in a given list of directions.
+     * @param directions The list of directions.
+     * @param delay The time delay (ms) between each move.
+     * @throws InterruptedException If this method is stopped during a delay.
+     */
+    private void exploreDefinedPath(List<Direction> directions, long delay) throws InterruptedException {
+        for (Direction d : directions) {
+            getRunnableFromDirection(d).run();
+            if (delay > 0) {
+                TimeUnit.MILLISECONDS.sleep(delay);
+            }
+        }
     }
 
-//    @AfterEach
-//    void tearDown() {
-//        while (true) {
-//
-//        }
-//    }
+    /**
+     * Executes a given callable until it finishes or the specified amount of time elapses.
+     * @param timeout The amount of time.
+     * @param unit The unit of time.
+     * @param callable The callable.
+     */
+    private void runWithTimeout(long timeout, TimeUnit unit, Callable<?> callable) {
+        final ExecutorService es = Executors.newSingleThreadExecutor();
+        Future<?> future = es.submit(callable);
+
+        try {
+            future.get(timeout, unit);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            System.out.println("Timeout: " + timeout + "elapsed.");
+        }
+        es.shutdownNow();
+    }
 
     /**
-     * Tests level 1. Starts by traversing random paths from the start, then purposely tries to break the level using
-     * hardcoded paths.
+     * Tests level 1. Purposely tries to break the level using a predetermined path, then traverses randomly.
      */
     @Test
     void test1() {
-        // Load in level 1
+        // Load level 1
         GUITestImp gui = new GUITestImp();
         gui.getMainWindow().setVisible(true);
 
-//        // Setup directional actions
+        // Setup directional actions
         north = gui::doNorthMove;
         east = gui::doEastMove;
         south = gui::doSouthMove;
         west = gui::doWestMove;
 
-        // This code block runs exploreGrid() until either it finishes, or a certain time limit is reached.
-        final ExecutorService es = Executors.newSingleThreadExecutor();
-        Future<?> future = es.submit((Callable<Void>) () -> {
+        // Explore a predetermined path
+        String path = "N N N S S W W W E E E E E S S S W W N N N N N N S N E E E E E E S N W W W W E E N N W W E E E E S S S S S S S E E E E E E W W W W W W N N N N N N E E E E E E E E N N W W W W S S W W W W S S S S S S E E E E E E S S E E N N E E";
+        try {
+            exploreDefinedPath(Direction.getDirectionsFromSequence(path), MOVE_DELAY);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Explore randomly
+        runWithTimeout(TIMEOUT, TimeUnit.SECONDS, (Callable<Void>) () -> {
             exploreGrid();
             return null;
         });
-        try {
-            future.get(TIMEOUT, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        } catch (TimeoutException e) {
-            System.out.println("Timeout: " + TIMEOUT + "s elapsed.");
-        }
-        es.shutdownNow();
-
     }
 
     /**
-     * Tests level 2. Starts by traversing random paths from the start, then purposely tries to break the level using
-     * hardcoded paths.
+     * Tests level 2. Purposely tries to break the level using a predetermined path, then traverses randomly.
      */
     @Test
     void test2() {
@@ -238,6 +251,38 @@ public class FuzzTest {
      * Represents a cardinal direction.
      */
     private enum Direction {
-      NORTH, SOUTH, EAST, WEST
+        NORTH, SOUTH, EAST, WEST;
+
+        /**
+         * Converts a given string (of the form "N E S W" etc.) to a list of directions.
+         * @param seq The string.
+         * @return The list of directions.
+         * @throws IllegalArgumentException If the string isn't of the correct form.
+         */
+        private static List<Direction> getDirectionsFromSequence(String seq) throws IllegalArgumentException {
+            List<Direction> r = new ArrayList<>();
+            Scanner sc = new Scanner(seq);
+
+            while (sc.hasNext()) {
+                switch(sc.next()) {
+                    case "N":
+                        r.add(NORTH);
+                        break;
+                    case "E":
+                        r.add(EAST);
+                        break;
+                    case "S":
+                        r.add(SOUTH);
+                        break;
+                    case "W":
+                        r.add(WEST);
+                        break;
+                    default:
+                        throw new IllegalArgumentException();
+                }
+            }
+
+            return r;
+        }
     }
 }
