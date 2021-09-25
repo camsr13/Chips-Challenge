@@ -1,9 +1,16 @@
 <?xml version="1.0"?>
 <map>
-	<mapSize>
-		<size>13</size>
-		<size>5</size>
-	</mapSize>
+	<mapVariables>
+		<sizeX>13</sizeX>
+		<sizeY>5</sizeY>
+		<total>1</total>
+		<collected>0</collected>
+		<exitLockX>11</exitLockX>
+		<exitLockY>2</exitLockY>
+	</mapVariables>
+	<keysHeld>
+		<key colour = "blue">0</key>
+	</keysHeld>
 	<player>
 		<location>4</location>
 		<location>2</location>
@@ -47,7 +54,7 @@
 		<tile>free</tile>
 		<tile colour = "blue">door</tile>
 		<tile>free</tile>
-		<tile>info</tile>
+		<tile info = "Collect all the treasures to unlock the exit.">info</tile>
 		<tile>treasure</tile>
 		<tile>free</tile>
 		<tile>gate</tile>

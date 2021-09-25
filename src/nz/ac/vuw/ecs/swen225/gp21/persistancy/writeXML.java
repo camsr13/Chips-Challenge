@@ -8,6 +8,8 @@ import org.jdom2.output.XMLOutputter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Rhys Hanrahan
@@ -22,6 +24,10 @@ public class writeXML {
 
     private Player player;
     private Tile[][] tileMap;
+    private HashMap<Game.KeyColour, Integer> keysHeld;
+    private int totalTreasures;
+    private int collectedTreasures;
+    private ExitLockTile exitLock;
 
     /**
      *
@@ -32,13 +38,19 @@ public class writeXML {
         //sets up variables from Game
         player = Game.instance.getPlayer();
         tileMap = Game.instance.getTilemap();
+        keysHeld = Game.instance.getKeysHeld();
+        totalTreasures = Game.instance.getTotalTreaures();
+        collectedTreasures = Game.instance.getCollectedTreasures();
+        exitLock = Game.instance.getExitLock();
 
         //creates new document and root element
         Document document = new Document();
         Element mapElement = new Element("map");
         document.setRootElement(mapElement);
         //call generateMapSize() to write the tileMap size
-        generateMapSize(mapElement);
+        generateMapVariables(mapElement);
+        //call generateKeysHeld() to write the hashMap of keys on the board and keys the player has
+        generateKeysHeld(mapElement);
         //call generatePlayer() to write the playerinfo section with location
         generatePlayer(mapElement);
         //call generateTileRow() for each tileRow in tileMap
@@ -62,17 +74,52 @@ public class writeXML {
      *
      * @param mapElement
      */
-    private void generateMapSize(Element mapElement){
-        Element mapSizeElement = new Element("mapSize");
-        mapElement.addContent(mapSizeElement);
+    private void generateMapVariables(Element mapElement){
+        Element mapVariableElement = new Element("mapVariables");
+        mapElement.addContent(mapVariableElement);
         //write the number of rows in tileRow
-        Element sizeElement = new Element("size");
+        Element sizeElement = new Element("sizeX");
         sizeElement.addContent(String.valueOf(tileMap.length));
-        mapSizeElement.addContent(sizeElement);
+        mapVariableElement.addContent(sizeElement);
         //write the number of columns in tileRow
-        sizeElement = new Element("size");
+        sizeElement = new Element("sizeY");
         sizeElement.addContent(String.valueOf(tileMap[0].length));
-        mapSizeElement.addContent(sizeElement);
+        mapVariableElement.addContent(sizeElement);
+        //write the total number of treasures that are on the current map
+        sizeElement = new Element("total");
+        sizeElement.addContent(String.valueOf(totalTreasures));
+        mapVariableElement.addContent(sizeElement);
+        //write the number of collected treasures
+        sizeElement = new Element("collected");
+        sizeElement.addContent(String.valueOf(collectedTreasures));
+        mapVariableElement.addContent(sizeElement);
+        //write the number of columns in tileRow
+        sizeElement = new Element("exitLockX");
+        sizeElement.addContent(String.valueOf(exitLock.getLocation().getX()));
+        mapVariableElement.addContent(sizeElement);
+        //write the number of columns in tileRow
+        sizeElement = new Element("exitLockY");
+        sizeElement.addContent(String.valueOf(exitLock.getLocation().getY()));
+        mapVariableElement.addContent(sizeElement);
+    }
+
+    /**
+     *
+     * generateKeysHeld read the hashMap of keysHeld and writes it to the save file
+     *
+     * @param mapElement
+     */
+    private void generateKeysHeld(Element mapElement){
+        //create new tileRowElement for each tileRow
+        Element tileKeysHeld = new Element("keysHeld");
+        mapElement.addContent(tileKeysHeld);
+        //add a new tileElement for each tile in a tileRow
+        for(Map.Entry<Game.KeyColour, Integer> entry: keysHeld.entrySet()){
+            Element keyElement = new Element("key");
+            keyElement.setAttribute("colour", getKeysHeldColour(entry.getKey()));
+            keyElement.addContent(String.valueOf(entry.getValue()));
+            tileKeysHeld.addContent(keyElement);
+        }
     }
 
     /**
@@ -135,6 +182,7 @@ public class writeXML {
         }else if(tile instanceof TreasureTile){
             return "treasure";
         }else if(tile instanceof InfoTile){
+            tileElement.setAttribute("info", ((InfoTile) tile).getMessage());
             return "info";
         }else if(tile instanceof ExitLockTile){
             return "gate";
@@ -177,6 +225,16 @@ public class writeXML {
         if(((KeyTile)tile).getKeyColour() == Game.KeyColour.BLUE){
             return "blue";
         }else if(((KeyTile)tile).getKeyColour() == Game.KeyColour.YELLOW){
+            return "yellow";
+        }else{
+            return null;
+        }
+    }
+
+    private String getKeysHeldColour(Game.KeyColour colour){
+        if(colour == Game.KeyColour.BLUE){
+            return "blue";
+        }else if(colour == Game.KeyColour.YELLOW){
             return "yellow";
         }else{
             return null;
