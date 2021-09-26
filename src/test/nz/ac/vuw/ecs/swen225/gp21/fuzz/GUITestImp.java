@@ -14,17 +14,17 @@ public class GUITestImp extends GUIImp {
   }
 
   @Override
-  public void doWestMove() {
+  protected void doWestMove() {
     super.doWestMove();
   }
 
   @Override
-  public void doEastMove() {
+  protected void doEastMove() {
     super.doEastMove();
   }
 
   @Override
-  public void doSouthMove() {
+  protected void doSouthMove() {
     super.doSouthMove();
   }
 

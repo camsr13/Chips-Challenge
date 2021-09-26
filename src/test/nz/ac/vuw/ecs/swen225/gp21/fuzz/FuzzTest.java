@@ -204,7 +204,7 @@ public class FuzzTest {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         } catch (TimeoutException e) {
-            System.out.println("Timeout: " + timeout + "elapsed.");
+            System.out.println("Timeout: " + timeout + " elapsed.");
         }
         es.shutdownNow();
     }
