@@ -215,7 +215,7 @@ public class FuzzTest {
     @Test
     void test1() {
         // Load level 1
-        GUITestImp gui = new GUITestImp();
+        GUITestImp gui = new GUITestImp("level1.xml");
         gui.getMainWindow().setVisible(true);
 
         // Setup directional actions

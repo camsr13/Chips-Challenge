@@ -6,11 +6,8 @@ import nz.ac.vuw.ecs.swen225.gp21.app.GUIImp;
  * Gui implementation without dialog
  */
 public class GUITestImp extends GUIImp {
-
-  @Override
-  protected void startPopUp() {
-    this.currFile = "level1.xml";
-    loadGame();
+  public GUITestImp(String file) {
+    super(file);
   }
 
   @Override
