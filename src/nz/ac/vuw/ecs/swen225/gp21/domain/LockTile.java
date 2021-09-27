@@ -31,6 +31,7 @@ public class LockTile extends Tile {
 		// TODO: check player holds correct key
 		FreeTile newTile = new FreeTile(Location.copy(location));
 		Game.instance.setTile(newTile);
+		Game.instance.removeKey(keyColour);
 	}
 
 	@Override
