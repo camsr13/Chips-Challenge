@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp21.renderer;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,13 +33,19 @@ class BoardPanel extends JPanel {
 	 * Serial Id to satisfy warnings
 	 */
 	private static final long serialVersionUID = -3951679614322867873L;
+	
+	
 	private Game game;
+	private double scale = 1.0;
 	private Map<Class<? extends Tile>, Image[]> images = new HashMap<Class<? extends Tile>, Image[]>();
 	
 	/**
+	 * Panel that is responsible for retrieving and displaying the board from game
 	 * @param game
+	 * @param initialScale 
 	 */
-	BoardPanel(Game game) {
+	protected BoardPanel(Game game, double initialScale) {
+		this.scale = initialScale;
 		this.game = game;
 		loadTileImages();
 	};
@@ -49,8 +56,11 @@ class BoardPanel extends JPanel {
 	 */
 	@Override
 	public void paintComponent(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g;
 		super.paintComponent(g);
-		draw(g);
+		g2d.scale(scale, scale);
+		draw(g2d);
+
 	}
 	
 	/**
@@ -59,9 +69,14 @@ class BoardPanel extends JPanel {
 	 * TODO: add smooth animated board updates
 	 * @param g
 	 */
-	private void draw (Graphics g) {
+	private void draw (Graphics2D g) {
+		
+		//BREAKPOINT: board info retrieved
 		Tile[][] boardTiles = game.getTilemap();
+		//BREAKPOINT: player info retrieved
 		Location chapPos = game.getPlayer().getLocation();
+		
+		
 		int i = 0;
 		for(int y = chapPos.getY() - 4; y < chapPos.getY() + 5; y++) {
 			int j = 0;
@@ -81,7 +96,9 @@ class BoardPanel extends JPanel {
 				if (paintTile == null) {
 					toPaint = images.get(null)[0];
 				} else if(paintTile instanceof LockTile || paintTile instanceof KeyTile) {
+					
 					int colour;
+					
 					if(paintTile instanceof KeyTile) {
 						KeyTile tile = (KeyTile) paintTile;
 						colour = tile.getKeyColour().ordinal();
@@ -89,10 +106,12 @@ class BoardPanel extends JPanel {
 						LockTile tile = (LockTile) paintTile;
 						colour = tile.getKeyColour().ordinal();
 					}
+					
 					toPaint = images.get(paintTile.getClass())[colour];
+					
 				} else if(images.get(paintTile.getClass()) == null) {
-					int xy = x + y;
-					System.out.println("error" + paintTile.getClass());
+					System.out.println("error: No tile image for:" + paintTile.getClass());
+					toPaint = images.get(null)[0];
 				} else {
 					toPaint = images.get(paintTile.getClass())[0];
 				} 	
@@ -162,6 +181,15 @@ class BoardPanel extends JPanel {
 		images.put(KeyTile.class, new Image[] {kb.getImage(), ky.getImage(), kg.getImage(),kr.getImage()});
 		
 		
-		
 	}
+	
+	/**
+	 * Updates the scale of the board
+	 * @param scale
+	 */
+	protected void setScale(double scale) {
+		this.scale = scale;
+		//paintComponent(this.getComponentGraphics(getGraphics()));
+	}
+	
 }

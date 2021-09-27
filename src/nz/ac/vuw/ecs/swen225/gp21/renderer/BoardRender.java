@@ -10,11 +10,14 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
  */
 public class BoardRender {
 	//private Game game;
-	private JPanel boardPanel;
+	private BoardPanel boardPanel;
 	private JLayeredPane basePane = new JLayeredPane();
 	private ChapRender chapIcon;
 	
-	private static final int squareSize = 128;
+	/**
+	 * Defines the image size
+	 */
+	static final int squareSize = 128;
 	private static final int panelHeight = 9;
 	private static final int panelWidth = panelHeight;
 	
@@ -33,22 +36,25 @@ public class BoardRender {
 	/**
 	 * Generates board objects and puts them into the output layered pane
 	 * @param game
+	 * @param size 
+	 * @param initScale 
 	 */
-	public BoardRender(Game game) {
-		//this.game = game;
-		//loadImages();
-		chapIcon = new ChapRender();
-		chapIcon.setBounds(panelHeight/2 * squareSize, panelWidth/2 * squareSize, squareSize, squareSize);
+	public BoardRender(Game game, int size) {
+		
+		double initScale = getScale(size);
+		int scaledSquare = (int) Math.round(initScale*squareSize);
+		
+		chapIcon = new ChapRender(game, initScale);
+		chapIcon.setBounds(6 * scaledSquare/2, 6 * scaledSquare/2, scaledSquare, scaledSquare);
 		chapIcon.setOpaque(false);
 
-		boardPanel = new BoardPanel(game);
+		boardPanel = new BoardPanel(game, initScale);
 		boardPanel.setVisible(true);
 		boardPanel.setBounds(0,0, panelWidth * squareSize, panelHeight * squareSize);
 		
 		basePane.add(boardPanel,JLayeredPane.DEFAULT_LAYER);
 		basePane.add(chapIcon,JLayeredPane.PALETTE_LAYER);
 		basePane.setVisible(true);
-		
 	}
 	
 	/**
@@ -60,10 +66,24 @@ public class BoardRender {
 		boardPanel.revalidate();
 		boardPanel.repaint();
 	}
+	/**
+	 * 
+	 */
+	private double getScale(int size) {
+		return 1.0 * size / (squareSize * panelWidth);
+	}
 	
-	//public void setScale(int width) {
-	//	
-	//}
+	/**
+	 * Updates the size of the render
+	 * @param scale
+	 */
+	public void setSize(int size) {
+		double scale = getScale(size);
+		
+		basePane.setSize(size, size);
+		chapIcon.setScale(scale);
+		boardPanel.setScale(scale);
+	}
 	
 	
 	/**
