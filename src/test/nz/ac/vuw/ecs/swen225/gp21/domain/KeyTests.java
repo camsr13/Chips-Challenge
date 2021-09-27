@@ -25,7 +25,7 @@ public class KeyTests {
 	@Test
 	public void testKey_01() {
 		Game game = new Game();
-		Player player = new Player(new Location(1, 1));
+		Player player = new Player(new Location(1, 1), 0);
 		Tile[][] tilemap = new Tile[3][3];
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
@@ -36,7 +36,7 @@ public class KeyTests {
 		HashMap<KeyColour, Integer> keysHeld = emptyKeySet();
 		game.setupGame(tilemap, player, keysHeld, 0, 0, null, null);
 
-		player.move(Game.Direction.UP, tilemap);
+		player.move(Game.Direction.UP);
 		assert (player.getLocation().getY() == 0);
 		assert (game.getKeysHeld().get(KeyColour.BLUE) > 0);
 	}
@@ -44,7 +44,7 @@ public class KeyTests {
 	@Test
 	public void testKey_02() {
 		Game game = new Game();
-		Player player = new Player(new Location(1, 1));
+		Player player = new Player(new Location(1, 1), 0);
 		Tile[][] tilemap = new Tile[3][3];
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
@@ -55,7 +55,7 @@ public class KeyTests {
 		HashMap<KeyColour, Integer> keysHeld = emptyKeySet();
 		game.setupGame(tilemap, player, keysHeld, 0, 0, null, null);
 
-		player.move(Game.Direction.UP, tilemap);
+		player.move(Game.Direction.UP);
 		assert (player.getLocation().getY() == 0);
 		assert (game.getKeysHeld().get(KeyColour.YELLOW) > 0);
 	}
@@ -63,7 +63,7 @@ public class KeyTests {
 	@Test
 	public void testKey_03() {
 		Game game = new Game();
-		Player player = new Player(new Location(1, 1));
+		Player player = new Player(new Location(1, 1), 0);
 		Tile[][] tilemap = new Tile[3][3];
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
@@ -74,14 +74,14 @@ public class KeyTests {
 		HashMap<KeyColour, Integer> keysHeld = emptyKeySet();
 		game.setupGame(tilemap, player, keysHeld, 0, 0, null, null);
 
-		player.move(Game.Direction.UP, tilemap);
+		player.move(Game.Direction.UP);
 		assert (game.getTilemap()[1][0] instanceof FreeTile);
 	}
 
 	@Test
 	public void testLock_01() {
 		Game game = new Game();
-		Player player = new Player(new Location(1, 1));
+		Player player = new Player(new Location(1, 1), 0);
 		Tile[][] tilemap = new Tile[3][3];
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
@@ -92,14 +92,14 @@ public class KeyTests {
 		HashMap<KeyColour, Integer> keysHeld = emptyKeySet();
 		game.setupGame(tilemap, player, keysHeld, 0, 0, null, null);
 
-		player.move(Game.Direction.UP, tilemap);
+		player.move(Game.Direction.UP);
 		assert (player.getLocation().getY() == 1);
 	}
 
 	@Test
 	public void testLock_02() {
 		Game game = new Game();
-		Player player = new Player(new Location(1, 1));
+		Player player = new Player(new Location(1, 1), 0);
 		Tile[][] tilemap = new Tile[3][3];
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
@@ -111,14 +111,14 @@ public class KeyTests {
 		game.setupGame(tilemap, player, keysHeld, 0, 0, null, null);
 		game.addKey(KeyColour.BLUE);
 
-		player.move(Game.Direction.UP, tilemap);
+		player.move(Game.Direction.UP);
 		assert (player.getLocation().getY() == 0);
 	}
 
 	@Test
 	public void testLock_03() {
 		Game game = new Game();
-		Player player = new Player(new Location(1, 1));
+		Player player = new Player(new Location(1, 1), 0);
 		Tile[][] tilemap = new Tile[3][3];
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
@@ -130,14 +130,14 @@ public class KeyTests {
 		game.setupGame(tilemap, player, keysHeld, 0, 0, null, null);
 		game.addKey(KeyColour.BLUE);
 
-		player.move(Game.Direction.UP, tilemap);
+		player.move(Game.Direction.UP);
 		assert (game.getTilemap()[1][0] instanceof FreeTile);
 	}
 
 	@Test
 	public void testLock_04() {
 		Game game = new Game();
-		Player player = new Player(new Location(1, 1));
+		Player player = new Player(new Location(1, 1), 0);
 		Tile[][] tilemap = new Tile[3][3];
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
@@ -149,7 +149,7 @@ public class KeyTests {
 		game.setupGame(tilemap, player, keysHeld, 0, 0, null, null);
 		game.addKey(KeyColour.YELLOW);
 
-		player.move(Game.Direction.UP, tilemap);
+		player.move(Game.Direction.UP);
 		assert (player.getLocation().getY() == 1);
 	}
 
