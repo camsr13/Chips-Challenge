@@ -7,4 +7,16 @@ public class FreezeActor extends Actor {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public void tick() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onPlayerEnter() {
+		// TODO Auto-generated method stub
+
+	}
+
 }
