@@ -39,6 +39,13 @@ public class FreezeActor extends Actor {
 			if (newTile.isActorPathable()){
 				setLocation(new Location(x, y));
 			}
+			else {
+				// Reverse direction
+				if (currentDirection == Game.Direction.UP) currentDirection = Game.Direction.DOWN;
+				if (currentDirection == Game.Direction.DOWN) currentDirection = Game.Direction.UP;
+				if (currentDirection == Game.Direction.LEFT) currentDirection = Game.Direction.RIGHT;
+				if (currentDirection == Game.Direction.RIGHT) currentDirection = Game.Direction.LEFT;
+			}
 		}
 	}
 
