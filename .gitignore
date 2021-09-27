@@ -3,6 +3,7 @@
 *.jar
 *.classpath
 *.project
+*.iml
 /bin/
 /ChapsChallenge.iml
 /out/
