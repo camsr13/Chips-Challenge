@@ -98,6 +98,16 @@ public class GUIImp implements GUIAbstract{
 		initGUI();
 	}
 
+		protected GUIImp(String file) {
+    	this.currFile = file;
+    	loadGame();
+			initFrame();
+			initMenu();
+			initBoard();
+			initSideBar();
+			countdown();
+		}
+
     protected void initGUI(){
 
     	startPopUp();
