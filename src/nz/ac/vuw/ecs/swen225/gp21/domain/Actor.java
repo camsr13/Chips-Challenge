@@ -6,6 +6,7 @@ public abstract class Actor {
 	 * Actors current location
 	 */
 	Location location;
+	boolean shouldRemove = false;
 
 	/**
 	 * @param location The Actors location
@@ -17,4 +18,11 @@ public abstract class Actor {
 	public abstract void tick();
 
 	public abstract void onPlayerEnter();
+
+	/**
+	 * @param l
+	 */
+	public  void setLocation(Location l) {
+		this.location = Location.copy(l);
+	};
 }

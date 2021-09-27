@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class Game {
 	 *
 	 */
 	public enum KeyColour {
-		BLUE, YELLOW
+		BLUE, YELLOW, RED, GREEN
 	}
 
 	/**
@@ -92,16 +93,27 @@ public class Game {
 	 */
 	public void inputDirection(Direction d) {
 		// TODO: check for nulls
-		player.move(d, tilemap);
+		player.move(d);
 	}
 
 	/**
 	 * Causes a gameplay tick to occur
 	 */
 	public void tick() {
+		player.tick();
+		Tile playerTile = tilemap[player.getLocation().getX()][player.getLocation().getY()];
+		playerTile.onPlayerTick();
+		ArrayList<Actor> toRemove = new ArrayList<Actor>();
 		for (Actor a : actors) {
 			a.tick();
+			if (a.shouldRemove){
+				toRemove.add(a);
+			}
 		}
+		for (Actor a : toRemove){
+			actors.remove(a);
+		}
+
 	}
 
 	/**
