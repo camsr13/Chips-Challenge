@@ -1,4 +1,4 @@
-package test.nz.ac.vuw.ecs.swen225.gp21.persistancy;
+package test.nz.ac.vuw.ecs.swen225.gp21.persistency;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.readXML;
