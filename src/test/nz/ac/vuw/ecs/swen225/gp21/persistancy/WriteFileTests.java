@@ -1,8 +1,8 @@
 package test.nz.ac.vuw.ecs.swen225.gp21.persistancy;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
-import nz.ac.vuw.ecs.swen225.gp21.persistancy.readXML;
-import nz.ac.vuw.ecs.swen225.gp21.persistancy.writeXML;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.readXML;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.writeXML;
 import org.jdom2.JDOMException;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ public class WriteFileTests {
         writeXML instance = new writeXML();
         instance.writeXMLFile();
 
-        assert(new File("src/nz/ac/vuw/ecs/swen225/gp21/persistancy/currentSave.xml").isFile());
+        assert(new File("src/nz/ac/vuw/ecs/swen225/gp21/persistency/currentSave.xml").isFile());
     }
 
 }

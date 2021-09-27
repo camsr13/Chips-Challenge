@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp21.persistancy;
+package nz.ac.vuw.ecs.swen225.gp21.persistency;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.*;
 import org.jdom2.Document;
@@ -39,7 +39,7 @@ public class writeXML {
         player = Game.instance.getPlayer();
         tileMap = Game.instance.getTilemap();
         keysHeld = Game.instance.getKeysHeld();
-        totalTreasures = Game.instance.getTotalTreaures();
+        totalTreasures = Game.instance.getTotalTreasures();
         collectedTreasures = Game.instance.getCollectedTreasures();
         exitLock = Game.instance.getExitLock();
 
@@ -59,7 +59,7 @@ public class writeXML {
         }
         //Set outputStream and write generated XML file
         XMLOutputter xmlOutputter = new XMLOutputter();
-        try(FileOutputStream fileOutputStream = new FileOutputStream("src/nz/ac/vuw/ecs/swen225/gp21/persistancy/currentSave.xml")){
+        try(FileOutputStream fileOutputStream = new FileOutputStream("src/nz/ac/vuw/ecs/swen225/gp21/persistency/currentSave.xml")){
             xmlOutputter.output(document, fileOutputStream);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
