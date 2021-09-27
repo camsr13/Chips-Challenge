@@ -27,17 +27,28 @@ public class BoardRender {
 	 *
 	 */
 	public enum Direction  {
+		/**
+		 * Player facing down
+		 */
 		DOWN,	
+		/**
+		 * Player facing right
+		 */
 		RIGHT,
+		/**
+		 * Player facing up
+		 */
 		UP,
+		/**
+		 * Player facing left
+		 */
 		LEFT
 	}
 	
 	/**
 	 * Generates board objects and puts them into the output layered pane
 	 * @param game
-	 * @param size 
-	 * @param initScale 
+	 * @param size  
 	 */
 	public BoardRender(Game game, int size) {
 		
