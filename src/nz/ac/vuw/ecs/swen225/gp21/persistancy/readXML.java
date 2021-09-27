@@ -8,6 +8,7 @@ import org.jdom2.input.SAXBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -52,20 +53,33 @@ public class readXML {
         Element tileElement = null;
         Element map = ((Document) (new SAXBuilder()).build(new File("src/nz/ac/vuw/ecs/swen225/gp21/persistancy/" + fileName))).getRootElement();
 
-        //Get map size
-        List<Element> mapSize = map.getChildren("mapSize");
-        for(int i = 0; i < mapSize.size(); i++){
-            rowElement = (Element) mapSize.get(i);
-            Iterator<Element> Iterator = rowElement.getChildren("size").iterator();
-            //There will always be two size elements in the XML file for the mapSize rows and columns
-            tilemap = new Tile[Integer.parseInt(Iterator.next().getText())][Integer.parseInt(Iterator.next().getText())];
+        //Get map variables
+        List<Element> mapVariables = map.getChildren("mapVariables");
+        rowElement = (Element) mapVariables.get(0);
+        //get the map size and create a new tileMap (2d array) of that size
+        tilemap = new Tile[Integer.parseInt(rowElement.getChild("sizeX").getText())][Integer.parseInt(rowElement.getChild("sizeY").getText())];
+        //get and store the totalTreasures and collectedTreasures
+        int totalTreasure = Integer.parseInt(rowElement.getChild("total").getText());
+        int collectedTreasures = Integer.parseInt(rowElement.getChild("collected").getText());
+        //get the coordinates of the exit lock
+        int exitLockX = Integer.parseInt(rowElement.getChild("exitLockX").getText());
+        int exitLockY = Integer.parseInt(rowElement.getChild("exitLockY").getText());
+
+        //Get keysHeld
+        HashMap<Game.KeyColour, Integer> keysHeld = new HashMap<Game.KeyColour, Integer>();
+        rowElement = map.getChildren("keysHeld").get(0);
+        Iterator<Element> Iterator = rowElement.getChildren("key").iterator();
+        //For every key colour, add the it to the hashmap
+        while(Iterator.hasNext()) {
+            tileElement = (Element) Iterator.next();
+            keysHeld.put(getColour(tileElement.getAttributeValue("colour")),Integer.parseInt(tileElement.getText()));
         }
 
         //Get player info (location)
         List<Element> playerInfo = map.getChildren("player");
         for(int i = 0; i < playerInfo.size(); i++){
             rowElement = (Element) playerInfo.get(i);
-            Iterator<Element> Iterator = rowElement.getChildren("location").iterator();
+            Iterator = rowElement.getChildren("location").iterator();
             //There will always be two location elements in the XML file for the players x and y coords
             player = new Player(new Location(Integer.parseInt(Iterator.next().getText()), Integer.parseInt(Iterator.next().getText())));
         }
@@ -74,7 +88,7 @@ public class readXML {
         List<Element> rowsList = map.getChildren("tileRow");
         for(int i = 0; i < rowsList.size(); i++){
             rowElement = (Element) rowsList.get(i);
-            Iterator<Element> Iterator = rowElement.getChildren("tile").iterator();
+            Iterator = rowElement.getChildren("tile").iterator();
 
             //Loops through all the tiles within each tileRow
             int count = 0;
@@ -93,7 +107,7 @@ public class readXML {
                 }else if(tileElement.getText().equals("treasure")){
                     tilemap[count][i] = new TreasureTile(new Location(count, i));
                 }else if(tileElement.getText().equals("info")){
-                    tilemap[count][i] = new InfoTile(new Location(count, i));
+                    tilemap[count][i] = new InfoTile(new Location(count, i), tileElement.getAttributeValue("info"));
                 }else if(tileElement.getText().equals("gate")){
                     tilemap[count][i] = new ExitLockTile(new Location(count, i));
                 }else if(tileElement.getText().equals("exit")){
@@ -108,7 +122,8 @@ public class readXML {
                 count+= 1;
             }
         }
-        Game.instance.setupGame(tilemap, player, new HashMap<Game.KeyColour, Boolean>());
+        List<Actor> actors = new ArrayList<Actor>();
+        Game.instance.setupGame(tilemap, player, keysHeld, totalTreasure, collectedTreasures, (ExitLockTile) tilemap[exitLockX][exitLockY], actors);
     }
 
     /**

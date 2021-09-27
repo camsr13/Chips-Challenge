@@ -1,9 +1,17 @@
 <?xml version="1.0"?>
 <map>
-	<mapSize>
-		<size>19</size>
-		<size>13</size>
-	</mapSize>
+	<mapVariables>
+		<sizeX>19</sizeX>
+		<sizeY>13</sizeY>
+		<total>9</total>
+		<collected>0</collected>
+		<exitLockX>17</exitLockX>
+		<exitLockY>9</exitLockY>
+	</mapVariables>
+	<keysHeld>
+		<key colour = "blue">0</key>
+		<key colour = "yellow">0</key>
+	</keysHeld>
 	<player>
 		<location>3</location>
 		<location>9</location>
