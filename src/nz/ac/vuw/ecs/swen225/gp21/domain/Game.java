@@ -14,7 +14,7 @@ public class Game {
 	/**
 	 * Singleton pattern
 	 */
-	static Game instance;
+	public static Game instance;
 
 	private Tile[][] tilemap;
 	private Player player;
@@ -24,6 +24,18 @@ public class Game {
 	private int collectedTreasures;
 	private ExitLockTile exitLock;
 	private List<Actor> actors;
+
+	public int getTotalTreasures() {
+		return totalTreasures;
+	}
+
+	public int getCollectedTreasures() {
+		return collectedTreasures;
+	}
+
+	public ExitLockTile getExitLock() {
+		return exitLock;
+	}
 
 	/**
 	 * @author Rhysa
