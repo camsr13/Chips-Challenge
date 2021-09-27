@@ -15,6 +15,7 @@
 	<player>
 		<location>15</location>
 		<location>20</location>
+		<frozen>0</frozen>
 	</player>
 	<tileRow>
 		<tile>wall</tile>
