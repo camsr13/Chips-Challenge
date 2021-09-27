@@ -1,17 +1,16 @@
 package nz.ac.vuw.ecs.swen225.gp21.renderer;
 
-import java.awt.Graphics;
+
 import java.awt.Image;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.awt.image.BufferedImage;
+
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
+import nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction;
 /**
  * A Modified JLabel base which can be used for objects that aren't part of the board
  * and animate when they move.
@@ -19,9 +18,31 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
  *
  */
 abstract class Animatable extends JLabel {
-	//protected Game game;
-	protected ImageIcon[] images = {null, null, null, null};
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	protected int currentDir = Direction.DOWN.ordinal();
+	/**
+	 * 
+	 */
+	protected Game game;
+	/**
+	 * buffered images for scaling and animating
+	 */
+	protected BufferedImage[] images = {null, null, null, null};
+	/**
+	 * Label that displays the image
+	 */
 	protected JLabel imageContainer;
+	
+	/**
+	 * Scales the animatable
+	 */
+	protected double scale = 1.0;
 	
 	/**
 	 * Animates movement of the object in the specified direction
@@ -40,7 +61,16 @@ abstract class Animatable extends JLabel {
 	 * @param dir
 	 */
 	void update(Integer dir) {
-		this.setIcon(images[dir]);
+		currentDir = dir;
+		int width = (int) Math.round( this.getWidth() * scale );
+		int height = (int) Math.round( this.getHeight() * scale );
+		
+		int x = (int) Math.round(this.getBounds().x * scale);
+		int y = (int) Math.round(this.getBounds().y * scale);
+		this.setBounds(x,y, width, height);
+		Image newImage = images[dir].getScaledInstance(width, height, BufferedImage.SCALE_DEFAULT);
+		this.setIcon(new ImageIcon(newImage));
+		scale = 1;
 	}
 	
 }
