@@ -37,6 +37,10 @@ public class Game {
 		return exitLock;
 	}
 
+	public List<Actor> getActors() {
+		return actors;
+	}
+
 	/**
 	 * @author Rhysa
 	 *
@@ -95,7 +99,9 @@ public class Game {
 	 * Causes a gameplay tick to occur
 	 */
 	public void tick() {
-
+		for (Actor a : actors) {
+			a.tick();
+		}
 	}
 
 	/**
