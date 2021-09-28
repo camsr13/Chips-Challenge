@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
 /**
- * TODO: everything
+ * TODO: exiting
  *
  * @author Rhysa
  *

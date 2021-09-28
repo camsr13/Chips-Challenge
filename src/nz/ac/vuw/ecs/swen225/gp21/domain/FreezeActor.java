@@ -2,8 +2,16 @@ package nz.ac.vuw.ecs.swen225.gp21.domain;
 
 public class FreezeActor extends Actor {
 
+	/**
+	 * This FreezeActors current direction for movement.
+	 */
 	public Game.Direction currentDirection;
 
+	/**
+	 *
+	 * @param location
+	 * @param currentDirection
+	 */
 	public FreezeActor(Location location, Game.Direction currentDirection) {
 		super(location);
 		this.currentDirection = currentDirection;
@@ -16,7 +24,7 @@ public class FreezeActor extends Actor {
 
 	}
 
-	private void move(){
+	private void move() {
 		int x = -1;
 		int y = -1;
 		if (currentDirection == Game.Direction.UP) {
@@ -36,7 +44,7 @@ public class FreezeActor extends Actor {
 			// TODO: bad movement case
 		} else {
 			Tile newTile = Game.instance.getTilemap()[x][y];
-			if (newTile.isActorPathable()){
+			if (newTile.isActorPathable()) {
 				setLocation(new Location(x, y));
 			}
 			else {

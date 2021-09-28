@@ -8,7 +8,7 @@ import java.util.List;
  * @author Rhys Adcock
  *
  *         Game holds the player and tilemap and facilitates logic of gameplay
- *         components
+ *         components.
  */
 public class Game {
 
@@ -26,18 +26,34 @@ public class Game {
 	private ExitLockTile exitLock;
 	private List<Actor> actors;
 
+	/**
+	 *
+	 * @return Total number of treasures in a level.
+	 */
 	public int getTotalTreasures() {
 		return totalTreasures;
 	}
 
+	/**
+	 *
+	 * @return Number of treausre collected.
+	 */
 	public int getCollectedTreasures() {
 		return collectedTreasures;
 	}
 
+	/**
+	 *
+	 * @return The ExitLock for this level.
+	 */
 	public ExitLockTile getExitLock() {
 		return exitLock;
 	}
 
+	/**
+	 *
+	 * @return List of actors.
+	 */
 	public List<Actor> getActors() {
 		return actors;
 	}
@@ -59,10 +75,11 @@ public class Game {
 	}
 
 	/**
-	 * Sets singleton instance to this
+	 * Sets singleton instance to this.
 	 */
 	public Game() {
 		instance = this;
+		observers = new ArrayList<Observer>();
 	}
 
 	/**
@@ -81,7 +98,6 @@ public class Game {
 
 	/**
 	 * Overwrites the tile in tilemap using given tiles location.
-	 * 
 	 * @param tile
 	 */
 	public void setTile(Tile tile) {
@@ -97,7 +113,7 @@ public class Game {
 	}
 
 	/**
-	 * Causes a gameplay tick to occur
+	 * Causes a gameplay tick to occur.
 	 */
 	public void tick() {
 		player.tick();
@@ -110,15 +126,14 @@ public class Game {
 				toRemove.add(a);
 			}
 		}
-		for (Actor a : toRemove){
+		for (Actor a : toRemove) {
 			actors.remove(a);
 		}
 
 	}
 
 	/**
-	 * Add an observer to the list of observers
-	 * 
+	 * Add an observer to the list of observers.
 	 * @param obs
 	 */
 	public void addObserver(Observer obs) {
@@ -126,11 +141,14 @@ public class Game {
 	}
 
 	/**
-	 * setups up the initial state of the game
-	 * 
+	 * setups up the initial state of the game.
 	 * @param tilemap
 	 * @param player
 	 * @param keysHeld
+	 * @param totalTreasure
+	 * @param collectedTreasures
+	 * @param exitLock
+	 * @param  actors
 	 */
 	public void setupGame(Tile[][] tilemap, Player player, HashMap<KeyColour, Integer> keysHeld, int totalTreasure,
 			int collectedTreasures, ExitLockTile exitLock, List<Actor> actors) {
@@ -145,7 +163,6 @@ public class Game {
 	}
 
 	/**
-	 * 
 	 * @return The keys already collected.
 	 */
 	public HashMap<KeyColour, Integer> getKeysHeld() {
@@ -155,7 +172,6 @@ public class Game {
 
 	/**
 	 * Add a key of the specified colour to the heldKeys list.
-	 * 
 	 * @param colour
 	 */
 	public void addKey(KeyColour colour) {
@@ -163,11 +179,18 @@ public class Game {
 		keysHeld.put(colour, keysHeld.get(colour) + 1);
 	}
 
+	/**
+	 * Remove a key of the specified colour from the heldKeys list.
+	 * @param colour
+	 */
 	public void removeKey(KeyColour colour) {
 		// TODO: checks
 		keysHeld.put(colour, keysHeld.get(colour) - 1);
 	}
 
+	/**
+	 * Adds a treausre to the collectedTreasure count and removes the exitLock if all have been collected.
+	 */
 	public void collectTreasure() {
 		collectedTreasures++;
 		// TODO: pre and post condition checks
