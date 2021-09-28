@@ -27,8 +27,7 @@ import javax.swing.border.EmptyBorder;
 import org.jdom2.JDOMException;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
-import nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction;
-import nz.ac.vuw.ecs.swen225.gp21.persistancy.readXML;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.readXML;
 import nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.*;
 
@@ -98,6 +97,16 @@ public class GUIImp implements GUIAbstract{
     public GUIImp() {
 		initGUI();
 	}
+
+		protected GUIImp(String file) {
+    	this.currFile = file;
+    	loadGame();
+			initFrame();
+			initMenu();
+			initBoard();
+			initSideBar();
+			countdown();
+		}
 
     protected void initGUI(){
 

@@ -25,4 +25,9 @@ public class ExitLockTile extends Tile {
 		return "E";
 	}
 
+	public void removeTile() {
+		FreeTile newTile = new FreeTile(Location.copy(location));
+		Game.instance.setTile(newTile);
+	}
+
 }

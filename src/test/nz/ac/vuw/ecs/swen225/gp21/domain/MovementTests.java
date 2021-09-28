@@ -13,7 +13,7 @@ public class MovementTests {
 	@Test
 	public void testValid_01() {
 		Game game = new Game();
-		Player player = new Player(new Location(1, 1));
+		Player player = new Player(new Location(1, 1), 0);
 		Tile[][] tilemap = new Tile[3][3];
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
@@ -21,21 +21,21 @@ public class MovementTests {
 			}
 		}
 		tilemap[1][1] = new FreeTile(new Location(1, 1));
-		player.move(Game.Direction.UP, tilemap);
+		player.move(Game.Direction.UP);
 		assert (player.getLocation().getY() == 1);
 	}
 
 	@Test
 	public void testValid_02() {
 		Game game = new Game();
-		Player player = new Player(new Location(1, 1));
+		Player player = new Player(new Location(1, 1), 0);
 		Tile[][] tilemap = new Tile[3][3];
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
 				tilemap[x][y] = new FreeTile(new Location(x, y));
 			}
 		}
-		player.move(Game.Direction.UP, tilemap);
+		player.move(Game.Direction.UP);
 		assert (player.getLocation().getY() == 0);
 	}
 }

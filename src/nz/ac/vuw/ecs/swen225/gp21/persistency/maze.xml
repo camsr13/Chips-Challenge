@@ -1,12 +1,21 @@
 <?xml version="1.0"?>
 <map>
-	<mapSize>
-		<size>29</size>
-		<size>23</size>
-	</mapSize>
+	<mapVariables>
+		<sizeX>29</sizeX>
+		<sizeY>23</sizeY>
+		<total>8</total>
+		<collected>0</collected>
+		<exitLockX>16</exitLockX>
+		<exitLockY>1</exitLockY>
+	</mapVariables>
+	<keysHeld>
+		<key colour = "blue">0</key>
+		<key colour = "yellow">0</key>
+	</keysHeld>
 	<player>
 		<location>15</location>
 		<location>20</location>
+		<frozen>0</frozen>
 	</player>
 	<tileRow>
 		<tile>wall</tile>

@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,12 +12,35 @@ import java.util.List;
  */
 public class Game {
 
+	/**
+	 * Singleton pattern
+	 */
 	public static Game instance;
 
 	private Tile[][] tilemap;
 	private Player player;
 	private List<Observer> observers;
-	private HashMap<KeyColour, Boolean> keysHeld;
+	private HashMap<KeyColour, Integer> keysHeld;
+	private int totalTreasures;
+	private int collectedTreasures;
+	private ExitLockTile exitLock;
+	private List<Actor> actors;
+
+	public int getTotalTreasures() {
+		return totalTreasures;
+	}
+
+	public int getCollectedTreasures() {
+		return collectedTreasures;
+	}
+
+	public ExitLockTile getExitLock() {
+		return exitLock;
+	}
+
+	public List<Actor> getActors() {
+		return actors;
+	}
 
 	/**
 	 * @author Rhysa
@@ -26,12 +50,16 @@ public class Game {
 		UP, DOWN, LEFT, RIGHT
 	}
 
+	/**
+	 * @author Rhysa
+	 *
+	 */
 	public enum KeyColour {
-		BLUE, YELLOW
+		BLUE, YELLOW, RED, GREEN
 	}
 
 	/**
-	 * Singleton pattern.
+	 * Sets singleton instance to this
 	 */
 	public Game() {
 		instance = this;
@@ -45,7 +73,7 @@ public class Game {
 	}
 
 	/**
-	 * @return The tilemap
+	 * @return The tilemap array
 	 */
 	public Tile[][] getTilemap() {
 		return tilemap;
@@ -65,13 +93,26 @@ public class Game {
 	 */
 	public void inputDirection(Direction d) {
 		// TODO: check for nulls
-		player.move(d, tilemap);
+		player.move(d);
 	}
 
 	/**
 	 * Causes a gameplay tick to occur
 	 */
 	public void tick() {
+		player.tick();
+		Tile playerTile = tilemap[player.getLocation().getX()][player.getLocation().getY()];
+		playerTile.onPlayerTick();
+		ArrayList<Actor> toRemove = new ArrayList<Actor>();
+		for (Actor a : actors) {
+			a.tick();
+			if (a.shouldRemove){
+				toRemove.add(a);
+			}
+		}
+		for (Actor a : toRemove){
+			actors.remove(a);
+		}
 
 	}
 
@@ -89,19 +130,25 @@ public class Game {
 	 * 
 	 * @param tilemap
 	 * @param player
+	 * @param keysHeld
 	 */
-	public void setupGame(Tile[][] tilemap, Player player, HashMap<KeyColour, Boolean> keysHeld) {
+	public void setupGame(Tile[][] tilemap, Player player, HashMap<KeyColour, Integer> keysHeld, int totalTreasure,
+			int collectedTreasures, ExitLockTile exitLock, List<Actor> actors) {
 		// TODO: null checks
 		this.tilemap = tilemap;
 		this.player = player;
 		this.keysHeld = keysHeld;
+		this.totalTreasures = totalTreasure;
+		this.collectedTreasures = collectedTreasures;
+		this.exitLock = exitLock;
+		this.actors = actors;
 	}
 
 	/**
 	 * 
 	 * @return The keys already collected.
 	 */
-	public HashMap<KeyColour, Boolean> getKeysHeld() {
+	public HashMap<KeyColour, Integer> getKeysHeld() {
 		return keysHeld;
 
 	}
@@ -112,6 +159,20 @@ public class Game {
 	 * @param colour
 	 */
 	public void addKey(KeyColour colour) {
-		keysHeld.put(colour, true);
+		// TODO: checks
+		keysHeld.put(colour, keysHeld.get(colour) + 1);
+	}
+
+	public void removeKey(KeyColour colour) {
+		// TODO: checks
+		keysHeld.put(colour, keysHeld.get(colour) - 1);
+	}
+
+	public void collectTreasure() {
+		collectedTreasures++;
+		// TODO: pre and post condition checks
+		if (collectedTreasures == totalTreasures) {
+			exitLock.removeTile();
+		}
 	}
 }

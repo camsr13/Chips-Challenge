@@ -1,9 +1,20 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
+/**
+ * A tile representing a key that when entered is picked up and leaves the tile
+ * a FreeTile
+ * 
+ * @author Rhysa
+ *
+ */
 public class KeyTile extends Tile {
 
 	private Game.KeyColour keyColour;
 
+	/**
+	 * @param location
+	 * @param keyColour
+	 */
 	public KeyTile(Location location, Game.KeyColour keyColour) {
 		super(location, true);
 		this.keyColour = keyColour;
@@ -11,6 +22,7 @@ public class KeyTile extends Tile {
 
 	@Override
 	public void onPlayerEnter() {
+		// TODO: checks
 		Game.instance.addKey(keyColour);
 		FreeTile newTile = new FreeTile(Location.copy(location));
 		Game.instance.setTile(newTile);
@@ -21,6 +33,9 @@ public class KeyTile extends Tile {
 		return "k";
 	}
 
+	/**
+	 * @return This keys colour
+	 */
 	public Game.KeyColour getKeyColour() {
 		return this.keyColour;
 	}

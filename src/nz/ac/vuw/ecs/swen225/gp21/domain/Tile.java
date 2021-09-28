@@ -6,7 +6,13 @@ package nz.ac.vuw.ecs.swen225.gp21.domain;
  */
 public abstract class Tile {
 
+	/**
+	 * This tiles location
+	 */
 	Location location;
+	/**
+	 * Whether the player can move onto this tile
+	 */
 	boolean pathable;
 
 	/**
@@ -31,11 +37,17 @@ public abstract class Tile {
 	public abstract void onPlayerEnter();
 
 	/**
-	 * @return Whether this tile is pathable
+	 * @return Whether this tile is pathable for the player
 	 */
-	public boolean isPathable() {
+	public boolean isPlayerPathable() {
 		return pathable;
 	}
+
+	/**
+	 *
+	 * @return Whether this tile is pathable for Actors
+	 */
+	public boolean isActorPathable() { return pathable; }
 
 	/**
 	 * For testing purposes
@@ -43,4 +55,9 @@ public abstract class Tile {
 	 * @return A char representation of this tile
 	 */
 	public abstract String toChar();
+
+	/**
+	 * Cause behaviour dependent on tile for when a tick occurs while player is standing on this tile
+	 */
+	public  void onPlayerTick(){}
 }

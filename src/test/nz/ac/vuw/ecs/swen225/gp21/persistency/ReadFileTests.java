@@ -1,7 +1,7 @@
-package test.nz.ac.vuw.ecs.swen225.gp21.persistancy;
+package test.nz.ac.vuw.ecs.swen225.gp21.persistency;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.*;
-import nz.ac.vuw.ecs.swen225.gp21.persistancy.readXML;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.readXML;
 import org.jdom2.JDOMException;
 import org.junit.jupiter.api.Test;
 
@@ -83,5 +83,20 @@ public class ReadFileTests {
 
         assert (player.getLocation().getX() == 15);
         assert (player.getLocation().getY() == 20);
+    }
+
+    @Test
+    public void testReadCurrentSave_01() throws JDOMException, IOException {
+        new Game();
+        readXML readXML = new readXML();
+        readXML.readXMLFile("currentSave.xml");
+        //get the created tilemap from Game and print it
+        Tile[][] tilemap = Game.instance.getTilemap();
+        for(int y = 0; y < tilemap[0].length; y++){
+            for(int x = 0; x < tilemap.length; x++){
+                System.out.print(tilemap[x][y].toChar() + "");
+            }
+            System.out.println();
+        }
     }
 }

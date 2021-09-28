@@ -1,8 +1,9 @@
 package test.nz.ac.vuw.ecs.swen225.gp21.fuzz;
 
+import java.awt.Frame;
 import java.util.*;
 import java.util.concurrent.*;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -13,16 +14,59 @@ public class FuzzTest {
 
     private Runnable north, east, south, west;
 
-    private final int GRID_WIDTH = 21;
-    private final int[] grid = new int[GRID_WIDTH * GRID_WIDTH];
+    private final int M = Integer.MAX_VALUE;
 
+    private final int[][] grid1 = new int[][] {
+        new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        new int[] {0, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, 0},
+        new int[] {0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0},
+        new int[] {0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0},
+        new int[] {0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0},
+        new int[] {0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0},
+        new int[] {0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0},
+        new int[] {0, M, M, M, 0, M, M, M, M, M, 0, M, M, M, M, M, M, M, M, M, 0},
+        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0},
+        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0},
+        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0},
+        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0},
+        new int[] {0, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, 0},
+        new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+    };
+    private final int[][] grid2 = new int[][] {
+        new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        new int[] {0, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, 0, M, M, M, M, M, M, M, M, M, M, M, M, 0},
+        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, M, 0, M, 0, 0, 0, M, 0, 0, 0, M, 0},
+        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, M, 0, M, M, M, 0, M, 0, 0, 0, M, 0, M, 0, M, M, M, 0, 0, 0, M, 0},
+        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, M, 0, M, 0, M, 0, M, 0, 0, 0, M, 0, M, 0, M, 0, 0, 0, 0, 0, M, 0},
+        new int[] {0, M, 0, M, M, M, M, M, 0, M, 0, M, 0, M, 0, M, M, 0, M, M, 0, 0, 0, M, 0, M, M, M, M, M, 0},
+        new int[] {0, M, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, M, 0, M, 0, 0, 0, 0, 0, M, 0, M, 0, M, 0, 0, 0, M, 0},
+        new int[] {0, M, 0, M, 0, M, M, M, M, M, 0, M, M, M, 0, M, M, M, M, M, M, M, 0, M, 0, M, 0, M, 0, M, 0},
+        new int[] {0, M, 0, M, 0, 0, 0, M, 0, 0, 0, M, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, M, 0, M, 0},
+        new int[] {0, M, 0, M, M, M, 0, M, 0, M, M, M, 0, M, 0, M, 0, M, M, M, 0, M, M, M, M, M, 0, M, M, M, 0},
+        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, M, 0, M, 0, M, 0, 0, 0, M, 0, M, 0, 0, 0, M, 0, 0, 0, M, 0},
+        new int[] {0, M, M, M, M, M, M, M, M, M, 0, M, 0, M, M, M, M, M, 0, M, M, M, 0, M, 0, M, M, M, 0, M, 0},
+        new int[] {0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, M, 0, 0, 0, 0, 0, M, 0},
+        new int[] {0, M, 0, M, M, M, M, M, 0, M, M, M, M, M, 0, M, 0, M, M, M, 0, M, 0, M, M, M, M, M, M, M, 0},
+        new int[] {0, M, 0, M, 0, 0, 0, M, 0, M, 0, 0, 0, M, 0, 0, 0, M, 0, M, 0, M, 0, 0, 0, 0, 0, 0, 0, M, 0},
+        new int[] {0, M, 0, M, 0, M, 0, M, M, M, 0, M, 0, M, M, M, M, M, 0, M, 0, M, M, M, M, M, M, M, 0, M, 0},
+        new int[] {0, M, 0, 0, 0, M, 0, 0, 0, M, 0, M, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0},
+        new int[] {0, M, 0, M, M, M, M, M, 0, M, M, M, 0, M, M, M, M, M, 0, M, 0, M, 0, M, M, M, M, M, M, M, 0},
+        new int[] {0, M, 0, M, 0, 0, 0, M, 0, M, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, M, 0, M, 0, 0, 0, 0, 0, M, 0},
+        new int[] {0, M, 0, M, 0, M, 0, M, 0, M, 0, M, M, M, M, M, M, M, M, M, 0, M, 0, M, 0, M, M, M, 0, M, 0},
+        new int[] {0, M, 0, M, 0, M, 0, 0, 0, M, 0, M, 0, 0, 0, 0, 0, 0, 0, M, 0, M, 0, 0, 0, M, 0, 0, 0, M, 0},
+        new int[] {0, M, 0, M, M, M, M, M, 0, M, 0, M, 0, M, 0, 0, 0, 0, 0, M, M, M, M, M, M, M, 0, M, 0, M, 0},
+        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, M, 0},
+        new int[] {0, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, 0},
+        new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,}
+    };
 
-//    private final int MOVES = 100;
+    private final int MOVES = 9999999;
     /**
      * The number of seconds the random exploration should run (at the most).
      */
-    private final int TIMEOUT = 30;
-    private final int MOVE_DELAY = 50;
+    private final int TIMEOUT = 20;
+    private final int MOVE_DELAY = 20;
 
     /**
      * Converts a specified direction to the Runnable used to move in that direction.
@@ -40,56 +84,27 @@ public class FuzzTest {
     }
 
     /**
-     * Converts the grid into a human-readable string with the visit numbers of each cell.
-     * @return The string.
-     */
-    private String gridToString() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < grid.length; i++) {
-            sb.append(grid[i]).append(" ");
-            if (i % GRID_WIDTH == GRID_WIDTH-1) {
-                sb.append("\n");
-            }
-        }
-        return String.valueOf(sb);
-    }
-
-    private int getGridAt(int row, int col) {
-        return grid[row * GRID_WIDTH + col];
-    }
-
-    private void setGridAt(int row, int col, int value) {
-        grid[row * GRID_WIDTH + col] = value;
-    }
-
-    private void incrementGridAt(int row, int col) {
-        setGridAt(row, col, getGridAt(row, col) + 1);
-    }
-
-    /**
      * Get a specified cell's neighbours, and store them in a map with their corresponding visit numbers.
+     * @param grid The grid the cell is from.
      * @param row The row used to specify the cell.
      * @param col The column used to specify the cell.
      * @return The map.
      */
-    private Map<Direction, Integer> getNeighbours(int row, int col) {
+    private Map<Direction, Integer> getNeighbours(int[][] grid, int row, int col) {
         Map<Direction, Integer> r = new HashMap<>();
 
         if (row > 0) {
-            r.put(Direction.NORTH, getGridAt(row-1, col));
+            r.put(Direction.NORTH, grid[row-1][col]);
         }
-        if (col < GRID_WIDTH - 1) {
-            r.put(Direction.EAST, getGridAt(row, col+1));
+        if (col < grid[0].length - 1) {
+            r.put(Direction.EAST, grid[row][col+1]);
         }
         if (col > 0) {
-            r.put(Direction.WEST, getGridAt(row, col-1));
+            r.put(Direction.WEST, grid[row][col-1]);
         }
-        if (row < GRID_WIDTH - 1) {
-            r.put(Direction.SOUTH, getGridAt(row+1, col));
+        if (row < grid.length - 1) {
+            r.put(Direction.SOUTH, grid[row+1][col]);
         }
-
-
-
 
         return r;
     }
@@ -97,12 +112,13 @@ public class FuzzTest {
     /**
      * Finds a specified cell's neighbouring cells with the least visits, converts those into directions and stores the
      * directions in a list.
+     * @param grid The grid the cell is from.
      * @param row The row used to specify the cell.
      * @param col The column used to specify the cell.
      * @return The list of directions.
      */
-    private List<Direction> getPreferredDirections(int row, int col) {
-        Map<Direction, Integer> neighbours = getNeighbours(row, col);
+    private List<Direction> getPreferredDirections(int[][] grid, int row, int col) {
+        Map<Direction, Integer> neighbours = getNeighbours(grid, row, col);
         List<Direction> preferredDirections = new ArrayList<>();
 
         int min = Integer.MAX_VALUE;
@@ -120,40 +136,25 @@ public class FuzzTest {
         return preferredDirections;
     }
 
-//    private void performRandomMoves() {
-//        Random random = new Random();
-//        for (int i = 0; i < MOVES; i++) {
-//            MouseAdapter direction = directions.get(random.nextInt(directions.size()));
-//            direction.mouseClicked(null);
-//        }
-//    }
-
-    /**
-     * Explores a set number of random paths from the start, resetting the level after each path.
-     */
-    private void exploreGrid() throws InterruptedException {
-//        for (int i = 0; i < 200; i++) {
-            explorePath();
-//            reset.keyPressed(null);
-//        }
-    }
-
     /**
      * Explores a random path, noting on the grid where it has already been.
+     * @param grid The grid to explore.
+     * @param startRow The row the player starts in.
+     * @param startCol The column the player starts in.
+     * @throws InterruptedException If the delay between moves in interrupted.
      */
-    private void explorePath() throws InterruptedException {
+    private void exploreGrid(int[][] grid, int startRow, int startCol) throws InterruptedException {
         Random random = new Random();
 
-        int currRow = GRID_WIDTH / 2;
-        int currCol = GRID_WIDTH / 2;
+        int currRow = startRow;
+        int currCol = startCol;
 
-        incrementGridAt(currRow, currCol);
+        grid[currRow][currCol] += 1;
 
-
-        for (int i = 0; i < 200; i++) {
-            List<Direction> directions = getPreferredDirections(currRow, currCol);
+        for (int i = 0; i < MOVES; i++) {
+            List<Direction> directions = getPreferredDirections(grid, currRow, currCol);
             Direction direction = directions.get(random.nextInt(directions.size()));
-            Runnable runnable = getRunnableFromDirection(direction);
+            Runnable move = getRunnableFromDirection(direction);
 
             switch (direction) {
                 case NORTH:
@@ -170,74 +171,94 @@ public class FuzzTest {
                     break;
             }
 
-            incrementGridAt(currRow, currCol);
+            TimeUnit.MILLISECONDS.sleep(MOVE_DELAY);
+
+            grid[currRow][currCol] += 1;
 
             // Execute move
-            TimeUnit.MILLISECONDS.sleep(MOVE_DELAY);
-            runnable.run();
+            move.run();
         }
     }
 
-    @BeforeEach
-    void setUp() {
+    /**
+     * Executes a given callable until it finishes or the specified amount of time elapses.
+     * @param timeout The amount of time.
+     * @param unit The unit of time.
+     * @param callable The callable.
+     */
+    private void runWithTimeout(long timeout, TimeUnit unit, Callable<?> callable) {
+        final ExecutorService es = Executors.newSingleThreadExecutor();
+        Future<?> future = es.submit(callable);
 
-
-
+        try {
+            future.get(timeout, unit);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            System.out.println("Timeout: " + timeout + " elapsed.");
+        }
+        es.shutdownNow();
     }
 
-//    @AfterEach
-//    void tearDown() {
-//        while (true) {
-//
-//        }
-//    }
-
     /**
-     * Tests level 1. Starts by traversing random paths from the start, then purposely tries to break the level using
-     * hardcoded paths.
+     * Tests a given level by initialising a GUI and performing {@link #exploreGrid} for a maximum of {@link #TIMEOUT}
+     * seconds.
+     * @param level The level.
      */
-    @Test
-    void test1() {
-        // Load in level 1
-        GUITestImp gui = new GUITestImp();
+    private void testLevel(Level level) {
+        // Load level
+        GUIFuzzImp gui = new GUIFuzzImp(level.XMLFile);
         gui.getMainWindow().setVisible(true);
 
-//        // Setup directional actions
+        // Setup directional actions
         north = gui::doNorthMove;
         east = gui::doEastMove;
         south = gui::doSouthMove;
         west = gui::doWestMove;
 
-        // This code block runs exploreGrid() until either it finishes, or a certain time limit is reached.
-        final ExecutorService es = Executors.newSingleThreadExecutor();
-        Future<?> future = es.submit((Callable<Void>) () -> {
-            exploreGrid();
+        // Explore randomly
+        runWithTimeout(TIMEOUT, TimeUnit.SECONDS, (Callable<Void>) () -> {
+            exploreGrid(level.grid, level.startRow, level.startCol);
             return null;
         });
-        try {
-            future.get(TIMEOUT, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        } catch (TimeoutException e) {
-            System.out.println("Timeout: " + TIMEOUT + "s elapsed.");
-        }
-        es.shutdownNow();
-
     }
 
     /**
-     * Tests level 2. Starts by traversing random paths from the start, then purposely tries to break the level using
-     * hardcoded paths.
+     * Removes any existing frames.
+     */
+    @AfterEach
+    void tearDown() {
+        for (Frame f : Frame.getFrames()) {
+            f.dispose();
+        }
+    }
+
+    /**
+     * Tests level 1.
+     */
+    @Test
+    void test1() {
+        Level level = new Level(grid1, 10, 4, "level1.xml");
+        testLevel(level);
+
+        System.out.println(level);
+    }
+
+    /**
+     * Tests level 2.
      */
     @Test
     void test2() {
+        Level level = new Level(grid2, 21, 16, "level2.xml");
+        testLevel(level);
 
+        System.out.println(level);
     }
 
     /**
      * Represents a cardinal direction.
      */
     private enum Direction {
-      NORTH, SOUTH, EAST, WEST
+        NORTH, SOUTH, EAST, WEST
     }
 }
