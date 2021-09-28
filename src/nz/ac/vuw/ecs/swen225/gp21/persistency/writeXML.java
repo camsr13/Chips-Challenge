@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 /**
  * @author Rhys Hanrahan
@@ -28,6 +29,7 @@ public class writeXML {
     private int totalTreasures;
     private int collectedTreasures;
     private ExitLockTile exitLock;
+    private List<Actor> actors;
 
     /**
      *
@@ -42,6 +44,7 @@ public class writeXML {
         totalTreasures = Game.instance.getTotalTreasures();
         collectedTreasures = Game.instance.getCollectedTreasures();
         exitLock = Game.instance.getExitLock();
+        actors = Game.instance.getActors();
 
         //creates new document and root element
         Document document = new Document();
@@ -53,6 +56,8 @@ public class writeXML {
         generateKeysHeld(mapElement);
         //call generatePlayer() to write the playerinfo section with location
         generatePlayer(mapElement);
+        //call generate actors to write all the actors on the current level
+        generateActors(mapElement, actors);
         //call generateTileRow() for each tileRow in tileMap
         generateTileRows(mapElement, tileMap);
         //Set outputStream and write generated XML file
@@ -145,6 +150,29 @@ public class writeXML {
 
     /**
      *
+     * generateActors uses the list of actors for a given level and writes their location and direction for each actor
+     *
+     * @param mapElement
+     * @param actors
+     */
+    private void generateActors(Element mapElement, List<Actor> actors){
+        //check if the current level contains any actors
+        if(!actors.isEmpty()){
+            Element actorsElement = new Element("actors");
+            //write each actor to the xml file
+            mapElement.addContent(actorsElement);
+            for(Actor actor : actors){
+                Element freezeElement = new Element("freeze");
+                freezeElement.setAttribute("coordX", Integer.toString(actor.getLocation().getX()));
+                freezeElement.setAttribute("coordY", Integer.toString(actor.getLocation().getY()));
+                freezeElement.addContent(getDirection(((FreezeActor)actor).currentDirection));
+                actorsElement.addContent(freezeElement);
+            }
+        }
+    }
+
+    /**
+     *
      * generateTileRow cycles through each row of tileMap and writes each tile type to the xml file
      *
      * @param mapElement
@@ -194,7 +222,7 @@ public class writeXML {
             return "exit";
         }else if(tile instanceof ArrowTile){
             tileElement.setAttribute("direction", getDirection(((ArrowTile)tile).getDirection()));
-            return "info";
+            return "arrow";
         }else if(tile instanceof FreezeTile){
             return "freeze";
         }
