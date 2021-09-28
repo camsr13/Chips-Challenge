@@ -25,4 +25,11 @@ public abstract class Actor {
 	public  void setLocation(Location l) {
 		this.location = Location.copy(l);
 	};
+
+	/**
+	 * @return Copy of actors current location
+	 */
+	public Location getLocation() {
+		return Location.copy(location);
+	}
 }
