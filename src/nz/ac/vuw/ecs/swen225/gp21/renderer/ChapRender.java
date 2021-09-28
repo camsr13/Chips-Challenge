@@ -1,9 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp21.renderer;
 
-import java.awt.Graphics;
-import java.awt.MediaTracker;
 
-import javax.swing.ImageIcon;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+
+import javax.imageio.ImageIO;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
 
@@ -27,21 +29,36 @@ class ChapRender extends Animatable {
 	private static final long serialVersionUID = 2763313205526639958L;
 	/**
 	 * Creates a JPanel type object which represents the player
+	 * @param game
+	 * @param scale 
 	 */
-	protected ChapRender() {
-		
+	protected ChapRender(Game game, double scale) {
+		this.game = game;
+		this.scale = scale;
 		loadImages();
-		this.setIcon(images[0]);
+		//set inital size
+		this.setSize((int) Math.round(images[0].getWidth()),(int) Math.round(images[0].getHeight()));
 		this.setVisible(true);
+		update(currentDir);
+	}
+	
+	/**
+	 * @param scale
+	 */
+	protected void setScale(double scale) {
+		this.scale =  scale;
+		update(currentDir);
 	}
 	
 	
 	@Override
 	void loadImages() {
 		for( int i = 0; i < 4; i++ ) {
-			images[i] = new ImageIcon(this.getClass().getResource(fileNames[i]));
-			if(images[i].getImageLoadStatus() != MediaTracker.COMPLETE) {
-				throw new Error("Failed to load the images for Chap");
+			URL nameUrl = getClass().getResource(fileNames[i]);
+			try {
+				images[i] = ImageIO.read(new File(nameUrl.getPath()));
+			} catch (IOException e) {
+				throw new Error("Unable to load images for chap");
 			}
 		}
 		

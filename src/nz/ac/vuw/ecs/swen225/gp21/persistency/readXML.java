@@ -49,69 +49,72 @@ public class readXML {
      */
     public void readXMLFile(String fileName) throws JDOMException, IOException {
         //Variables to hold the position where the file is up to
-        Element rowElement = null;
-        Element tileElement = null;
+        Element parentElement = null;
+        Element childElement = null;
         Element map = ((Document) (new SAXBuilder()).build(new File("src/nz/ac/vuw/ecs/swen225/gp21/persistency/" + fileName))).getRootElement();
 
         //Get map variables
         List<Element> mapVariables = map.getChildren("mapVariables");
-        rowElement = (Element) mapVariables.get(0);
+        parentElement = (Element) mapVariables.get(0);
         //get the map size and create a new tileMap (2d array) of that size
-        tilemap = new Tile[Integer.parseInt(rowElement.getChild("sizeX").getText())][Integer.parseInt(rowElement.getChild("sizeY").getText())];
+        tilemap = new Tile[Integer.parseInt(parentElement.getChild("sizeX").getText())][Integer.parseInt(parentElement.getChild("sizeY").getText())];
         //get and store the totalTreasures and collectedTreasures
-        int totalTreasure = Integer.parseInt(rowElement.getChild("total").getText());
-        int collectedTreasures = Integer.parseInt(rowElement.getChild("collected").getText());
+        int totalTreasure = Integer.parseInt(parentElement.getChild("total").getText());
+        int collectedTreasures = Integer.parseInt(parentElement.getChild("collected").getText());
         //get the coordinates of the exit lock
-        int exitLockX = Integer.parseInt(rowElement.getChild("exitLockX").getText());
-        int exitLockY = Integer.parseInt(rowElement.getChild("exitLockY").getText());
+        int exitLockX = Integer.parseInt(parentElement.getChild("exitLockX").getText());
+        int exitLockY = Integer.parseInt(parentElement.getChild("exitLockY").getText());
 
         //Get keysHeld
         HashMap<Game.KeyColour, Integer> keysHeld = new HashMap<Game.KeyColour, Integer>();
-        rowElement = map.getChildren("keysHeld").get(0);
-        Iterator<Element> Iterator = rowElement.getChildren("key").iterator();
+        parentElement = map.getChildren("keysHeld").get(0);
+        Iterator<Element> Iterator = parentElement.getChildren("key").iterator();
         //For every key colour, add the it to the hashmap
         while(Iterator.hasNext()) {
-            tileElement = (Element) Iterator.next();
-            keysHeld.put(getColour(tileElement.getAttributeValue("colour")),Integer.parseInt(tileElement.getText()));
+            childElement = (Element) Iterator.next();
+            keysHeld.put(getColour(childElement.getAttributeValue("colour")),Integer.parseInt(childElement.getText()));
         }
 
         //Get player info (location)
         List<Element> playerInfo = map.getChildren("player");
-        for(int i = 0; i < playerInfo.size(); i++){
-            rowElement = (Element) playerInfo.get(i);
-            Iterator = rowElement.getChildren("location").iterator();
-            //There will always be two location elements in the XML file for the players x and y coords
-            player = new Player(new Location(Integer.parseInt(Iterator.next().getText()), Integer.parseInt(Iterator.next().getText())));
-        }
+        parentElement = (Element) playerInfo.get(0);
+        Iterator = parentElement.getChildren("location").iterator();
+        //There will always be two location elements in the XML file for the players x and y coords
+        player = new Player(new Location(Integer.parseInt(Iterator.next().getText()), Integer.parseInt(Iterator.next().getText())), Integer.parseInt(parentElement.getChild("frozen").getText()));
+
 
         //Loop through the file and goes through all the tileRows
         List<Element> rowsList = map.getChildren("tileRow");
         for(int i = 0; i < rowsList.size(); i++){
-            rowElement = (Element) rowsList.get(i);
-            Iterator = rowElement.getChildren("tile").iterator();
+            parentElement = (Element) rowsList.get(i);
+            Iterator = parentElement.getChildren("tile").iterator();
 
             //Loops through all the tiles within each tileRow
             int count = 0;
             while(Iterator.hasNext()){
-                tileElement = (Element) Iterator.next();
+                childElement = (Element) Iterator.next();
 
                 //check for what the tile type is then add it to the tile map
-                if(tileElement.getText().equals("free")){
+                if(childElement.getText().equals("free")){
                     tilemap[count][i] = new FreeTile(new Location(count, i));
-                }else if(tileElement.getText().equals("wall")){
+                }else if(childElement.getText().equals("wall")){
                     tilemap[count][i] = new WallTile(new Location(count, i));
-                }else if(tileElement.getText().equals("door")){
-                    tilemap[count][i] = new LockTile(new Location(count, i), getColour(tileElement.getAttributeValue("colour")));
-                }else if(tileElement.getText().equals("key")){
-                    tilemap[count][i] = new KeyTile(new Location(count, i), getColour(tileElement.getAttributeValue("colour")));
-                }else if(tileElement.getText().equals("treasure")){
+                }else if(childElement.getText().equals("door")){
+                    tilemap[count][i] = new LockTile(new Location(count, i), getColour(childElement.getAttributeValue("colour")));
+                }else if(childElement.getText().equals("key")){
+                    tilemap[count][i] = new KeyTile(new Location(count, i), getColour(childElement.getAttributeValue("colour")));
+                }else if(childElement.getText().equals("treasure")){
                     tilemap[count][i] = new TreasureTile(new Location(count, i));
-                }else if(tileElement.getText().equals("info")){
-                    tilemap[count][i] = new InfoTile(new Location(count, i), tileElement.getAttributeValue("info"));
-                }else if(tileElement.getText().equals("gate")){
+                }else if(childElement.getText().equals("info")){
+                    tilemap[count][i] = new InfoTile(new Location(count, i), childElement.getAttributeValue("info"));
+                }else if(childElement.getText().equals("gate")){
                     tilemap[count][i] = new ExitLockTile(new Location(count, i));
-                }else if(tileElement.getText().equals("exit")){
+                }else if(childElement.getText().equals("exit")){
                     tilemap[count][i] = new ExitTile(new Location(count, i));
+                }else if(childElement.getText().equals("arrow")){
+                    tilemap[count][i] = new ArrowTile(new Location(count, i), getDirection(childElement.getAttributeValue("direction")));
+                }else if(childElement.getText().equals("freeze")){
+                    tilemap[count][i] = new FreezeTile(new Location(count, i));
                 }
                 //Incase an error happens/or missing tile type put a wall tile instead
                 else{
@@ -139,6 +142,31 @@ public class readXML {
             return Game.KeyColour.BLUE;
         }else if(colour.equals("yellow")){
             return Game.KeyColour.YELLOW;
+        }else if(colour.equals("red")){
+            return Game.KeyColour.RED;
+        }else if(colour.equals("green")){
+            return Game.KeyColour.GREEN;
+        }
+        return null;
+    }
+
+    /**
+     *
+     * getDirection is a method used when creating tiles for the tileMap
+     * When creating an arrowTile a string direction from the xml file is passed and the enum Game.direction is returned
+     *
+     * @param direction
+     * @return enum direction from game
+     */
+    private Game.Direction getDirection(String direction){
+        if(direction.equals("up")){
+            return Game.Direction.UP;
+        }else if(direction.equals("down")){
+            return Game.Direction.DOWN;
+        }else if(direction.equals("left")){
+            return Game.Direction.LEFT;
+        }else if(direction.equals("right")){
+            return Game.Direction.RIGHT;
         }
         return null;
     }

@@ -54,9 +54,7 @@ public class writeXML {
         //call generatePlayer() to write the playerinfo section with location
         generatePlayer(mapElement);
         //call generateTileRow() for each tileRow in tileMap
-        for(Tile[] aTileRow : tileMap){
-            generateTileRow(mapElement, aTileRow);
-        }
+        generateTileRows(mapElement, tileMap);
         //Set outputStream and write generated XML file
         XMLOutputter xmlOutputter = new XMLOutputter();
         try(FileOutputStream fileOutputStream = new FileOutputStream("src/nz/ac/vuw/ecs/swen225/gp21/persistency/currentSave.xml")){
@@ -139,6 +137,10 @@ public class writeXML {
         locationElement = new Element("location");
         locationElement.addContent(Integer.toString(player.getLocation().getY()));
         playerElement.addContent(locationElement);
+        //write the time the player is frozen for
+        Element frozenElement = new Element("frozen");
+        frozenElement.addContent(Integer.toString(player.getTimeFrozen()));
+        playerElement.addContent(frozenElement);
     }
 
     /**
@@ -146,17 +148,19 @@ public class writeXML {
      * generateTileRow cycles through each row of tileMap and writes each tile type to the xml file
      *
      * @param mapElement
-     * @param row
+     * @param tileMap
      */
-    private void generateTileRow(Element mapElement, Tile[] row){
+    private void generateTileRows(Element mapElement, Tile[][] tileMap){
         //create new tileRowElement for each tileRow
-        Element tileRowElement = new Element("tileRow");
-        mapElement.addContent(tileRowElement);
-        //add a new tileElement for each tile in a tileRow
-        for(Tile aTile : row){
-            Element tileElement = new Element("tile");
-            tileElement.addContent(getTileType(aTile, tileElement));
-            tileRowElement.addContent(tileElement);
+        for(int y = 0; y < tileMap[0].length; y++){
+            Element tileRowElement = new Element("tileRow");
+            mapElement.addContent(tileRowElement);
+            //add a new tileElement for each tile in a tileRow
+            for(int x = 0; x < tileMap.length; x++){
+                Element tileElement = new Element("tile");
+                tileElement.addContent(getTileType(tileMap[x][y], tileElement));
+                tileRowElement.addContent(tileElement);
+            }
         }
     }
 
@@ -188,6 +192,11 @@ public class writeXML {
             return "gate";
         }else if(tile instanceof ExitTile){
             return "exit";
+        }else if(tile instanceof ArrowTile){
+            tileElement.setAttribute("direction", getDirection(((ArrowTile)tile).getDirection()));
+            return "info";
+        }else if(tile instanceof FreezeTile){
+            return "freeze";
         }
         //Incase error or unknown tile type occurs save as wall tile
         else{
@@ -208,6 +217,10 @@ public class writeXML {
             return "blue";
         }else if(((LockTile)tile).getKeyColour() == Game.KeyColour.YELLOW){
             return "yellow";
+        }else if(((LockTile)tile).getKeyColour() == Game.KeyColour.RED){
+            return "red";
+        }else if(((LockTile)tile).getKeyColour() == Game.KeyColour.GREEN){
+            return "green";
         }else{
             return null;
         }
@@ -226,19 +239,55 @@ public class writeXML {
             return "blue";
         }else if(((KeyTile)tile).getKeyColour() == Game.KeyColour.YELLOW){
             return "yellow";
+        }else if(((KeyTile)tile).getKeyColour() == Game.KeyColour.RED){
+            return "red";
+        }else if(((KeyTile)tile).getKeyColour() == Game.KeyColour.GREEN){
+            return "green";
         }else{
             return null;
         }
     }
 
+    /**
+     *
+     * get the colour of keys on the map and return string colour
+     *
+     * @param colour
+     * @return
+     */
     private String getKeysHeldColour(Game.KeyColour colour){
         if(colour == Game.KeyColour.BLUE){
             return "blue";
         }else if(colour == Game.KeyColour.YELLOW){
             return "yellow";
+        }else if(colour == Game.KeyColour.RED){
+            return "red";
+        }else if(colour == Game.KeyColour.GREEN){
+            return "green";
         }else{
             return null;
         }
+    }
+
+    /**
+     *
+     * getDirection is a method used when writing arrow tiles to the xml file
+     * When writing an arrowTile a enum Game.direction is passed and a string direction is returned
+     *
+     * @param direction
+     * @return string
+     */
+    private String getDirection(Game.Direction direction){
+        if(direction == Game.Direction.UP){
+            return "up";
+        }else if(direction == Game.Direction.DOWN){
+            return "down";
+        }else if(direction == Game.Direction.LEFT){
+            return "left";
+        }else if(direction == Game.Direction.RIGHT){
+            return "right";
+        }
+        return null;
     }
 
 }
