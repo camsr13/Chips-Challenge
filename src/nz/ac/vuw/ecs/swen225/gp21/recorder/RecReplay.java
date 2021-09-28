@@ -1,5 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp21.recorder;
 
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -90,26 +94,16 @@ public class RecReplay {
     /**
      * Saves a recording.
      *
-     * @throws ParserConfigurationException
      * @throws TransformerException
      */
-    public static void saveRecording(String filePath) throws ParserConfigurationException, TransformerException {
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newDefaultInstance();
-        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+    public static void saveRecording(String filePath) throws TransformerException {
 
-        // root
-        org.w3c.dom.Document doc = docBuilder.newDocument();
-        org.w3c.dom.Element rootElem = doc.createElement("save");
-        doc.appendChild(rootElem);
+        //creates new document and root element
+        Document document = new Document();
+        Element root = new Element("recorded");
+        document.setRootElement(root);
 
-        // contents
-        org.w3c.dom.Element levelElem = doc.createElement("level");
-        rootElem.appendChild(levelElem);
-        levelElem.appendChild(doc.createTextNode("1"));
-
-        org.w3c.dom.Element movesElem = doc.createElement("moves");
-        rootElem.appendChild(movesElem);
-
+        // transfer to Strings
         Queue<String> moveQ = new ArrayDeque<>();
         for (Direction direction : moveHistory) {
             switch (direction) {
@@ -130,24 +124,43 @@ public class RecReplay {
             }
         }
 
-        System.out.println(moveHistory); // INTEGRATION DAY PRINT
+        // player moves
+        Element playerMovesElem = new Element("playerMoves");
+        root.addContent(playerMovesElem);
 
-        movesElem.appendChild(doc.createTextNode(moveQ.poll()));
         for (String move : moveQ) {
-            movesElem.appendChild(doc.createTextNode(" " + moveQ.poll()));
+            addPlayerMovesElement(playerMovesElem, moveQ.poll());
         }
 
-        // write dom document to a file
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
-        LocalDateTime now = LocalDateTime.now();
-        String fn = "Chaps_Challenge_Save_" + dtf.format(now);
-        try (FileOutputStream output =
-                     new FileOutputStream(filePath + fn + ".xml")) {
-            writeSaveXML(doc, output);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // TODO mob moves element
+
+        // level element -> game state
+        Element levelInfoElem = new Element("levelInfo");
+        root.addContent(levelInfoElem);
+        addLevelElement(levelInfoElem, "1");
+
+        writeSaveXML(document, filePath);
+
         endRecording(); // clean up
+    }
+
+
+    public static void addPlayerMovesElement(Element root, String dir) {
+        Element move = new Element("move");
+        move.addContent(dir);
+        root.addContent(move);
+    }
+
+
+    public static void addMobMovesElement(Element root) {
+
+    }
+
+
+    public static void addLevelElement(Element root, String n) {
+        Element level = new Element("level");
+        level.addContent(n);
+        root.addContent(level);
     }
 
 
@@ -155,20 +168,19 @@ public class RecReplay {
      * Writes the save file information to the XML and saves the XML to disk.
      *
      * @param doc document object to write.
-     * @param out output stream.
-     * @throws TransformerException
+     * @param fp output file path in string form.
      */
-    public static void writeSaveXML(org.w3c.dom.Document doc, OutputStream out) throws TransformerException {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-
-        // pretty print XML
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-
-        DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(out);
-
-        transformer.transform(source, result);
+    public static void writeSaveXML(Document doc, String fp) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
+        LocalDateTime now = LocalDateTime.now();
+        String fn = "Chaps_Challenge_Save_" + dtf.format(now);
+        //Set outputStream and write generated XML file
+        XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+        try(FileOutputStream fileOutputStream = new FileOutputStream(fp + "\\" + fn + ".xml")){
+            xmlOutputter.output(doc, fileOutputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
