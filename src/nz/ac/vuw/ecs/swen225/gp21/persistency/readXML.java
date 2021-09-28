@@ -54,8 +54,7 @@ public class readXML {
         Element map = ((Document) (new SAXBuilder()).build(new File("src/nz/ac/vuw/ecs/swen225/gp21/persistency/" + fileName))).getRootElement();
 
         //Get map variables
-        List<Element> mapVariables = map.getChildren("mapVariables");
-        parentElement = (Element) mapVariables.get(0);
+        parentElement = map.getChild("mapVariables");
         //get the map size and create a new tileMap (2d array) of that size
         tilemap = new Tile[Integer.parseInt(parentElement.getChild("sizeX").getText())][Integer.parseInt(parentElement.getChild("sizeY").getText())];
         //get and store the totalTreasures and collectedTreasures
@@ -67,7 +66,7 @@ public class readXML {
 
         //Get keysHeld
         HashMap<Game.KeyColour, Integer> keysHeld = new HashMap<Game.KeyColour, Integer>();
-        parentElement = map.getChildren("keysHeld").get(0);
+        parentElement = map.getChild("keysHeld");
         Iterator<Element> Iterator = parentElement.getChildren("key").iterator();
         //For every key colour, add the it to the hashmap
         while(Iterator.hasNext()) {
@@ -76,11 +75,22 @@ public class readXML {
         }
 
         //Get player info (location)
-        List<Element> playerInfo = map.getChildren("player");
-        parentElement = (Element) playerInfo.get(0);
+        parentElement = map.getChild("player");
         Iterator = parentElement.getChildren("location").iterator();
         //There will always be two location elements in the XML file for the players x and y coords
         player = new Player(new Location(Integer.parseInt(Iterator.next().getText()), Integer.parseInt(Iterator.next().getText())), Integer.parseInt(parentElement.getChild("frozen").getText()));
+
+        //get actors
+        List<Actor> actors = new ArrayList<Actor>();
+        parentElement = map.getChild("actors");
+        //check if there are actors on the current xml level
+        if(parentElement != null){
+            Iterator = parentElement.getChildren("freeze").iterator();
+            while(Iterator.hasNext()){
+                childElement = (Element) Iterator.next();
+                actors.add(new FreezeActor(new Location(Integer.parseInt(childElement.getAttributeValue("coordX")), Integer.parseInt(childElement.getAttributeValue("coordY"))), getDirection(childElement.getText())));
+            }
+        }
 
 
         //Loop through the file and goes through all the tileRows
@@ -125,7 +135,6 @@ public class readXML {
                 count+= 1;
             }
         }
-        List<Actor> actors = new ArrayList<Actor>();
         Game.instance.setupGame(tilemap, player, keysHeld, totalTreasure, collectedTreasures, (ExitLockTile) tilemap[exitLockX][exitLockY], actors);
     }
 
