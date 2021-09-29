@@ -154,8 +154,7 @@ public class RecReplay {
         String fn = "Chaps_Challenge_Save_" + dtf.format(now);
         //Set outputStream and write generated XML file
         XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
-        try(FileOutputStream fileOutputStream = new FileOutputStream(fp + "\\" + fn + ".xml")){
-            xmlOutputter.output(doc, fileOutputStream);
+        try(FileOutputStream fileOutputStream = new FileOutputStream(fp)){
         } catch (IOException e) {
             e.printStackTrace();
         }
