@@ -86,7 +86,7 @@ public class GUIImp implements GUIAbstract{
 	private Game game = new Game();
 	private readXML currXML = new readXML();
 	protected String currFile;
-	
+
 
 
 
@@ -135,15 +135,14 @@ public class GUIImp implements GUIAbstract{
 
     	switch(n){
     		case 0:
-    			currFile = "level1.xml"; 
-    			loadGame();
+    			doStartLevel1();
     			break;
     		case 1:
-    			currFile = "level2.xml"; 
+    			doStartLevel2();
     			loadGame();
     			break;
     		case 2:
-    			currFile = "testMap.xml"; 
+    			currFile = "testMap.xml";
     			loadGame();
     			break;
     	}
@@ -242,7 +241,7 @@ public class GUIImp implements GUIAbstract{
 
 	protected void doExitGameS() {
 		// TODO Auto-generated method stub
-		
+
 
 	}
 
@@ -473,11 +472,10 @@ public class GUIImp implements GUIAbstract{
 
 
 		game = currXML.getGameInstance();
-		boardRender = new BoardRender(game);
+		boardRender = new BoardRender(game,500);
 		gameBoard = boardRender.getPane();
 		RecReplay.newRecording();
 
 	}
 }
-
 
