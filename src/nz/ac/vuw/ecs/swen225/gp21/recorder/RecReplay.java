@@ -207,7 +207,7 @@ public class RecReplay {
      */
     public static void saveRecording() {
         WriteXML xmlWriter = new WriteXML();
-        Document document =xmlWriter.generateDocument();
+        Document document = xmlWriter.generateDocument();
         //creates new document and root element
         //Document document = new Document();
         //Element root = new Element("recorded");
@@ -282,6 +282,10 @@ public class RecReplay {
 
 
     // REPLAY
+
+    public static void onReplay() {
+        //TODO
+    }
 
     /**
      * Loads the recording file ready for replay.
