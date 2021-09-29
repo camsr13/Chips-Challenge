@@ -37,7 +37,7 @@ public class readXML {
      * @throws IOException
      */
     public void readXMLFile() throws JDOMException, IOException {
-        readXMLFile("testMap.xml");
+        readXMLFile("src/nz/ac/vuw/ecs/swen225/gp21/persistency/testMap.xml");
     }
 
     /**
@@ -47,11 +47,11 @@ public class readXML {
      * @throws JDOMException
      * @throws IOException
      */
-    public void readXMLFile(String fileName) throws JDOMException, IOException {
+    public void readXMLFile(String fileDirectory) throws JDOMException, IOException {
         //Variables to hold the position where the file is up to
         Element parentElement = null;
         Element childElement = null;
-        Element map = ((Document) (new SAXBuilder()).build(new File("src/nz/ac/vuw/ecs/swen225/gp21/persistency/" + fileName))).getRootElement();
+        Element map = ((Document) (new SAXBuilder()).build(new File(fileDirectory))).getRootElement();
 
         //Get map variables
         parentElement = map.getChild("mapVariables");

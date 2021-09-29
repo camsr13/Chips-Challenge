@@ -36,7 +36,25 @@ public class writeXML {
      * writeXMLFile writes the current state of tilemap and player to an xmlFile
      *
      */
-    public void writeXMLFile(){
+    public void writeXMLFile(Document document, String fileDirectory){
+        //Set outputStream and write generated XML file
+        XMLOutputter xmlOutputter = new XMLOutputter();
+        try(FileOutputStream fileOutputStream = new FileOutputStream(fileDirectory)){
+            xmlOutputter.output(document, fileOutputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *
+     * Generates a document of the current state of the game
+     *
+     * @return document
+     */
+    public Document generateDocument(){
         //sets up variables from Game
         player = Game.instance.getPlayer();
         tileMap = Game.instance.getTilemap();
@@ -60,15 +78,7 @@ public class writeXML {
         generateActors(mapElement, actors);
         //call generateTileRow() for each tileRow in tileMap
         generateTileRows(mapElement, tileMap);
-        //Set outputStream and write generated XML file
-        XMLOutputter xmlOutputter = new XMLOutputter();
-        try(FileOutputStream fileOutputStream = new FileOutputStream("src/nz/ac/vuw/ecs/swen225/gp21/persistency/currentSave.xml")){
-            xmlOutputter.output(document, fileOutputStream);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return document;
     }
 
     /**
