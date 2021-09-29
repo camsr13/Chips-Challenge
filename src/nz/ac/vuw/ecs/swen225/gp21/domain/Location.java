@@ -40,4 +40,18 @@ public class Location {
 	public int getY() {
 		return y;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof  Location)) {
+			return false;
+		}
+		Location l = (Location) o;
+		if (l.getX() == x && l.getY() == y) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }

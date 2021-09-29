@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
 /**
- * TODO: everything
+ * This is a tile that acts as a WallTile until all treasures have been collected.
  *
  * @author Rhysa
  *
@@ -25,6 +25,9 @@ public class ExitLockTile extends Tile {
 		return "E";
 	}
 
+	/**
+	 * Replaces this tile current location in the game instance tilemap with a FreeTile.
+	 */
 	public void removeTile() {
 		FreeTile newTile = new FreeTile(Location.copy(location));
 		Game.instance.setTile(newTile);

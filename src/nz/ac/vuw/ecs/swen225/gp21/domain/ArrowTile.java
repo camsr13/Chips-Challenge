@@ -1,15 +1,19 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
-public class ArrowTile extends Tile{
+public class ArrowTile extends Tile {
 
+    /**
+     * The direction this tile will push the player.
+     */
     private Game.Direction direction;
 
     /**
-     * @param location This tiles location
+     * @param l This tiles location
+     * @param d This tiles direction
      */
-    public ArrowTile(Location location, Game.Direction direction) {
-        super(location, true);
-        this.direction = direction;
+    public ArrowTile(Location l, Game.Direction d) {
+        super(l, true);
+        this.direction = d;
     }
 
     @Override
@@ -23,11 +27,15 @@ public class ArrowTile extends Tile{
     }
 
     @Override
-    public void onPlayerTick(){
+    public void onPlayerTick() {
         Game.instance.getPlayer().move(direction);
     }
 
-    public Game.Direction getDirection(){
+    /**
+     *
+     * @return this tiles direction
+     */
+    public Game.Direction getDirection() {
         return direction;
     }
 }

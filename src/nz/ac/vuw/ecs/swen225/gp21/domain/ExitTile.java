@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
 /**
- * TODO: everything
+ * TODO: exiting
  *
  * @author Rhysa
  *
@@ -17,7 +17,7 @@ public class ExitTile extends Tile {
 
 	@Override
 	public void onPlayerEnter() {
-
+		Game.instance.setLevelComplete(true);
 	}
 
 	@Override
