@@ -72,8 +72,6 @@ public class RecReplay {
         // adds to actionHistory
         if (isRecording) {
             moveHistory.add(direction.toString());
-            System.out.println(direction); // INTEGRATION DAY PRINT
-            System.out.println(moveHistory);
         }
     }
 
@@ -260,6 +258,7 @@ public class RecReplay {
         //Set outputStream and write generated XML file
         XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
         try(FileOutputStream fileOutputStream = new FileOutputStream(fp)){
+            xmlOutputter.output(doc, fileOutputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
