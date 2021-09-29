@@ -2,6 +2,8 @@ package nz.ac.vuw.ecs.swen225.gp21.recorder;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.w3c.dom.Node;
@@ -16,17 +18,19 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayDeque;
+import java.util.List;
 import java.util.Queue;
 
 public class RecReplay {
 
-    private static Queue<Direction> moveHistory = new ArrayDeque<>(); // needs to be Game.Direction, String for testing
+    private static Queue<String> moveHistory = new ArrayDeque<>();
     private static boolean isRunning;
     private static boolean isRecording;
     private static int DELAY = 200;
@@ -58,7 +62,7 @@ public class RecReplay {
     public static void addAction(Direction direction) {
         // adds to actionHistory
         if (isRecording) {
-            moveHistory.add(direction);
+            moveHistory.add(direction.toString());
             System.out.println(direction); // INTEGRATION DAY PRINT
             System.out.println(moveHistory);
         }
@@ -70,7 +74,7 @@ public class RecReplay {
      *
      * @return moveHistory queue.
      */
-    public static Queue<Direction> getMoveHistory() {
+    public static Queue<String> getMoveHistory() {
         return moveHistory;
     }
 
@@ -97,39 +101,17 @@ public class RecReplay {
      * @throws TransformerException
      */
     public static void saveRecording(String filePath) throws TransformerException {
-
         //creates new document and root element
         Document document = new Document();
         Element root = new Element("recorded");
         document.setRootElement(root);
 
-        // transfer to Strings
-        Queue<String> moveQ = new ArrayDeque<>();
-        for (Direction direction : moveHistory) {
-            switch (direction) {
-                case LEFT:
-                    moveQ.offer("Left");
-                    break;
-                case RIGHT:
-                    moveQ.offer("Right");
-                    break;
-                case UP:
-                    moveQ.offer("Up");
-                    break;
-                case DOWN:
-                    moveQ.offer("Down");
-                    break;
-                default:
-                    break;
-            }
-        }
-
         // player moves
         Element playerMovesElem = new Element("playerMoves");
         root.addContent(playerMovesElem);
 
-        for (String move : moveQ) {
-            addPlayerMovesElement(playerMovesElem, moveQ.poll());
+        for (String move : moveHistory) {
+            addPlayerMovesElement(playerMovesElem, moveHistory.poll());
         }
 
         // TODO mob moves element
@@ -139,7 +121,8 @@ public class RecReplay {
         root.addContent(levelInfoElem);
         addLevelElement(levelInfoElem, "1");
 
-        writeSaveXML(document, filePath);
+        // TODO fileSelectDialogue(document);
+        //writeSaveXML(document, filePath);
 
         endRecording(); // clean up
     }
@@ -149,11 +132,6 @@ public class RecReplay {
         Element move = new Element("move");
         move.addContent(dir);
         root.addContent(move);
-    }
-
-
-    public static void addMobMovesElement(Element root) {
-
     }
 
 
@@ -200,71 +178,20 @@ public class RecReplay {
     /**
      * Loads the recording file ready for replay.
      */
-    public static void loadRecording() {
+    public static void loadRecording() throws JDOMException, IOException {
+        moveHistory.clear();
+        Element root = ((Document) (new SAXBuilder()).build(new File("C:\\Users\\Hazel\\Desktop\\rec_tests\\test.xml"))).getRootElement();
 
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newDefaultInstance();
+        Element playerMoves = root.getChild("playerMoves");
+        System.out.println(playerMoves);
+        List<Element> moves = playerMoves.getChildren();
 
-        try {
-            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-            org.w3c.dom.Document doc = docBuilder.parse("C:\\Users\\Hazel\\Documents\\VUW 2021 TRI 2\\SWEN225\\Assignments\\Project\\xmlTEST\\testout\\Chaps_Challenge_Save_2021-09-21_162606.xml");
-            doc.getDocumentElement().normalize();
-
-            // TESTING
-            System.out.println("Root Element :" + doc.getDocumentElement().getNodeName());
-            System.out.println("------");
-
-            NodeList list = doc.getElementsByTagName("save");
-
-            for (int temp = 0; temp < list.getLength(); temp++) {
-
-                Node node = list.item(temp);
-
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-
-                    org.w3c.dom.Element element = (org.w3c.dom.Element) node;
-
-                    // get level
-                    String level = element.getElementsByTagName("level").item(0).getTextContent();
-
-                    // get moves list
-                    String moves = element.getElementsByTagName("moves").item(0).getTextContent();
-
-                    // TESTING
-                    System.out.println("Current Element : " + node.getNodeName());
-                    System.out.println("level : " + level);
-                    System.out.println("moves : " + moves);
-
-                    String[] arr = moves.split(" ");
-
-                    for (String direction : arr) {
-
-                        switch (direction) {
-                            case "Left":
-                                moveHistory.add(Direction.LEFT);
-                                break;
-                            case "Right":
-                                moveHistory.add(Direction.RIGHT);
-                                break;
-                            case "Up":
-                                moveHistory.add(Direction.UP);
-                                break;
-                            case "Down":
-                                moveHistory.add(Direction.DOWN);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    System.out.println(moveHistory);
-                }
-            }
-
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+        for (Element move : moves) {
+            moveHistory.add(move.getText());
         }
-
+        System.out.println(moveHistory);
     }
+
 
 
     /**
