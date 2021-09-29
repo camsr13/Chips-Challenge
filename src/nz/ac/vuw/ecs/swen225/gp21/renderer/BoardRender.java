@@ -13,7 +13,16 @@ public class BoardRender {
 	private BoardPanel boardPanel;
 	private JLayeredPane basePane = new JLayeredPane();
 	private ChapRender chapIcon;
-	private int panelSize = BoardPanel.boardWidth * BoardPanel.tileSize;
+	
+	/**
+	 * Size of the tiles in the image file (pixels)
+	 */
+	protected static final int tileSize = 64;
+	/**
+	 * desired board width to be rendered, including offscreen tiles for moves
+	 */
+	private static final int boardWidth = 11;
+	private int panelSize = boardWidth * tileSize;
 	
 	
 	/**
@@ -48,15 +57,16 @@ public class BoardRender {
 	public BoardRender(Game game, int size) {
 		
 		double initScale = getScale(size);
-		int scaledSquare = (int) Math.round(initScale * BoardPanel.tileSize);
+		int scaledTile = (int) Math.round(initScale * tileSize);
+		int chapPos = (int) Math.round(scaledTile * boardWidth/2 - (1.5 * scaledTile));
 		
-		chapIcon = new ChapRender(game, initScale);
-		chapIcon.setBounds(6 * scaledSquare/2, 6 * scaledSquare/2, scaledSquare, scaledSquare);
+		chapIcon = new ChapRender(game, initScale, tileSize);
+		chapIcon.setBounds(chapPos, chapPos, scaledTile, scaledTile);
 		chapIcon.setOpaque(false);
 
-		boardPanel = new BoardPanel(game, initScale);
+		boardPanel = new BoardPanel(game, tileSize, boardWidth , initScale);
 		boardPanel.setVisible(true);
-		boardPanel.setBounds(0,0, panelSize, panelSize);
+		boardPanel.setBounds(0,0, scaledTile * boardWidth, scaledTile * boardWidth);
 		
 		basePane.add(boardPanel,JLayeredPane.DEFAULT_LAYER);
 		basePane.add(chapIcon,JLayeredPane.PALETTE_LAYER);

@@ -59,11 +59,11 @@ class BoardPanel extends JPanel {
 	/**
 	 * Size of the tiles in the image file (pixels)
 	 */
-	protected static final int tileSize = 64;
+	private final int tileSize;
 	/**
 	 * desired board width to be rendered, including offscreen tiles for moves
 	 */
-	protected static final int boardWidth = 11;
+	private final int boardWidth;
 	
 	private Game game;
 	private double scale = 1.0;
@@ -72,9 +72,13 @@ class BoardPanel extends JPanel {
 	/**
 	 * Panel that is responsible for retrieving and displaying the board from game
 	 * @param game
+	 * @param tileSize 
+	 * @param boardWidth 
 	 * @param initialScale 
 	 */
-	protected BoardPanel(Game game, double initialScale) {
+	protected BoardPanel(Game game, int tileSize, int boardWidth, double initialScale) {
+		this.tileSize = tileSize;
+		this.boardWidth = boardWidth;
 		this.scale = initialScale;
 		this.game = game;
 		loadTileSprites();

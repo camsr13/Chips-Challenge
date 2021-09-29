@@ -3,7 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp21.renderer;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -33,7 +33,7 @@ abstract class Animatable extends JLabel {
 	/**
 	 * buffered images for scaling and animating
 	 */
-	protected BufferedImage[] images = {null, null, null, null};
+	protected ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
 	/**
 	 * Label that displays the image
 	 */
@@ -68,7 +68,7 @@ abstract class Animatable extends JLabel {
 		int x = (int) Math.round(this.getBounds().x * scale);
 		int y = (int) Math.round(this.getBounds().y * scale);
 		this.setBounds(x,y, width, height);
-		Image newImage = images[dir].getScaledInstance(width, height, BufferedImage.SCALE_DEFAULT);
+		Image newImage = images.get(dir).getScaledInstance(width, height, BufferedImage.SCALE_DEFAULT);
 		this.setIcon(new ImageIcon(newImage));
 		scale = 1;
 	}

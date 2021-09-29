@@ -39,9 +39,9 @@ public class RenderTest {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 		Game g = new Game();
-		Player p = new Player(new Location(5,5), 0);
+		Player p = new Player(new Location(4,4), 0);
 		g.setupGame(board, p, null, 0, 0, null, null);
-		BoardRender render = new BoardRender(g, 512);
+		BoardRender render = new BoardRender(g, 1000);
 		JFrame frame = new JFrame();
 		frame.setSize(1280, 1024);
 		frame.setVisible(true);
@@ -57,6 +57,7 @@ public class RenderTest {
 		TimeUnit.SECONDS.sleep(1);
 		p.setLocation(new Location(3,4));
 		render.update(Direction.UP);
+		TimeUnit.SECONDS.sleep(1);
 		p.setLocation(new Location(4,4));
 		render.update(Direction.RIGHT);
 		
