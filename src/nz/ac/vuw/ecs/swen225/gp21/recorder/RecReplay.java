@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp21.recorder;
 
 import nz.ac.vuw.ecs.swen225.gp21.app.GUIImp;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.WriteXML;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -88,7 +89,7 @@ public class RecReplay {
 
 
     // DIALOGS
-    public static void fileSelectDialogue(Document document) {
+    public static void fileSelectDialogue(Document document, WriteXML xmlWriter) {
         JFrame window = GUI.getMainWindow();
 
         JFileChooser fileChooser = new JFileChooser();
@@ -98,7 +99,8 @@ public class RecReplay {
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = fileChooser.getSelectedFile();
-            writeSaveXML(document, fileToSave.getAbsolutePath());
+            //writeSaveXML(document, fileToSave.getAbsolutePath());
+            xmlWriter.writeXMLFile(document, fileToSave.getAbsolutePath());
             System.out.println("Save as file: " + fileToSave.getAbsolutePath());
         }
     }
@@ -204,10 +206,13 @@ public class RecReplay {
      * @throws TransformerException
      */
     public static void saveRecording() {
+        WriteXML xmlWriter = new WriteXML();
+        Document document =xmlWriter.generateDocument();
         //creates new document and root element
-        Document document = new Document();
-        Element root = new Element("recorded");
-        document.setRootElement(root);
+        //Document document = new Document();
+        //Element root = new Element("recorded");
+        //document.setRootElement(root);
+        Element root = document.getRootElement();
 
         // player moves
         Element playerMovesElem = new Element("playerMoves");
@@ -224,7 +229,7 @@ public class RecReplay {
         root.addContent(levelInfoElem);
         addLevelElement(levelInfoElem, "1");
 
-        fileSelectDialogue(document);
+        fileSelectDialogue(document, xmlWriter);
         //writeSaveXML(document, filePath);
 
         endRecording(); // clean up
