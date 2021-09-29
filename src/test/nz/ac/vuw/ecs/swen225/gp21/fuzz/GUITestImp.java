@@ -29,7 +29,7 @@ public class GUITestImp extends GUIImp {
   }
 
   @Override
-  protected void doNorthMove() {
+  public void doNorthMove() {
     super.doNorthMove();
   }
 }

@@ -69,10 +69,10 @@ public class GUIImp implements GUIAbstract{
 	JTextArea treasuresFigureLabel = new JTextArea("0");
 
 	//Navigation and Pause Buttons
-	private final JButton north = new JButton("Up");
-	private final JButton east = new JButton("Right");
-	private final JButton south = new JButton("Down");
-	private final JButton west = new JButton("Left");
+	private static final JButton north = new JButton("Up");
+	private static final JButton east = new JButton("Right");
+	private static final JButton south = new JButton("Down");
+	private static final JButton west = new JButton("Left");
 	private final JButton pause = new JButton("Pause");
 
     //Create MenuBar and buttons
@@ -107,6 +107,7 @@ public class GUIImp implements GUIAbstract{
 	    initBoard();
 	    initSideBar();
 	    countdown();
+
     }
 
     protected void startPopUp() {
@@ -231,14 +232,41 @@ public class GUIImp implements GUIAbstract{
 
 	}
 
+	public static JButton getNorth() {
+		return north;
+	}
+
+	public static JButton getEast() {
+		return east;
+	}
+
+	public static JButton getSouth() {
+		return south;
+	}
+
+	public static JButton getWest() {
+		return west;
+	}
+
 	protected void doExitGameS() {
 		// TODO Auto-generated method stub
-		
+/*		RecReplay.saveRecording("C:\\Users\\Hazel\\Desktop\\rec_tests");
+		try {
+			RecReplay.loadRecording();
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+		//RecReplay.runReplay();
+		// RecReplay.saveRecording();
+		RecReplay.selectModeDialogue();
 
 	}
 
 	protected void doExitGameX() {
 		System.exit(0);
+
 	}
 
 	protected void initBoard(){
@@ -364,7 +392,8 @@ public class GUIImp implements GUIAbstract{
 
 	}
 
-	protected void doWestMove() {
+
+	public void doWestMove() {
 
 		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.LEFT);
 		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.LEFT);
@@ -372,21 +401,21 @@ public class GUIImp implements GUIAbstract{
 
 	}
 
-	protected void doEastMove() {
+	public void doEastMove() {
 		// TODO Auto-generated method stub
 		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.RIGHT);
 		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.RIGHT);
 		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.RIGHT);
 	}
 
-	protected void doSouthMove() {
+	public void doSouthMove() {
 		// TODO Auto-generated method stub
 		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.DOWN);
 		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.DOWN);
 		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.DOWN);
 	}
 
-	protected void doNorthMove() {
+	public void doNorthMove() {
 		// TODO Auto-generated method stub
 		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.UP);
 		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.UP);
@@ -467,6 +496,7 @@ public class GUIImp implements GUIAbstract{
 		boardRender = new BoardRender(game);
 		gameBoard = boardRender.getPane();
 		RecReplay.newRecording();
+		RecReplay.getGUIImp(this);
 
 	}
 }

@@ -1,8 +1,18 @@
 package nz.ac.vuw.ecs.swen225.gp21.recorder;
 
+import nz.ac.vuw.ecs.swen225.gp21.app.*;
+import nz.ac.vuw.ecs.swen225.gp21.app.GUIImp;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -12,26 +22,37 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayDeque;
+import java.util.List;
 import java.util.Queue;
 
 public class RecReplay {
 
-    private static Queue<Direction> moveHistory = new ArrayDeque<>(); // needs to be Game.Direction, String for testing
+    private static Queue<String> moveHistory = new ArrayDeque<>(); // needs to be Game.Direction, String for testing
     private static boolean isRunning;
     private static boolean isRecording;
     private static int DELAY = 200;
+
+    private static GUIImp GUI;
 
     static Thread thread;
 
     public enum Direction {
         UP, DOWN, LEFT, RIGHT
     }
+
+    public static void getGUIImp(GUIImp g) {
+        GUI = g;
+    }
+
 
     /**
      * Sets the playback delay to the int specified
@@ -54,9 +75,7 @@ public class RecReplay {
     public static void addAction(Direction direction) {
         // adds to actionHistory
         if (isRecording) {
-            moveHistory.add(direction);
-            System.out.println(direction); // INTEGRATION DAY PRINT
-            System.out.println(moveHistory);
+            moveHistory.add(direction.toString());
         }
     }
 
@@ -66,9 +85,104 @@ public class RecReplay {
      *
      * @return moveHistory queue.
      */
-    public static Queue<Direction> getMoveHistory() {
+    public static Queue<String> getMoveHistory() {
         return moveHistory;
     }
+
+
+    // DIALOGS
+    public static void fileSelectDialogue(Document document) {
+        JFrame window = GUI.getMainWindow();
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Specify a file to save");
+
+        int userSelection = fileChooser.showSaveDialog(window);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            writeSaveXML(document, fileToSave.getAbsolutePath());
+            System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+        }
+    }
+
+
+    public static void selectModeDialogue() {
+        String[] options = new String[]{"Step-by-step", "Auto", "Custom Speed"};
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Select Replay Mode: ");
+        JComboBox comboBox = new JComboBox(options);
+
+        // Setup
+        panel.add(label);
+        panel.add(Box.createHorizontalStrut(10));
+        panel.add(comboBox);
+
+        // JOptionPane
+        int result = JOptionPane.showConfirmDialog(null, panel,"Replay ", JOptionPane.CLOSED_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            String selection = comboBox.getSelectedItem().toString();
+
+            switch (selection) {
+                case "Step-by-step":
+                    stepMode();
+                    break;
+                case "Auto":
+                    runReplay();
+                    break;
+                case "Custom Speed":
+                    customSpeedMode();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+
+    public static void stepMode() {
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Step forward one: ");
+        JButton button = new JButton("Step");
+
+        // Setup
+        panel.add(label);
+        panel.add(Box.createHorizontalStrut(10));
+        panel.add(button);
+
+        button.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                stepReplay();
+            }
+        });
+
+        // JOptionPane
+        int result = JOptionPane.showConfirmDialog(null, panel,"Replay ", JOptionPane.CLOSED_OPTION);
+        if (result == JOptionPane.CLOSED_OPTION) {
+        }
+    }
+
+
+    public static void customSpeedMode() {
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Select custom speed: ");
+        JSpinner spinner = new JSpinner();
+        spinner.setValue(200);
+
+        // Setup
+        panel.add(label);
+        panel.add(Box.createHorizontalStrut(10));
+        panel.add(spinner);
+
+        // JOptionPane
+        int result = JOptionPane.showConfirmDialog(null, panel,"Replay ", JOptionPane.CLOSED_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            int selection = (int) spinner.getValue();
+            DELAY = selection;
+            runReplay();
+        }
+    }
+
 
 
     // RECORD
@@ -80,74 +194,63 @@ public class RecReplay {
         isRecording = true;
         moveHistory.clear();
         // TODO populates moveHistory
-/*        Direction[] arr = new Direction[]{Direction.LEFT, Direction.UP, Direction.UP, Direction.RIGHT};
-        for (Direction d : arr) {
+        String[] arr = new String[]{"LEFT", "UP", "UP", "RIGHT", "DOWN"};
+        for (String d : arr) {
             moveHistory.offer(d);
-        }*/
+        }
     }
 
 
     /**
      * Saves a recording.
      *
-     * @throws ParserConfigurationException
      * @throws TransformerException
      */
-    public static void saveRecording(String filePath) throws ParserConfigurationException, TransformerException {
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newDefaultInstance();
-        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+    public static void saveRecording() {
 
-        // root
-        org.w3c.dom.Document doc = docBuilder.newDocument();
-        org.w3c.dom.Element rootElem = doc.createElement("save");
-        doc.appendChild(rootElem);
+        //creates new document and root element
+        Document document = new Document();
+        Element root = new Element("recorded");
+        document.setRootElement(root);
 
-        // contents
-        org.w3c.dom.Element levelElem = doc.createElement("level");
-        rootElem.appendChild(levelElem);
-        levelElem.appendChild(doc.createTextNode("1"));
+        // player moves
+        Element playerMovesElem = new Element("playerMoves");
+        root.addContent(playerMovesElem);
 
-        org.w3c.dom.Element movesElem = doc.createElement("moves");
-        rootElem.appendChild(movesElem);
-
-        Queue<String> moveQ = new ArrayDeque<>();
-        for (Direction direction : moveHistory) {
-            switch (direction) {
-                case LEFT:
-                    moveQ.offer("Left");
-                    break;
-                case RIGHT:
-                    moveQ.offer("Right");
-                    break;
-                case UP:
-                    moveQ.offer("Up");
-                    break;
-                case DOWN:
-                    moveQ.offer("Down");
-                    break;
-                default:
-                    break;
-            }
+        for (String move : moveHistory) {
+            addPlayerMovesElement(playerMovesElem, moveHistory.poll());
         }
 
-        System.out.println(moveHistory); // INTEGRATION DAY PRINT
+        // TODO mob moves element
 
-        movesElem.appendChild(doc.createTextNode(moveQ.poll()));
-        for (String move : moveQ) {
-            movesElem.appendChild(doc.createTextNode(" " + moveQ.poll()));
-        }
+        // level element -> game state
+        Element levelInfoElem = new Element("levelInfo");
+        root.addContent(levelInfoElem);
+        addLevelElement(levelInfoElem, "1");
 
-        // write dom document to a file
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
-        LocalDateTime now = LocalDateTime.now();
-        String fn = "Chaps_Challenge_Save_" + dtf.format(now);
-        try (FileOutputStream output =
-                     new FileOutputStream(filePath + fn + ".xml")) {
-            writeSaveXML(doc, output);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        fileSelectDialogue(document);
+        //writeSaveXML(document, filePath);
+
         endRecording(); // clean up
+    }
+
+
+    public static void addPlayerMovesElement(Element root, String dir) {
+        Element move = new Element("move");
+        move.addContent(dir);
+        root.addContent(move);
+    }
+
+
+    public static void addMobMovesElement(Element root) {
+
+    }
+
+
+    public static void addLevelElement(Element root, String n) {
+        Element level = new Element("level");
+        level.addContent(n);
+        root.addContent(level);
     }
 
 
@@ -155,20 +258,19 @@ public class RecReplay {
      * Writes the save file information to the XML and saves the XML to disk.
      *
      * @param doc document object to write.
-     * @param out output stream.
-     * @throws TransformerException
+     * @param fp output file path in string form.
      */
-    public static void writeSaveXML(org.w3c.dom.Document doc, OutputStream out) throws TransformerException {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-
-        // pretty print XML
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-
-        DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(out);
-
-        transformer.transform(source, result);
+    public static void writeSaveXML(Document doc, String fp) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
+        LocalDateTime now = LocalDateTime.now();
+        String fn = "Chaps_Challenge_Save_" + dtf.format(now);
+        //Set outputStream and write generated XML file
+        XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+        try(FileOutputStream fileOutputStream = new FileOutputStream(fp)){
+            xmlOutputter.output(doc, fileOutputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -188,70 +290,18 @@ public class RecReplay {
     /**
      * Loads the recording file ready for replay.
      */
-    public static void loadRecording() {
+    public static void loadRecording() throws JDOMException, IOException {
+        moveHistory.clear();
+        Element root = ((Document) (new SAXBuilder()).build(new File("C:\\Users\\Hazel\\Desktop\\rec_tests\\test.xml"))).getRootElement();
 
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newDefaultInstance();
+        Element playerMoves = root.getChild("playerMoves");
+        System.out.println(playerMoves);
+        List<Element> moves = playerMoves.getChildren();
 
-        try {
-            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-            org.w3c.dom.Document doc = docBuilder.parse("C:\\Users\\Hazel\\Documents\\VUW 2021 TRI 2\\SWEN225\\Assignments\\Project\\xmlTEST\\testout\\Chaps_Challenge_Save_2021-09-21_162606.xml");
-            doc.getDocumentElement().normalize();
-
-            // TESTING
-            System.out.println("Root Element :" + doc.getDocumentElement().getNodeName());
-            System.out.println("------");
-
-            NodeList list = doc.getElementsByTagName("save");
-
-            for (int temp = 0; temp < list.getLength(); temp++) {
-
-                Node node = list.item(temp);
-
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-
-                    org.w3c.dom.Element element = (org.w3c.dom.Element) node;
-
-                    // get level
-                    String level = element.getElementsByTagName("level").item(0).getTextContent();
-
-                    // get moves list
-                    String moves = element.getElementsByTagName("moves").item(0).getTextContent();
-
-                    // TESTING
-                    System.out.println("Current Element : " + node.getNodeName());
-                    System.out.println("level : " + level);
-                    System.out.println("moves : " + moves);
-
-                    String[] arr = moves.split(" ");
-
-                    for (String direction : arr) {
-
-                        switch (direction) {
-                            case "Left":
-                                moveHistory.add(Direction.LEFT);
-                                break;
-                            case "Right":
-                                moveHistory.add(Direction.RIGHT);
-                                break;
-                            case "Up":
-                                moveHistory.add(Direction.UP);
-                                break;
-                            case "Down":
-                                moveHistory.add(Direction.DOWN);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    System.out.println(moveHistory);
-                }
-            }
-
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+        for (Element move : moves) {
+            moveHistory.add(move.getText());
         }
-
+        System.out.println(moveHistory);
     }
 
 
@@ -259,9 +309,30 @@ public class RecReplay {
      * Steps the replay forward by one
      */
     public static void stepReplay() {
+        isRecording = false;
+        isRunning = true;
         // If the game is running and there are moves left to replay, step forward by one
         if (isRunning && moveHistory.size() > 0) {
             //game move player method -> (actionHistory.poll())
+            String move = moveHistory.poll();
+                System.out.println(move);
+                switch (move) {
+                    case "LEFT":
+                        GUI.doWestMove();
+                        break;
+                    case "RIGHT":
+                        GUI.doEastMove();
+                        break;
+                    case "UP":
+                        GUI.doNorthMove();
+                        break;
+                    case "DOWN":
+                        GUI.doSouthMove();
+                        break;
+                    default:
+                        break;
+                }
+
         }
         // When there are no moves left to replay, the game should no longer be running
         if (moveHistory.size() == 0) {
@@ -276,6 +347,7 @@ public class RecReplay {
      * Stops once replay is complete
      */
     public static void runReplay() {
+        isRunning = true;
         // FIXME
         Runnable run = () -> {
             while (isRunning && moveHistory.size() > 0) {
