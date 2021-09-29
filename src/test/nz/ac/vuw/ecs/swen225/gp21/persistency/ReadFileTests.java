@@ -45,7 +45,7 @@ public class ReadFileTests {
     public void testReadLevel1_01() throws JDOMException, IOException {
         new Game();
         readXML readXML = new readXML();
-        readXML.readXMLFile("level1.xml");
+        readXML.readXMLFile("src/nz/ac/vuw/ecs/swen225/gp21/persistency/level1.xml");
         //get the created tilemap from Game and print it
         Tile[][] tilemap = Game.instance.getTilemap();
         for(int y = 0; y < tilemap[0].length; y++){
@@ -67,7 +67,7 @@ public class ReadFileTests {
     public void testReadLevel2_01() throws JDOMException, IOException {
         new Game();
         readXML readXML = new readXML();
-        readXML.readXMLFile("level2.xml");
+        readXML.readXMLFile("src/nz/ac/vuw/ecs/swen225/gp21/persistency/level2.xml");
         //get the created tilemap from Game and print it
         Tile[][] tilemap = Game.instance.getTilemap();
         for(int y = 0; y < tilemap[0].length; y++){
@@ -81,15 +81,15 @@ public class ReadFileTests {
         Player player = Game.instance.getPlayer();
         System.out.println("Player located at x: " + player.getLocation().getX() + ", y: " + player.getLocation().getY());
 
-        assert (player.getLocation().getX() == 15);
-        assert (player.getLocation().getY() == 20);
+        assert (player.getLocation().getX() == 9);
+        assert (player.getLocation().getY() == 8);
     }
 
     @Test
     public void testReadCurrentSave_01() throws JDOMException, IOException {
         new Game();
         readXML readXML = new readXML();
-        readXML.readXMLFile("currentSave.xml");
+        readXML.readXMLFile("src/nz/ac/vuw/ecs/swen225/gp21/persistency/currentSave.xml");
         //get the created tilemap from Game and print it
         Tile[][] tilemap = Game.instance.getTilemap();
         for(int y = 0; y < tilemap[0].length; y++){
