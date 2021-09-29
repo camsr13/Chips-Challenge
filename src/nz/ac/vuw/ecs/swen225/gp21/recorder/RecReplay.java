@@ -197,15 +197,36 @@ public class RecReplay {
      * Steps the replay forward by one
      */
     public static void stepReplay() {
+        isRecording = false;
+        isRunning = true;
         // If the game is running and there are moves left to replay, step forward by one
         if (isRunning && moveHistory.size() > 0) {
             //game move player method -> (actionHistory.poll())
+            String move = moveHistory.poll();
+            System.out.println(move);
+            switch (move) {
+                case "LEFT":
+                    //GUI.doWestMove();
+                    break;
+                case "RIGHT":
+                    //GUI.doEastMove();
+                    break;
+                case "UP":
+                    //GUI.doNorthMove();
+                    break;
+                case "DOWN":
+                    //GUI.doSouthMove();
+                    break;
+                default:
+                    break;
+            }
         }
         // When there are no moves left to replay, the game should no longer be running
         if (moveHistory.size() == 0) {
             isRunning = false;
             // TODO send message to Game?? or app?
         }
+
     }
 
 
