@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp21.recorder;
 
+import nz.ac.vuw.ecs.swen225.gp21.app.GUIImp;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -34,11 +35,15 @@ public class RecReplay {
     private static boolean isRunning;
     private static boolean isRecording;
     private static int DELAY = 200;
-
+    static GUIImp GUI;
     static Thread thread;
 
     public enum Direction {
         UP, DOWN, LEFT, RIGHT
+    }
+
+    public static void getGUIImp(GUIImp g) {
+        GUI = g;
     }
 
     /**
@@ -206,16 +211,16 @@ public class RecReplay {
             System.out.println(move);
             switch (move) {
                 case "LEFT":
-                    //GUI.doWestMove();
+                    GUI.doWestMove();
                     break;
                 case "RIGHT":
-                    //GUI.doEastMove();
+                    GUI.doEastMove();
                     break;
                 case "UP":
-                    //GUI.doNorthMove();
+                    GUI.doNorthMove();
                     break;
                 case "DOWN":
-                    //GUI.doSouthMove();
+                    GUI.doSouthMove();
                     break;
                 default:
                     break;
