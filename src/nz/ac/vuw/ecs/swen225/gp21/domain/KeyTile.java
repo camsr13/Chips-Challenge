@@ -26,7 +26,6 @@ public class KeyTile extends Tile {
 		Game.instance.addKey(keyColour);
 		FreeTile newTile = new FreeTile(Location.copy(location));
 		Game.instance.setTile(newTile);
-		Game.instance.removeKey(keyColour);
 	}
 
 	@Override

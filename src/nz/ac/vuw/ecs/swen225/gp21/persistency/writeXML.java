@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 /**
  * @author Rhys Hanrahan
@@ -28,13 +29,32 @@ public class writeXML {
     private int totalTreasures;
     private int collectedTreasures;
     private ExitLockTile exitLock;
+    private List<Actor> actors;
 
     /**
      *
      * writeXMLFile writes the current state of tilemap and player to an xmlFile
      *
      */
-    public void writeXMLFile(){
+    public void writeXMLFile(Document document, String fileDirectory){
+        //Set outputStream and write generated XML file
+        XMLOutputter xmlOutputter = new XMLOutputter();
+        try(FileOutputStream fileOutputStream = new FileOutputStream(fileDirectory)){
+            xmlOutputter.output(document, fileOutputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *
+     * Generates a document of the current state of the game
+     *
+     * @return document
+     */
+    public Document generateDocument(){
         //sets up variables from Game
         player = Game.instance.getPlayer();
         tileMap = Game.instance.getTilemap();
@@ -42,6 +62,7 @@ public class writeXML {
         totalTreasures = Game.instance.getTotalTreasures();
         collectedTreasures = Game.instance.getCollectedTreasures();
         exitLock = Game.instance.getExitLock();
+        actors = Game.instance.getActors();
 
         //creates new document and root element
         Document document = new Document();
@@ -53,19 +74,11 @@ public class writeXML {
         generateKeysHeld(mapElement);
         //call generatePlayer() to write the playerinfo section with location
         generatePlayer(mapElement);
+        //call generate actors to write all the actors on the current level
+        generateActors(mapElement, actors);
         //call generateTileRow() for each tileRow in tileMap
-        for(Tile[] aTileRow : tileMap){
-            generateTileRow(mapElement, aTileRow);
-        }
-        //Set outputStream and write generated XML file
-        XMLOutputter xmlOutputter = new XMLOutputter();
-        try(FileOutputStream fileOutputStream = new FileOutputStream("src/nz/ac/vuw/ecs/swen225/gp21/persistency/currentSave.xml")){
-            xmlOutputter.output(document, fileOutputStream);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        generateTileRows(mapElement, tileMap);
+        return document;
     }
 
     /**
@@ -139,6 +152,33 @@ public class writeXML {
         locationElement = new Element("location");
         locationElement.addContent(Integer.toString(player.getLocation().getY()));
         playerElement.addContent(locationElement);
+        //write the time the player is frozen for
+        Element frozenElement = new Element("frozen");
+        frozenElement.addContent(Integer.toString(player.getTimeFrozen()));
+        playerElement.addContent(frozenElement);
+    }
+
+    /**
+     *
+     * generateActors uses the list of actors for a given level and writes their location and direction for each actor
+     *
+     * @param mapElement
+     * @param actors
+     */
+    private void generateActors(Element mapElement, List<Actor> actors){
+        //check if the current level contains any actors
+        if(!actors.isEmpty()){
+            Element actorsElement = new Element("actors");
+            //write each actor to the xml file
+            mapElement.addContent(actorsElement);
+            for(Actor actor : actors){
+                Element freezeElement = new Element("freeze");
+                freezeElement.setAttribute("coordX", Integer.toString(actor.getLocation().getX()));
+                freezeElement.setAttribute("coordY", Integer.toString(actor.getLocation().getY()));
+                freezeElement.addContent(getDirection(((FreezeActor)actor).currentDirection));
+                actorsElement.addContent(freezeElement);
+            }
+        }
     }
 
     /**
@@ -146,17 +186,19 @@ public class writeXML {
      * generateTileRow cycles through each row of tileMap and writes each tile type to the xml file
      *
      * @param mapElement
-     * @param row
+     * @param tileMap
      */
-    private void generateTileRow(Element mapElement, Tile[] row){
+    private void generateTileRows(Element mapElement, Tile[][] tileMap){
         //create new tileRowElement for each tileRow
-        Element tileRowElement = new Element("tileRow");
-        mapElement.addContent(tileRowElement);
-        //add a new tileElement for each tile in a tileRow
-        for(Tile aTile : row){
-            Element tileElement = new Element("tile");
-            tileElement.addContent(getTileType(aTile, tileElement));
-            tileRowElement.addContent(tileElement);
+        for(int y = 0; y < tileMap[0].length; y++){
+            Element tileRowElement = new Element("tileRow");
+            mapElement.addContent(tileRowElement);
+            //add a new tileElement for each tile in a tileRow
+            for(int x = 0; x < tileMap.length; x++){
+                Element tileElement = new Element("tile");
+                tileElement.addContent(getTileType(tileMap[x][y], tileElement));
+                tileRowElement.addContent(tileElement);
+            }
         }
     }
 
@@ -188,6 +230,11 @@ public class writeXML {
             return "gate";
         }else if(tile instanceof ExitTile){
             return "exit";
+        }else if(tile instanceof ArrowTile){
+            tileElement.setAttribute("direction", getDirection(((ArrowTile)tile).getDirection()));
+            return "arrow";
+        }else if(tile instanceof FreezeTile){
+            return "freeze";
         }
         //Incase error or unknown tile type occurs save as wall tile
         else{
@@ -208,6 +255,10 @@ public class writeXML {
             return "blue";
         }else if(((LockTile)tile).getKeyColour() == Game.KeyColour.YELLOW){
             return "yellow";
+        }else if(((LockTile)tile).getKeyColour() == Game.KeyColour.RED){
+            return "red";
+        }else if(((LockTile)tile).getKeyColour() == Game.KeyColour.GREEN){
+            return "green";
         }else{
             return null;
         }
@@ -226,19 +277,55 @@ public class writeXML {
             return "blue";
         }else if(((KeyTile)tile).getKeyColour() == Game.KeyColour.YELLOW){
             return "yellow";
+        }else if(((KeyTile)tile).getKeyColour() == Game.KeyColour.RED){
+            return "red";
+        }else if(((KeyTile)tile).getKeyColour() == Game.KeyColour.GREEN){
+            return "green";
         }else{
             return null;
         }
     }
 
+    /**
+     *
+     * get the colour of keys on the map and return string colour
+     *
+     * @param colour
+     * @return
+     */
     private String getKeysHeldColour(Game.KeyColour colour){
         if(colour == Game.KeyColour.BLUE){
             return "blue";
         }else if(colour == Game.KeyColour.YELLOW){
             return "yellow";
+        }else if(colour == Game.KeyColour.RED){
+            return "red";
+        }else if(colour == Game.KeyColour.GREEN){
+            return "green";
         }else{
             return null;
         }
+    }
+
+    /**
+     *
+     * getDirection is a method used when writing arrow tiles to the xml file
+     * When writing an arrowTile a enum Game.direction is passed and a string direction is returned
+     *
+     * @param direction
+     * @return string
+     */
+    private String getDirection(Game.Direction direction){
+        if(direction == Game.Direction.UP){
+            return "up";
+        }else if(direction == Game.Direction.DOWN){
+            return "down";
+        }else if(direction == Game.Direction.LEFT){
+            return "left";
+        }else if(direction == Game.Direction.RIGHT){
+            return "right";
+        }
+        return null;
     }
 
 }

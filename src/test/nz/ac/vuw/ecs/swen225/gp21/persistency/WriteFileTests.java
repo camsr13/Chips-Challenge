@@ -14,9 +14,9 @@ public class WriteFileTests {
     public void testWriteCurrentSave_01() throws JDOMException, IOException {
         Game game = new Game();
         readXML readXML = new readXML();
-        readXML.readXMLFile();
+        readXML.readXMLFile("src/nz/ac/vuw/ecs/swen225/gp21/persistency/level2.xml");
         writeXML instance = new writeXML();
-        instance.writeXMLFile();
+        instance.writeXMLFile(instance.generateDocument(), "src/nz/ac/vuw/ecs/swen225/gp21/persistency/currentSave.xml");
 
         assert(new File("src/nz/ac/vuw/ecs/swen225/gp21/persistency/currentSave.xml").isFile());
     }

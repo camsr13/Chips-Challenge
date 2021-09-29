@@ -19,7 +19,7 @@ public class LockTile extends Tile {
 	}
 
 	@Override
-	public boolean isPathable() {
+	public boolean isPlayerPathable() {
 		if (Game.instance.getKeysHeld().get(keyColour) > 0) {
 			return true;
 		}
@@ -31,6 +31,7 @@ public class LockTile extends Tile {
 		// TODO: check player holds correct key
 		FreeTile newTile = new FreeTile(Location.copy(location));
 		Game.instance.setTile(newTile);
+		Game.instance.removeKey(keyColour);
 	}
 
 	@Override

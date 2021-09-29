@@ -11,11 +11,14 @@ public class Player {
 	 */
 	Location location;
 
+	int timeFrozen;
+
 	/**
 	 * @param location The players location
 	 */
-	public Player(Location location) {
+	public Player(Location location, int timeFrozen) {
 		this.location = location;
+		this.timeFrozen = timeFrozen;
 	}
 
 	/**
@@ -23,6 +26,13 @@ public class Player {
 	 */
 	public Location getLocation() {
 		return Location.copy(location);
+	}
+
+	/**
+	 * @return Time player is frozen
+	 */
+	public int getTimeFrozen() {
+		return timeFrozen;
 	}
 
 	/**
@@ -35,9 +45,11 @@ public class Player {
 
 	/**
 	 * @param d       The direction for player movement
-	 * @param tilemap The tilemap in which the player is moving
 	 */
-	public void move(Game.Direction d, Tile[][] tilemap) {
+	public void move(Game.Direction d) {
+		if (timeFrozen > 0){
+			return;
+		}
 		int x = -1;
 		int y = -1;
 		if (d == Game.Direction.UP) {
@@ -56,11 +68,21 @@ public class Player {
 		if (x < 0 || y < 0) {
 			// TODO: bad movement case
 		} else {
-			Tile newTile = tilemap[x][y];
-			if (newTile.isPathable()) {
+			Tile newTile = Game.instance.getTilemap()[x][y];
+			if (newTile.isPlayerPathable()) {
 				setLocation(new Location(x, y));
-				tilemap[x][y].onPlayerEnter();
+				Game.instance.getTilemap()[x][y].onPlayerEnter();
 			}
 		}
+	}
+
+	public void tick(){
+		if (timeFrozen > 0){
+			timeFrozen--;
+		}
+	}
+
+	public void freeze (int time){
+		timeFrozen += time;
 	}
 }

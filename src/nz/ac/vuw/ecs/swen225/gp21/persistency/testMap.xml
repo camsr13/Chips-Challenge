@@ -14,6 +14,7 @@
 	<player>
 		<location>4</location>
 		<location>2</location>
+		<frozen>0</frozen>
 	</player>
 	<tileRow>
 		<tile>wall</tile>
@@ -33,15 +34,15 @@
 	<tileRow>
 		<tile>wall</tile>
 		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
+		<tile>freeze</tile>
+		<tile>freeze</tile>
+		<tile>freeze</tile>
 		<tile>free</tile>
 		<tile>wall</tile>
 		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
+		<tile direction = "right">arrow</tile>
+		<tile direction = "down">arrow</tile>
+		<tile direction = "left">arrow</tile>
 		<tile>free</tile>
 		<tile>wall</tile>
 	</tileRow>

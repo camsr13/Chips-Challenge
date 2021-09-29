@@ -1,34 +1,22 @@
 <?xml version="1.0"?>
 <map>
 	<mapVariables>
-		<sizeX>20</sizeX>
-		<sizeY>29</sizeY>
-		<total>9</total>
+		<sizeX>29</sizeX>
+		<sizeY>23</sizeY>
+		<total>8</total>
 		<collected>0</collected>
-		<exitLockX>9</exitLockX>
-		<exitLockY>6</exitLockY>
+		<exitLockX>16</exitLockX>
+		<exitLockY>1</exitLockY>
 	</mapVariables>
 	<keysHeld>
 		<key colour = "blue">0</key>
 		<key colour = "yellow">0</key>
-		<key colour = "green">0</key>
-		<key colour = "red">0</key>
 	</keysHeld>
 	<player>
-		<location>9</location>
-		<location>8</location>
+		<location>15</location>
+		<location>20</location>
 		<frozen>0</frozen>
 	</player>
-	<actors>
-		<freeze coordX = "2" coordY = "1">down</freeze>
-		<freeze coordX = "1" coordY = "18">right</freeze>
-		<freeze coordX = "2" coordY = "19">right</freeze>
-		<freeze coordX = "3" coordY = "20">right</freeze>
-		<freeze coordX = "3" coordY = "22">left</freeze>
-		<freeze coordX = "2" coordY = "23">right</freeze>
-		<freeze coordX = "4" coordY = "25">left</freeze>
-		<freeze coordX = "17" coordY = "27">up</freeze>
-	</actors>
 	<tileRow>
 		<tile>wall</tile>
 		<tile>wall</tile>
@@ -45,95 +33,109 @@
 		<tile>wall</tile>
 		<tile>wall</tile>
 		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>freeze</tile>
 		<tile>wall</tile>
 		<tile>exit</tile>
 		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
 		<tile>wall</tile>
-		<tile>freeze</tile>
-		<tile>freeze</tile>
-		<tile>freeze</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
 		<tile>wall</tile>
 	</tileRow>
 	<tileRow>
 		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>gate</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>treasure</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
 		<tile>treasure</tile>
 		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>freeze</tile>
-		<tile colour = "red">key</tile>
-		<tile>freeze</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>treasure</tile>
 		<tile colour = "yellow">key</tile>
 		<tile>free</tile>
 		<tile>wall</tile>
-		<tile>freeze</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile colour = "blue">key</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
 		<tile>treasure</tile>
-		<tile>freeze</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>freeze</tile>
-		<tile>freeze</tile>
-		<tile>freeze</tile>
 		<tile>wall</tile>
 		<tile>free</tile>
 		<tile>wall</tile>
 		<tile>free</tile>
 		<tile>free</tile>
 		<tile>free</tile>
+		<tile>wall</tile>
 		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>freeze</tile>
-		<tile>freeze</tile>
-		<tile>freeze</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
 		<tile>wall</tile>
 		<tile>free</tile>
 		<tile>wall</tile>
 		<tile>free</tile>
 		<tile>free</tile>
-		<tile>free</tile>
-		<tile>freeze</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
 		<tile>free</tile>
 		<tile>free</tile>
 		<tile>free</tile>
@@ -141,508 +143,560 @@
 	</tileRow>
 	<tileRow>
 		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>freeze</tile>
-		<tile>freeze</tile>
-		<tile>free</tile>
-		<tile>freeze</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>wall</tile>
 		<tile>free</tile>
 		<tile>wall</tile>
 		<tile>wall</tile>
 		<tile>wall</tile>
-		<tile colour = "green">door</tile>
 		<tile>wall</tile>
 		<tile>wall</tile>
-		<tile>gate</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
 		<tile>wall</tile>
 		<tile>wall</tile>
 		<tile colour = "blue">door</tile>
 		<tile>wall</tile>
 		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile colour = "red">door</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>freeze</tile>
-		<tile>freeze</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile info = "Actors move in straight lines, and turn around after touching a wall">info</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>freeze</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>freeze</tile>
-		<tile>free</tile>
-		<tile>freeze</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile info = "Arrow tiles push the player in the direction they are pointing">info</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>freeze</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>freeze</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile direction = "up">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile>freeze</tile>
-		<tile>treasure</tile>
-		<tile>freeze</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile colour = "blue">key</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>free</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile>freeze</tile>
-		<tile>freee</tile>
-		<tile>freeze</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile direction = "up">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile>treasure</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>treasure</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile direction = "up">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile direction = "up">arrow</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile>treasure</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "left">arrow</tile>
-		<tile>treasure</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile>free</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile direction = "right">arrow</tile>
-		<tile>free</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "left">arrow</tile>
-		<tile>free</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "left">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile>treasure</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile colour = "green">key</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "right">arrow</tile>
-		<tile direction = "up">arrow</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile direction = "down">arrow</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>wall</tile>
-		<tile>wall</tile>
-	</tileRow>
-	<tileRow>
-		<tile>wall</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
-		<tile>free</tile>
 		<tile>free</tile>
 		<tile colour = "yellow">door</tile>
 		<tile>free</tile>
+		<tile>wall</tile>
 		<tile>free</tile>
 		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>treasure</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>treasure</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>treasure</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>treasure</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+	</tileRow>
+	<tileRow>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>treasure</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>free</tile>
+		<tile>wall</tile>
+		<tile>free</tile>
 		<tile>wall</tile>
 	</tileRow>
 	<tileRow>
@@ -666,6 +720,14 @@
 		<tile>wall</tile>
 		<tile>wall</tile>
 		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
+		<tile>wall</tile>
 	</tileRow>
-	
 </map>
