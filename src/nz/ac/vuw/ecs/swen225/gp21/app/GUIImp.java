@@ -74,6 +74,11 @@ public class GUIImp implements GUIAbstract{
 	private final JButton west = new JButton("Left");
 	private final JButton pause = new JButton("Pause");
 
+	//Boolean if Movement allowed
+	private boolean canMove = true;
+	private boolean waitSecond = true;
+
+
     //Create MenuBar and buttons
 	private JMenuBar menuBar = new JMenuBar();
 
@@ -86,8 +91,6 @@ public class GUIImp implements GUIAbstract{
 	private Game game = new Game();
 	private readXML currXML = new readXML();
 	protected String currFile;
-
-
 
 
 	//Content Panel
@@ -115,7 +118,7 @@ public class GUIImp implements GUIAbstract{
 	    initMenu();
 	    initBoard();
 	    initSideBar();
-	    countdown();
+
     }
 
     protected void startPopUp() {
@@ -155,6 +158,7 @@ public class GUIImp implements GUIAbstract{
 		frame.setLocationByPlatform(true);
 		frame.pack();
 	}
+
 
     protected void initMenu(){
     	//Create menuBar options
@@ -224,12 +228,12 @@ public class GUIImp implements GUIAbstract{
 
 
 	protected void doStartLevel2() {
-		currFile = "level2.xml";
+		currFile = "/am/st-james/home1/richarcame1/eclipse-workspace5/gogo/swen225-group-project-main/src/nz/ac/vuw/ecs/swen225/gp21/persistency/level2.xml";
 		loadGame();
 	}
 
 	protected void doStartLevel1() {
-		currFile = "level1.xml";
+		currFile = "/am/st-james/home1/richarcame1/eclipse-workspace5/gogo/swen225-group-project-main/src/nz/ac/vuw/ecs/swen225/gp21/persistency/level1.xml";
 		loadGame();
 
 	}
@@ -267,7 +271,9 @@ public class GUIImp implements GUIAbstract{
     	timePanel.add(timeTitleLabel);
     	timePanel.add(timeFigureLabel);
     	keysPanel.add(keysLabel);
+    	keysPanel.add(keysFigureLabel);
     	treasuresPanel.add(treasuresLabel);
+    	treasuresPanel.add(treasuresFigureLabel);
 
     	//add parts parts to sideBarSouth
 		sidebarNorth.setBackground(Color.WHITE);
@@ -373,34 +379,67 @@ public class GUIImp implements GUIAbstract{
 	}
 
 	public void doWestMove() {
-
-		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.LEFT);
-		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.LEFT);
-		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.LEFT);
-
+		if(canMove) {
+			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.LEFT);
+			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.LEFT);
+			boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.LEFT);
+			updateDisplay();
+			freezeMovement();
+		}
 	}
 
 	public void doEastMove() {
-		// TODO Auto-generated method stub
-		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.RIGHT);
-		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.RIGHT);
-		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.RIGHT);
+		if(canMove) {
+			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.RIGHT);
+			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.RIGHT);
+			boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.RIGHT);
+			updateDisplay();
+			freezeMovement();
+		}
 	}
 
 	public void doSouthMove() {
-		// TODO Auto-generated method stub
-		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.DOWN);
-		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.DOWN);
-		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.DOWN);
+		if(canMove) {
+			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.DOWN);
+			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.DOWN);
+			boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.DOWN);
+			updateDisplay();
+			freezeMovement();
+		}
 	}
 
 	public void doNorthMove() {
-		// TODO Auto-generated method stub
-		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.UP);
-		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.UP);
-		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.UP);
+		if(canMove) {
+			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.UP);
+			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.UP);
+			boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.UP);
+			updateDisplay();
+			freezeMovement();
+		}
 	}
 
+	private void updateDisplay() {
+
+		treasuresFigureLabel.setText(String.valueOf(game.getTotalTreasures()-game.getCollectedTreasures()));
+
+	}
+
+	protected void freezeMovement() {
+
+		canMove = false;
+		int wait = 1000;
+		Timer freezeTimer = new Timer(1000, new ActionListener() {
+            public void actionPerformed(ActionEvent i) {
+            	if(waitSecond) {
+            		canMove = true;
+            	}
+            	waitSecond = true;
+
+            }
+        });
+		freezeTimer.start();
+
+	}
 	/**
 	 * This helper class initialises GridBagConstraints with two options (gridx, gridy). By default GridBagConstraints
 	 * only supports initialisation with either 0 options, or every option.
@@ -416,10 +455,11 @@ public class GUIImp implements GUIAbstract{
 
     public JFrame getMainWindow() {
 		return frame;
+
 	}
 
     protected void countdown() {
-        timer = new Timer(1000, new ActionListener() {
+        timer = new Timer(1001, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	timeFigureLabel.setText(String.valueOf(timeRemaining--));
 
@@ -462,7 +502,7 @@ public class GUIImp implements GUIAbstract{
 	}
 
 	protected void loadGame(){
-
+		
 		try {
 			currXML.readXMLFile(currFile);
 		} catch (JDOMException | IOException e) {
@@ -475,7 +515,8 @@ public class GUIImp implements GUIAbstract{
 		boardRender = new BoardRender(game,500);
 		gameBoard = boardRender.getPane();
 		RecReplay.newRecording();
-
+		countdown();
+		updateDisplay();
 	}
 }
 
