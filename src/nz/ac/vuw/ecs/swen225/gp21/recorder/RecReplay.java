@@ -21,6 +21,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -102,6 +104,83 @@ public class RecReplay {
             System.out.println("Save as file: " + fileToSave.getAbsolutePath());
         }
     }
+
+    public static void selectModeDialogue() {
+        String[] options = new String[]{"Step-by-step", "Auto", "Custom Speed"};
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Select Replay Mode: ");
+        JComboBox comboBox = new JComboBox(options);
+
+        // Setup
+        panel.add(label);
+        panel.add(Box.createHorizontalStrut(10));
+        panel.add(comboBox);
+
+        // JOptionPane
+        int result = JOptionPane.showConfirmDialog(null, panel,"Replay ", JOptionPane.CLOSED_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            String selection = comboBox.getSelectedItem().toString();
+
+            switch (selection) {
+                case "Step-by-step":
+                    stepMode();
+                    break;
+                case "Auto":
+                    runReplay();
+                    break;
+                case "Custom Speed":
+                    customSpeedMode();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+
+    public static void stepMode() {
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Step forward one: ");
+        JButton button = new JButton("Step");
+
+        // Setup
+        panel.add(label);
+        panel.add(Box.createHorizontalStrut(10));
+        panel.add(button);
+
+        button.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                stepReplay();
+            }
+        });
+
+        // JOptionPane
+        int result = JOptionPane.showConfirmDialog(null, panel,"Replay ", JOptionPane.CLOSED_OPTION);
+        if (result == JOptionPane.CLOSED_OPTION) {
+        }
+    }
+
+
+    public static void customSpeedMode() {
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Select custom speed: ");
+        JSpinner spinner = new JSpinner();
+        spinner.setValue(200);
+
+        // Setup
+        panel.add(label);
+        panel.add(Box.createHorizontalStrut(10));
+        panel.add(spinner);
+
+        // JOptionPane
+        int result = JOptionPane.showConfirmDialog(null, panel,"Replay ", JOptionPane.CLOSED_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            int selection = (int) spinner.getValue();
+            DELAY = selection;
+            runReplay();
+        }
+    }
+
 
 
 
