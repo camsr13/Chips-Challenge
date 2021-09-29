@@ -17,7 +17,7 @@ public class ExitTile extends Tile {
 
 	@Override
 	public void onPlayerEnter() {
-
+		Game.instance.setLevelComplete(true);
 	}
 
 	@Override

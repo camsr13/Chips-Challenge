@@ -25,6 +25,23 @@ public class Game {
 	private int collectedTreasures;
 	private ExitLockTile exitLock;
 	private List<Actor> actors;
+	private boolean levelComplete = false;
+
+	/**
+	 *
+	 * @param levelComplete Set state of current level completion.
+	 */
+	public void setLevelComplete(boolean levelComplete) {
+		this.levelComplete = levelComplete;
+	}
+
+	/**
+	 *
+	 * @return Whether the current level has been completed.
+	 */
+	public boolean isLevelComplete() {
+		return levelComplete;
+	}
 
 	/**
 	 *
