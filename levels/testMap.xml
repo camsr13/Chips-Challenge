@@ -7,6 +7,7 @@
 		<collected>0</collected>
 		<exitLockX>11</exitLockX>
 		<exitLockY>2</exitLockY>
+		<time>999</time>
 	</mapVariables>
 	<keysHeld>
 		<key colour = "blue">0</key>

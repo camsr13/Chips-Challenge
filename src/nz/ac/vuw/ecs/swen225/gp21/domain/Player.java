@@ -40,14 +40,21 @@ public class Player {
 	 */
 	public void setLocation(Location l) {
 		this.location = Location.copy(l);
-		// TODO: check tile is valid
+
+		if (!Game.instance.getTilemap()[location.getX()][location.getY()].isPlayerPathable()){
+			throw new IllegalStateException("Player lcoation cannot be set to a tile that is unpathable.");
+		}
 	}
 
 	/**
 	 * @param d       The direction for player movement
 	 */
 	public void move(Game.Direction d) {
-		if (timeFrozen > 0){
+		if (d == null){
+			throw new IllegalArgumentException("Movement direction cannot be null");
+		}
+
+		if (timeFrozen > 0) {
 			return;
 		}
 		int x = -1;
@@ -65,8 +72,8 @@ public class Player {
 			x = location.getX() + 1;
 			y = location.getY();
 		}
-		if (x < 0 || y < 0) {
-			// TODO: bad movement case
+		if (x < 0 || y < 0 || x > Game.instance.getTilemap().length || y > Game.instance.getTilemap()[0].length) {
+			throw new IllegalStateException("Movement cannot exceed bounds of tile array.");
 		} else {
 			Tile newTile = Game.instance.getTilemap()[x][y];
 			if (newTile.isPlayerPathable()) {
@@ -76,13 +83,18 @@ public class Player {
 		}
 	}
 
-	public void tick(){
-		if (timeFrozen > 0){
+	public void tick() {
+		if (timeFrozen > 0) {
 			timeFrozen--;
 		}
+		// postcondition check
+		assert (timeFrozen >= 0);
 	}
 
-	public void freeze (int time){
+	public void freeze (int time) {
+		if (time < 1) {
+			throw new IllegalArgumentException("Time to freeze cannot be less than 1.");
+		}
 		timeFrozen += time;
 	}
 }
