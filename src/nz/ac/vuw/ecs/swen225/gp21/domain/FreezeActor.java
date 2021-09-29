@@ -20,28 +20,29 @@ public class FreezeActor extends Actor {
 	@Override
 	public void tick() {
 		move();
-		// TODO: check if touching player
-
+		if (Game.instance.getPlayer().getLocation().equals(getLocation())) {
+			freezePlayer();
+		}
 	}
 
 	private void move() {
 		int x = -1;
 		int y = -1;
 		if (currentDirection == Game.Direction.UP) {
-			x = location.getX();
-			y = location.getY() - 1;
+			x = getLocation().getX();
+			y = getLocation().getY() - 1;
 		} else if (currentDirection == Game.Direction.DOWN) {
-			x = location.getX();
-			y = location.getY() + 1;
+			x = getLocation().getX();
+			y = getLocation().getY() + 1;
 		} else if (currentDirection == Game.Direction.LEFT) {
-			x = location.getX() - 1;
-			y = location.getY();
+			x = getLocation().getX() - 1;
+			y = getLocation().getY();
 		} else if (currentDirection == Game.Direction.RIGHT) {
-			x = location.getX() + 1;
-			y = location.getY();
+			x = getLocation().getX() + 1;
+			y = getLocation().getY();
 		}
-		if (x < 0 || y < 0) {
-			// TODO: bad movement case
+		if (x < 0 || y < 0 || x > Game.instance.getTilemap().length || y > Game.instance.getTilemap()[0].length) {
+			throw new IllegalStateException("Movement cannot exceed bounds of tile array.");
 		} else {
 			Tile newTile = Game.instance.getTilemap()[x][y];
 			if (newTile.isActorPathable()) {
@@ -62,7 +63,7 @@ public class FreezeActor extends Actor {
 		freezePlayer();
 	}
 
-	private void freezePlayer(){
+	private void freezePlayer() {
 		this.shouldRemove = true;
 		Game.instance.getPlayer().freeze(3);
 	}

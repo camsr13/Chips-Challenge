@@ -12,7 +12,7 @@ public class ArrowTile extends Tile {
      * @param d This tiles direction
      */
     public ArrowTile(Location l, Game.Direction d) {
-        super(location, true);
+        super(l, true);
         this.direction = d;
     }
 

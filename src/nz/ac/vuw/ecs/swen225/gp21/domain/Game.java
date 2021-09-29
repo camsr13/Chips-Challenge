@@ -108,7 +108,9 @@ public class Game {
 	 * @param d The direction for player movement
 	 */
 	public void inputDirection(Direction d) {
-		// TODO: check for nulls
+		if (d == null){
+			throw new IllegalArgumentException("Direction cannot be null.");
+		}
 		player.move(d);
 	}
 
@@ -122,14 +124,13 @@ public class Game {
 		ArrayList<Actor> toRemove = new ArrayList<Actor>();
 		for (Actor a : actors) {
 			a.tick();
-			if (a.shouldRemove){
+			if (a.shouldRemove) {
 				toRemove.add(a);
 			}
 		}
 		for (Actor a : toRemove) {
 			actors.remove(a);
 		}
-
 	}
 
 	/**
@@ -167,7 +168,6 @@ public class Game {
 	 */
 	public HashMap<KeyColour, Integer> getKeysHeld() {
 		return keysHeld;
-
 	}
 
 	/**
@@ -175,7 +175,6 @@ public class Game {
 	 * @param colour
 	 */
 	public void addKey(KeyColour colour) {
-		// TODO: checks
 		keysHeld.put(colour, keysHeld.get(colour) + 1);
 	}
 
@@ -184,8 +183,12 @@ public class Game {
 	 * @param colour
 	 */
 	public void removeKey(KeyColour colour) {
-		// TODO: checks
+		if (keysHeld.get(colour) < 1) {
+			throw new IllegalArgumentException("Cannot remove a key when number held is less than 1.");
+		}
 		keysHeld.put(colour, keysHeld.get(colour) - 1);
+		// postcondition check
+		assert (keysHeld.get(colour) >= 0);
 	}
 
 	/**
@@ -193,9 +196,11 @@ public class Game {
 	 */
 	public void collectTreasure() {
 		collectedTreasures++;
-		// TODO: pre and post condition checks
 		if (collectedTreasures == totalTreasures) {
 			exitLock.removeTile();
+		}
+		if (collectedTreasures > totalTreasures) {
+			throw new IllegalStateException("Collected treasure count cannot exceed total treasures");
 		}
 	}
 }
