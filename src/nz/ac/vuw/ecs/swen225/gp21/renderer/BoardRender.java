@@ -13,13 +13,8 @@ public class BoardRender {
 	private BoardPanel boardPanel;
 	private JLayeredPane basePane = new JLayeredPane();
 	private ChapRender chapIcon;
+	private int panelSize = BoardPanel.boardWidth * BoardPanel.tileSize;
 	
-	/**
-	 * Defines the image size
-	 */
-	static final int squareSize = 128;
-	private static final int panelHeight = 9;
-	private static final int panelWidth = panelHeight;
 	
 	/**
 	 * A Simple enum to keep track of what direction non board objects are facing
@@ -53,7 +48,7 @@ public class BoardRender {
 	public BoardRender(Game game, int size) {
 		
 		double initScale = getScale(size);
-		int scaledSquare = (int) Math.round(initScale*squareSize);
+		int scaledSquare = (int) Math.round(initScale * BoardPanel.tileSize);
 		
 		chapIcon = new ChapRender(game, initScale);
 		chapIcon.setBounds(6 * scaledSquare/2, 6 * scaledSquare/2, scaledSquare, scaledSquare);
@@ -61,7 +56,7 @@ public class BoardRender {
 
 		boardPanel = new BoardPanel(game, initScale);
 		boardPanel.setVisible(true);
-		boardPanel.setBounds(0,0, panelWidth * squareSize, panelHeight * squareSize);
+		boardPanel.setBounds(0,0, panelSize, panelSize);
 		
 		basePane.add(boardPanel,JLayeredPane.DEFAULT_LAYER);
 		basePane.add(chapIcon,JLayeredPane.PALETTE_LAYER);
@@ -81,12 +76,12 @@ public class BoardRender {
 	 * 
 	 */
 	private double getScale(int size) {
-		return 1.0 * size / (squareSize * panelWidth);
+		return 1.0 * size / (panelSize);
 	}
 	
 	/**
 	 * Updates the size of the render
-	 * @param scale
+	 * @param size
 	 */
 	public void setSize(int size) {
 		double scale = getScale(size);
