@@ -9,6 +9,7 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
+import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
 
 /**
  * An extended JLable which handles the rendering and animation of the players character "Chap".
@@ -33,14 +34,15 @@ class ChapRender extends Animatable {
 	 * @param tileSize 
 	 */
 	protected ChapRender(Game game, double scale, int tileSize) {
-		this.game = game;
-		this.scale = scale;
+		super.game = game;
+		super.scale = scale;
+		super.oldLocation = game.getPlayer().getLocation();
 		this.tileSize = tileSize;
 		loadImages();
 		//set inital size
 		this.setSize(tileSize,tileSize);
 		this.setVisible(true);
-		update(currentDir);
+		update();
 	}
 	
 	/**
@@ -49,7 +51,7 @@ class ChapRender extends Animatable {
 	 */
 	protected void setScale(double scale) {
 		this.scale = scale;
-		update(currentDir);
+		update();
 	}
 	
 	/**
@@ -87,6 +89,12 @@ class ChapRender extends Animatable {
 	void animate(int dir) {
 		// TODO Make chap animate in a direction
 		
+	}
+
+	@Override
+	Location getBoardLocation() {
+		// TODO Auto-generated method stub
+		return game.getPlayer().getLocation();
 	}
 
 }

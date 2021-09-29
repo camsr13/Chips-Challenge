@@ -1,6 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp21.renderer;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.*;
 
+import nz.ac.vuw.ecs.swen225.gp21.domain.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
 /**
  * Main rendered class responsible for initialising all sub classes
@@ -13,18 +18,19 @@ public class BoardRender {
 	private BoardPanel boardPanel;
 	private JLayeredPane basePane = new JLayeredPane();
 	private ChapRender chapIcon;
+	private Game game;
 	
 	/**
 	 * Size of the tiles in the image file (pixels)
 	 */
-	protected static final int tileSize = 64;
+	private static final int tileSize = 64;
 	/**
 	 * desired board width to be rendered, including offscreen tiles for moves
 	 */
 	private static final int boardWidth = 11;
 	private int panelSize = boardWidth * tileSize;
 	
-	
+	private List<Actor> actors;
 	/**
 	 * A Simple enum to keep track of what direction non board objects are facing
 	 * @author Jac Clarke
@@ -54,11 +60,21 @@ public class BoardRender {
 	 * @param game
 	 * @param size  
 	 */
-	public BoardRender(Game game, int size) {
-		
+	public BoardRender(Game game) {
+		this.game = game;
+	}
+	
+	
+	/**
+	 * Loads the components re
+	 * @param size
+	 */
+	public void initaliseBoard(int size) {
 		double initScale = getScale(size);
 		int scaledTile = (int) Math.round(initScale * tileSize);
 		int chapPos = (int) Math.round(scaledTile * boardWidth/2 - (1.5 * scaledTile));
+		
+		actors = game.getActors();
 		
 		chapIcon = new ChapRender(game, initScale, tileSize);
 		chapIcon.setBounds(chapPos, chapPos, scaledTile, scaledTile);
@@ -77,10 +93,19 @@ public class BoardRender {
 	 * Observer that refreshes the board based off either player movement or tick
 	 * @param dir Direction moved
 	 */
+	@Deprecated
 	public void update(Direction dir) {
-		chapIcon.update(dir.ordinal());
+		chapIcon.update();
 		boardPanel.revalidate();
 		boardPanel.repaint();
+	}
+	
+	
+	/**
+	 * 
+	 */
+	public void updateOnTick() {
+		chapIcon.update();
 	}
 	/**
 	 * 
@@ -100,7 +125,6 @@ public class BoardRender {
 		chapIcon.setScale(scale);
 		boardPanel.setScale(scale);
 	}
-	
 	
 	/**
 	 * Returns the entire render as a layered pane

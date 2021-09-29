@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp21.renderer;
 
 
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -10,6 +11,7 @@ import javax.swing.JLabel;
 
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
+import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction;
 /**
  * A Modified JLabel base which can be used for objects that aren't part of the board
@@ -25,7 +27,12 @@ abstract class Animatable extends JLabel {
 	/**
 	 * 
 	 */
-	protected int currentDir = Direction.DOWN.ordinal();
+	protected Direction currentDir;
+	
+	/**
+	 * 
+	 */
+	protected Location oldLocation;
 	/**
 	 * 
 	 */
@@ -55,13 +62,32 @@ abstract class Animatable extends JLabel {
 	 */
 	abstract void loadImages();
 	
+	/**
+	 * Gets the location of the assigned object from the board
+	 * @return
+	 */
+	abstract Location getBoardLocation();
+	
 	
 	/**
 	 * Updates the facing direction of the object
-	 * @param dir
 	 */
-	void update(Integer dir) {
-		currentDir = dir;
+	void update() {
+		Location curLocation = getBoardLocation();
+		int dir = 0;
+		if (!oldLocation.equals(curLocation)) {
+			//figure out direction moved
+			int dy = curLocation.getY() - oldLocation.getY();
+			int dx = curLocation .getX() - oldLocation.getX();
+			//translate into a direction
+		    if ( dx == 0 ) {
+		    	
+		    } else if ( dy == 0 ) {
+		    	
+		    } else {
+		    	//error incorrect movement
+		    }
+		}
 		int width = (int) Math.round( this.getWidth() * scale );
 		int height = (int) Math.round( this.getHeight() * scale );
 		

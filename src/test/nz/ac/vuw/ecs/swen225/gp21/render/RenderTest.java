@@ -41,7 +41,8 @@ public class RenderTest {
 		Game g = new Game();
 		Player p = new Player(new Location(4,4), 0);
 		g.setupGame(board, p, null, 0, 0, null, null);
-		BoardRender render = new BoardRender(g, 1000);
+		BoardRender render = new BoardRender(g);
+		render.initaliseBoard(1000);
 		JFrame frame = new JFrame();
 		frame.setSize(1280, 1024);
 		frame.setVisible(true);
