@@ -10,6 +10,8 @@ import org.jdom2.output.XMLOutputter;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -84,6 +86,25 @@ public class RecReplay {
     }
 
 
+
+    // DIALOGS
+    public static void fileSelectDialogue(Document document) {
+        JFrame window = GUI.getMainWindow();
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Specify a file to save");
+
+        int userSelection = fileChooser.showSaveDialog(window);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            writeSaveXML(document, fileToSave.getAbsolutePath());
+            System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+        }
+    }
+
+
+
     // RECORD
 
     /**
@@ -105,7 +126,7 @@ public class RecReplay {
      *
      * @throws TransformerException
      */
-    public static void saveRecording(String filePath) throws TransformerException {
+    public static void saveRecording() {
         //creates new document and root element
         Document document = new Document();
         Element root = new Element("recorded");
@@ -126,7 +147,7 @@ public class RecReplay {
         root.addContent(levelInfoElem);
         addLevelElement(levelInfoElem, "1");
 
-        // TODO fileSelectDialogue(document);
+        fileSelectDialogue(document);
         //writeSaveXML(document, filePath);
 
         endRecording(); // clean up
@@ -231,7 +252,6 @@ public class RecReplay {
             isRunning = false;
             // TODO send message to Game?? or app?
         }
-
     }
 
 
