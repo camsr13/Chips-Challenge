@@ -240,7 +240,7 @@ public class GUIImp implements GUIAbstract{
 
 		    	}
 
-		    	doStartLevel1();
+		    	doStartLevel2();
 		    }
 		});
 
@@ -485,6 +485,7 @@ public class GUIImp implements GUIAbstract{
     	//stop game
     	timer.stop();
 
+
     	RecReplay.endRecording();
 
     	JOptionPane.showMessageDialog(null, "You have won!");
@@ -569,8 +570,7 @@ public class GUIImp implements GUIAbstract{
 
 	private void levelOver() {
 
-		timer.stop();
-		clearLevel();
+
 
 		Object[] options1 = {"Yes",
 				"No"};
@@ -651,6 +651,7 @@ public class GUIImp implements GUIAbstract{
 
 	private void clearLevel() {
 
+		game.setLevelComplete(false);
 		game = null;
 		levelTimeMax = 0;
 		timeRemaining = 0;
