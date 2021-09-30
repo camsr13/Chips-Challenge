@@ -101,7 +101,7 @@ public class GUIImp implements GUIAbstract{
 		initGUI();
 	}
 
-		protected GUIImp(String file) {
+		public GUIImp(String file) {
     	this.currFile = file;
     	loadGame();
 			initFrame();
