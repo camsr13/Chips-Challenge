@@ -114,18 +114,9 @@ public class BoardRender {
 		
 	
 	/**
-	 * Observer that refreshes the board based off either player movement or tick
+	 * Updates and animates chaps position
 	 */
-	public void update() {
-		updateOnTick();
-	}
-	
-	
-	/**
-	 * 
-	 */
-	public void updateOnTick() {
-		
+	public void updateChap() {
 		int increment = 0;
 		int[] chapMove = chapIcon.getMoved();
 		
@@ -157,10 +148,17 @@ public class BoardRender {
 		boardPanel.revalidate();
 		boardPanel.repaint();
 		
+	}
+	
+	
+	/**
+	 * Updates actors which move on ticks
+	 */
+	public void updateOnTick() {
 		
 	}
 	/**
-	 * 
+	 * Sets the scale of the board
 	 */
 	private double getScale(int size) {
 		return 1.0 * size / (panelSize);
