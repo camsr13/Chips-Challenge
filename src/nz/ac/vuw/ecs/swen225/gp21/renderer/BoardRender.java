@@ -84,7 +84,7 @@ public class BoardRender {
 				basePane.add(newActor, JLayeredPane.PALETTE_LAYER);
 			}
 		}
-		
+		System.out.println(scaledTile);
 		chapIcon = new ChapRender(game, initScale, tileSize);
 		chapIcon.setBounds(chapPos, chapPos, scaledTile, scaledTile);
 		chapIcon.setOpaque(false);
@@ -92,7 +92,7 @@ public class BoardRender {
 		boardPanel = new BoardPanel(game, tileSize, boardWidth , initScale);
 		boardPanel.setVisible(true);
 		boardPanel.setBounds(0,0, scaledTile * (boardWidth-2), scaledTile * (boardWidth-2));
-		boardPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		
 		basePane.add(boardPanel,JLayeredPane.DEFAULT_LAYER);
 		basePane.add(chapIcon,JLayeredPane.MODAL_LAYER);
 		basePane.setVisible(true);
@@ -137,41 +137,41 @@ public class BoardRender {
 			
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
+			int totalFrames = 32;
 			int frames = 0;
 			int increment = 0;
 			int[] chapMove = chapIcon.getMoved();
 			@Override
 			public void run() {
 					
-				increment += tileSize/32;
+				increment += tileSize/totalFrames;
 				boardPanel.setOffsets(-(increment * chapMove[0]), -(increment * chapMove[1]));
 				boardPanel.revalidate();
 				boardPanel.repaint();
 					
 					
-				if (frames % (32/4) == 0) {
+				if (frames % (totalFrames/4) == 0) {
 					chapIcon.update();
 				}
 					
 			
 				// TODO Auto-generated method stub
 				frames++;
-				if(frames == 32) {
+				if(frames == totalFrames) {
 					this.cancel();
-					chapIcon.refreshChapPost();
+					chapIcon.refreshLocation();
 					boardPanel.setOffsets(0, 0);
 					boardPanel.updateChapPos();
 				}
 			}
 			
-		}, 31, 31);
+		}, 28, 28);
 		
 		
 		}
 		
 		boardPanel.revalidate();
 		boardPanel.repaint();
-		
 		
 	}
 	

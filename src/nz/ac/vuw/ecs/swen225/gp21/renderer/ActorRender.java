@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -49,10 +51,12 @@ class ActorRender extends Animatable {
 		super.currentDir = actor.currentDirection;
 		super.oldLocation = actor.getLocation();
 		loadImages();
+		System.out.println(scale*tileSize);
 		setScale(scale);
-		this.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
-		this.setBounds(actor.getLocation().getX()*tileScaled,actor.getLocation().getY()*tileScaled,tileScaled, tileScaled);
-		this.setSize(tileScaled, tileScaled);
+		this.setBorder(BorderFactory.createLineBorder(Color.BLUE, 1));
+		this.setBounds((actor.getLocation().getX() - 2)*tileScaled,
+					(actor.getLocation().getY() - 2) * tileScaled,
+						tileScaled, tileScaled);
 		this.setVisible(true);
 		update();
 	}
@@ -79,6 +83,11 @@ class ActorRender extends Animatable {
 			i++;
 		}
 	}
+	
+	@Override
+	void setBounds(){
+		
+	}
 
 	@Override
 	Location getBoardLocation() {
@@ -90,9 +99,8 @@ class ActorRender extends Animatable {
 	 */
 	void animateSprite() {
 		if(getMoved() != null) { 
-			update();
-			Animate gif = new Animate();
-			gif.start();
+			Timer aniTimer = new Timer();
+			aniTimer.scheduleAtFixedRate(new AnimationTimer(), 30, 30);
 			
 		}
 	}
@@ -121,12 +129,39 @@ class ActorRender extends Animatable {
 		this.setBounds(x, y, tileScaled, tileScaled);
 	}
 	
+	protected void finaliseLocation() {
+		refreshLocation();
+		this.setBounds(actor.getLocation().getX(), actor.getLocation().getY(), tileScaled, tileScaled);
+	}
 	
+	class MovementTimer extends TimerTask {
+		@Override
+		public void run() {
+			
+		}
+	}
+	
+	class AnimationTimer extends TimerTask{
+		int totalFrames = 32;
+		int frame = 0;
+		@Override
+		public void run() {
+			if (frame % (totalFrames/frames) == 0) {
+				setFrame(true);
+			}
+			frame++;
+			if(frame == totalFrames) {
+				//cancel the timer
+				this.cancel();
+			}
+		}
+		
+	}
 	/**
 	 * Thread that allows the animation to be run separate of other tasks
 	 * @author Jac Clarke
 	 */
-	 class Animate extends Thread {
+	 /*class Animate extends Thread {
 		public void run() {
 			try {
 				int frameRate = tileScaled;
@@ -143,6 +178,7 @@ class ActorRender extends Animatable {
 				Thread.currentThread().interrupt();
 			}
 		}
-	}
+	}*/
+	
 
 }

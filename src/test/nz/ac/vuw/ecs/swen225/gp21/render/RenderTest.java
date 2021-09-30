@@ -53,10 +53,10 @@ public class RenderTest {
 		g.setupGame(board, p, null, 0, 0, null, actors);
 		
 		BoardRender render = new BoardRender(g);
-		render.initaliseBoard(1000);
-		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 405, 405);
-		panel.add(render.getPane());
+		render.initaliseBoard(600);
+		//JPanel panel = new JPanel();
+		//panel.setBounds(0, 0, 405, 405);
+		//panel.add(render.getPane());
 		JFrame frame = new JFrame();
 		frame.setSize(1280, 1024);
 		frame.setVisible(true);

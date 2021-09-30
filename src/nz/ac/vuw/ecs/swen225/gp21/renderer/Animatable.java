@@ -61,7 +61,10 @@ abstract class Animatable extends JLabel {
 	 */
 	double scale = 1.0;
 	
-	
+	/**
+	 * Updates the bounds for he animatable
+	 */
+	abstract void setBounds();
 	
 	/**
 	 * Loads the images for the animated object
@@ -112,11 +115,11 @@ abstract class Animatable extends JLabel {
 		if(next) {
 			currentFrame = (currentFrame+1) % 4;
 		}
-		int width = (int) Math.round( this.getWidth() * scale );
-		int height = (int) Math.round( this.getHeight() * scale );
-		
-		int x = (int) Math.round(this.getBounds().x * scale);
-		int y = (int) Math.round(this.getBounds().y * scale);
+		int width = tileScaled;
+		int height = tileScaled;
+		setBounds();
+		int x = this.getBounds().x;
+		int y = this.getBounds().y;
 		int image = currentFrame + (currentDir.ordinal() *  frames);
 		this.setBounds(x,y, width, height);
 		Image newImage = images.get(image).getScaledInstance(width, height, BufferedImage.SCALE_DEFAULT);
@@ -150,7 +153,7 @@ abstract class Animatable extends JLabel {
 		return dir;
 	}
 	
-	void refreshChapPost() {
+	void refreshLocation() {
 		oldLocation = getBoardLocation();
 	}
 	/**

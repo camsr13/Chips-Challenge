@@ -47,7 +47,10 @@ class ChapRender extends Animatable {
 		update();
 	}
 	
-	
+	@Override
+	void setBounds(){
+		
+	}
 	
 	/**
 	 * Loads the sprite sheet for chap
