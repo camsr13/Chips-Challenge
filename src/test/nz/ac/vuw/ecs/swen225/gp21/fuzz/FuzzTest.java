@@ -3,6 +3,7 @@ package test.nz.ac.vuw.ecs.swen225.gp21.fuzz;
 import java.awt.Frame;
 import java.util.*;
 import java.util.concurrent.*;
+import nz.ac.vuw.ecs.swen225.gp21.app.GUIImp;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -207,7 +208,7 @@ public class FuzzTest {
      */
     private void testLevel(Level level) {
         // Load level
-        GUIFuzzImp gui = new GUIFuzzImp(level.XMLFile);
+        GUIImp gui = new GUIImp(level.XMLFile);
         gui.getMainWindow().setVisible(true);
 
         // Setup directional actions
@@ -238,7 +239,7 @@ public class FuzzTest {
      */
     @Test
     void test1() {
-        Level level = new Level(grid1, 10, 4, "level1.xml");
+        Level level = new Level(grid1, 10, 4, "levels/level1.xml");
         testLevel(level);
 
         System.out.println(level);
@@ -249,7 +250,7 @@ public class FuzzTest {
      */
     @Test
     void test2() {
-        Level level = new Level(grid2, 21, 16, "level2.xml");
+        Level level = new Level(grid2, 21, 16, "levels/level2.xml");
         testLevel(level);
 
         System.out.println(level);

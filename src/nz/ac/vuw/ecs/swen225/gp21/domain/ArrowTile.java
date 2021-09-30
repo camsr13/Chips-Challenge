@@ -1,5 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
+/**
+ * @author Rhys Adcock 300419040
+ *
+ *         ArrowTiles will move the player in their stored direction when a tick occurs while the player is standing on them.
+ */
+
 public class ArrowTile extends Tile {
 
     /**
@@ -28,7 +34,7 @@ public class ArrowTile extends Tile {
 
     @Override
     public void onPlayerTick() {
-        Game.instance.getPlayer().move(direction);
+        Game.instance.getPlayer().move(getDirection());
     }
 
     /**

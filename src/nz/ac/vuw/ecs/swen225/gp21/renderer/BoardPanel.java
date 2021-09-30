@@ -3,18 +3,15 @@ package nz.ac.vuw.ecs.swen225.gp21.renderer;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.List;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.ArrowTile;
@@ -64,9 +61,11 @@ class BoardPanel extends JPanel {
 	 * desired board width to be rendered, including offscreen tiles for moves
 	 */
 	private final int boardWidth;
-	
+	private Location chapPos;
 	private Game game;
 	private double scale = 1.0;
+	private int xOffset = 0;
+	private int yOffset = 0;
 	private Map<Class<? extends Tile>, ArrayList<BufferedImage>> images = new HashMap<Class<? extends Tile>, ArrayList<BufferedImage>>();
 	
 	/**
@@ -81,8 +80,19 @@ class BoardPanel extends JPanel {
 		this.boardWidth = boardWidth;
 		this.scale = initialScale;
 		this.game = game;
+		chapPos = game.getPlayer().getLocation();
 		loadTileSprites();
 	};
+	
+	/**
+	 * offsets the board for animation
+	 * @param x
+	 * @param y
+	 */
+	protected void setOffsets(int x, int y) {
+		xOffset = x;
+		yOffset = y;
+	}
 	
 	
 	/**
@@ -94,7 +104,13 @@ class BoardPanel extends JPanel {
 		super.paintComponent(g);
 		g2d.scale(scale, scale);
         draw(g2d);
-
+	}
+	
+	/**
+	 * 
+	 */
+	protected void updateChapPos() {
+		chapPos = game.getPlayer().getLocation();
 	}
 	
 	/**
@@ -108,13 +124,13 @@ class BoardPanel extends JPanel {
 		//BREAKPOINT: board info retrieved
 		Tile[][] boardTiles = game.getTilemap();
 		//BREAKPOINT: player info retrieved
-		Location chapPos = game.getPlayer().getLocation();
 		
 		
-		int i = 0;
-		for(int y = chapPos.getY() - 4; y < chapPos.getY() + 5; y++) {
-			int j = 0;
-			for(int x = chapPos.getX() - 4; x < chapPos.getX() + 5; x++) {
+		
+		int i = -1;
+		for(int y = chapPos.getY() - 5; y < chapPos.getY() + 6; y++) {
+			int j = -1;
+			for(int x = chapPos.getX() - 5; x < chapPos.getX() + 6; x++) {
 				//Get the tile if possible otherwise return null for the empty screen space
 				Tile paintTile;
 				Image toPaint;
@@ -150,7 +166,7 @@ class BoardPanel extends JPanel {
 				} 	
 				
 				//Draw the image in the required location
-				g.drawImage(toPaint, j * tileSize, i * tileSize , this);
+				g.drawImage(toPaint, j * tileSize + xOffset, i * tileSize + yOffset, this);
 				
 				j++;
 			}
@@ -161,6 +177,7 @@ class BoardPanel extends JPanel {
 	/**
 	 * Attempts to load the tiles images from the sprite sheet
 	 * and stores them in the image map with their associated objects
+	 * 
 	 */
 	@SuppressWarnings("unchecked")
 	private void loadTileSprites() {
@@ -181,10 +198,14 @@ class BoardPanel extends JPanel {
 		while ( i < numTiles ) {
 			BufferedImage subImage = sheet.getSubimage(x, y, tileSize, tileSize);
 			Class<? extends Tile> curTile;
-			if (Tile.class.isAssignableFrom(tileOrder[i])) {
+			try {
+				/*
+				 * Java generics requires we supress the unchecked class cast,
+				 * even though we surround the cast in a try catch
+				 */
 				 curTile = (Class<? extends Tile>) tileOrder[i];
-			} else {
-				throw new Error("Class for tile " + i + " is not an extension of Tile" );
+			} catch (ClassCastException e){
+				throw new Error("Class for tile " + i + " is not castable to Tile" );
 			}
 			
 			if(images.get(curTile) == null) {
@@ -211,7 +232,6 @@ class BoardPanel extends JPanel {
 	 */
 	protected void setScale(double scale) {
 		this.scale = scale;
-		//paintComponent(this.getComponentGraphics(getGraphics()));
 	}
 	
 }

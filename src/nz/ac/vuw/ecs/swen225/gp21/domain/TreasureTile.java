@@ -1,10 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
 /**
- * TODO: everything
+ * @author Rhys Adcock 300419040
  *
- * @author Rhysa
- *
+ *         Treasures can be picked up.
  */
 public class TreasureTile extends Tile {
 

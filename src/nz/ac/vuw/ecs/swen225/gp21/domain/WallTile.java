@@ -3,7 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp21.domain;
 /**
  * A tile that represents a wall that cannot be walked through
  * 
- * @author Rhysa
+ * @author Rhys Adcock 300419040
  *
  */
 public class WallTile extends Tile {

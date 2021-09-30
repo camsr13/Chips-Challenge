@@ -9,6 +9,7 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
+import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
 
 /**
  * An extended JLable which handles the rendering and animation of the players character "Chap".
@@ -24,8 +25,7 @@ class ChapRender extends Animatable {
 	 */
 	private static final long serialVersionUID = 2763313205526639958L;
 	
-	
-	private final int tileSize;
+	private static final int chapFrames = 4;
 	/**
 	 * Creates a JPanel type object which represents the player
 	 * @param game
@@ -33,24 +33,21 @@ class ChapRender extends Animatable {
 	 * @param tileSize 
 	 */
 	protected ChapRender(Game game, double scale, int tileSize) {
-		this.game = game;
-		this.scale = scale;
-		this.tileSize = tileSize;
+		super.frames = chapFrames;
+		super.game = game;
+		super.scale = scale;
+		super.oldLocation = game.getPlayer().getLocation();
+		super.currentDir = Game.Direction.DOWN;
+		super.tileSize = tileSize;
 		loadImages();
-		//set inital size
-		this.setSize(tileSize,tileSize);
+		setScale(scale);
+		//set initial size
+		this.setSize(tileScaled,tileScaled);
 		this.setVisible(true);
-		update(currentDir);
+		update();
 	}
 	
-	/**
-	 * Updates the scale of chaps sprites
-	 * @param scale
-	 */
-	protected void setScale(double scale) {
-		this.scale = scale;
-		update(currentDir);
-	}
+	
 	
 	/**
 	 * Loads the sprite sheet for chap
@@ -59,7 +56,7 @@ class ChapRender extends Animatable {
 	void loadImages() {
 		BufferedImage sheet;
 		try {
-			URL nameUrl = getClass().getResource(sheetName);
+			URL nameUrl = this.getClass().getResource(sheetName);
 			sheet = ImageIO.read(new File(nameUrl.getPath()));
 		} catch (IOException e) {
 			throw new Error("Unable to load sprite sheet for chap");
@@ -82,11 +79,10 @@ class ChapRender extends Animatable {
 	}
 
 
-
 	@Override
-	void animate(int dir) {
-		// TODO Make chap animate in a direction
-		
+	Location getBoardLocation() {
+		// TODO Auto-generated method stub
+		return game.getPlayer().getLocation();
 	}
 
 }
