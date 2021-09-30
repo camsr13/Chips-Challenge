@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
-import nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction;
+
 /**
  * A Modified JLabel base which can be used for objects that aren't part of the board
  * and animate when they move.
@@ -27,7 +27,7 @@ abstract class Animatable extends JLabel {
 	/**
 	 * 
 	 */
-	protected Direction currentDir;
+	protected Game.Direction currentDir;
 	
 	/**
 	 * the number of frames in the animatable
@@ -35,7 +35,10 @@ abstract class Animatable extends JLabel {
 	protected int frames;
 	
 	private int currentFrame = 0;
-	private int framesLeft = 0;
+	protected int framesLeft = 0;
+	
+	protected int tileSize;
+	protected int tileScaled;
 	/**
 	 * 
 	 */
@@ -57,6 +60,7 @@ abstract class Animatable extends JLabel {
 	 * Scales the animatable
 	 */
 	double scale = 1.0;
+	
 	
 	
 	/**
@@ -87,49 +91,27 @@ abstract class Animatable extends JLabel {
 		return dir;
 	}
 	
+	
 	/**
 	 * Updates the scale of the sprites
 	 * @param scale
 	 */
 	protected void setScale(double scale) {
 		this.scale = scale;
-		update();
+		this.tileScaled =(int) (scale * tileSize);
+		if(this.getWidth() > 0) {
+			update();
+		}
 	}
 	
 	/**
-	 * Updates the facing direction of the object
+	 * Sets the current frame of the JLabel
+	 * @param next determines if to move to the next frame in the sequence
 	 */
-	void update() {
-		//Location curLocation = getBoardLocation();
-		int[] moveMatrix = getMoved();
-		if ( moveMatrix != null ) {
-			switch (moveMatrix[0]) {
-				case(-1):
-					currentDir = Direction.LEFT;
-					break;
-				case(1):
-					currentDir = Direction.RIGHT;
-					break;
-			}
-			switch (moveMatrix[1]) {
-			case(-1):
-				currentDir = Direction.UP;
-				break;
-			case(1):
-				currentDir = Direction.DOWN;
-				break;
-			}
-			currentFrame = 1;
-			framesLeft = frames - 1;
-			oldLocation = getBoardLocation();
-		} else if (framesLeft > 1) {
-			currentFrame += 1;
-			framesLeft--;
-		} else {
-			framesLeft = 0;
-			currentFrame = 0;
+	protected void setFrame(boolean next) {
+		if(next) {
+			currentFrame = (currentFrame+1) % 4;
 		}
-		
 		int width = (int) Math.round( this.getWidth() * scale );
 		int height = (int) Math.round( this.getHeight() * scale );
 		
@@ -140,6 +122,53 @@ abstract class Animatable extends JLabel {
 		Image newImage = images.get(image).getScaledInstance(width, height, BufferedImage.SCALE_DEFAULT);
 		this.setIcon(new ImageIcon(newImage));
 		scale = 1;
+	}
+	
+	/**
+	 * Converts a int table containing a x and y value into a Direction
+	 * @param matrix matrix to be converted {x,y}
+	 * @return Direction corresponding with the matrix
+	 */
+	protected static Game.Direction matrixToDir(int[] matrix){
+		Game.Direction dir = null;
+		switch (matrix[0]) {
+		case(-1):
+			dir = Game.Direction.LEFT;
+			break;
+		case(1):
+			dir = Game.Direction.RIGHT;
+			break;
+		}
+		switch (matrix[1]) {
+		case(-1):
+			dir = Game.Direction.UP;
+			break;
+		case(1):
+			dir = Game.Direction.DOWN;
+			break;
+		}
+		return dir;
+	}
+	
+	/**
+	 * Updates the facing direction of the object
+	 */
+	void update() {
+		boolean next = false;
+		int[] moveMatrix = getMoved();
+		oldLocation = getBoardLocation();
+		if ( moveMatrix != null ) {
+			currentDir = matrixToDir(moveMatrix);
+			
+			framesLeft = 4;
+		}
+		if(framesLeft == 0) {
+			
+		} else {
+			framesLeft--;
+			next = true;
+		}
+		setFrame(next);
 	}
 	
 }

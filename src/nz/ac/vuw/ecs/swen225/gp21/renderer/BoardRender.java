@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.*;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Actor;
+import nz.ac.vuw.ecs.swen225.gp21.domain.FreezeActor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
 /**
  * Main rendered class responsible for initialising all sub classes
@@ -39,24 +40,6 @@ public class BoardRender {
 	 * @author Jac Clarke
 	 *
 	 */
-	public enum Direction  {
-		/**
-		 * Player facing down
-		 */
-		DOWN,	
-		/**
-		 * Player facing right
-		 */
-		RIGHT,
-		/**
-		 * Player facing up
-		 */
-		UP,
-		/**
-		 * Player facing left
-		 */
-		LEFT
-	}
 	
 	/**
 	 * Generates board objects and puts them into the output layered pane
@@ -92,7 +75,9 @@ public class BoardRender {
 		actors = new ArrayList<ActorRender>();
 		if (gameActors != null) {
 			for (int i = 0; i < gameActors.size(); i++) {
-				actors.add(new ActorRender(gameActors.get(i), tileSize));
+				ActorRender newActor = new ActorRender(game, (FreezeActor) gameActors.get(i), initScale, tileSize );
+				actors.add(newActor);
+				basePane.add(newActor, JLayeredPane.PALETTE_LAYER);
 			}
 		}
 		
@@ -105,13 +90,35 @@ public class BoardRender {
 		boardPanel.setBounds(0,0, scaledTile * (boardWidth-2), scaledTile * (boardWidth-2));
 		boardPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		basePane.add(boardPanel,JLayeredPane.DEFAULT_LAYER);
-		basePane.add(chapIcon,JLayeredPane.PALETTE_LAYER);
+		basePane.add(chapIcon,JLayeredPane.MODAL_LAYER);
 		basePane.setVisible(true);
 		return scaledTile * boardWidth;
 	}
 	
 
-		
+	/**
+	 * Inverts a game Direction
+	 * @param dir Direction to be inverted
+	 * @return Inverted game direction
+	 */
+	protected static Game.Direction invDir(Game.Direction dir){
+		Game.Direction invDir = null;
+		switch(dir) {
+		case UP:
+			invDir = Game.Direction.DOWN;
+			break;
+		case DOWN:
+			invDir = Game.Direction.UP;
+			break;
+		case LEFT:
+			invDir = Game.Direction.RIGHT;
+			break;
+		case RIGHT:
+			invDir = Game.Direction.LEFT;
+			break;
+		}
+		return invDir;
+	}
 	
 	/**
 	 * Updates and animates chaps position
@@ -129,6 +136,8 @@ public class BoardRender {
 				boardPanel.setOffsets(-(increment * chapMove[0]), -(increment * chapMove[1]));
 				boardPanel.revalidate();
 				boardPanel.repaint();
+				
+				actors.get(0).offsetSprite(frames, invDir(Animatable.matrixToDir(chapMove)));
 				
 				if (i % (frames/4) == 0) {
 					chapIcon.update();
@@ -155,7 +164,9 @@ public class BoardRender {
 	 * Updates actors which move on ticks
 	 */
 	public void updateOnTick() {
-		
+		for(ActorRender a : actors) {
+			a.animateSprite();
+		}
 	}
 	/**
 	 * Sets the scale of the board

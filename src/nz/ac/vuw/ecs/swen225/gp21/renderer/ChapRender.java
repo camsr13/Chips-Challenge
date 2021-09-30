@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
-import nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction;
 
 /**
  * An extended JLable which handles the rendering and animation of the players character "Chap".
@@ -27,7 +26,6 @@ class ChapRender extends Animatable {
 	private static final long serialVersionUID = 2763313205526639958L;
 	
 	private static final int chapFrames = 4;
-	private final int tileSize;
 	/**
 	 * Creates a JPanel type object which represents the player
 	 * @param game
@@ -39,11 +37,12 @@ class ChapRender extends Animatable {
 		super.game = game;
 		super.scale = scale;
 		super.oldLocation = game.getPlayer().getLocation();
-		super.currentDir = Direction.DOWN;
-		this.tileSize = tileSize;
+		super.currentDir = Game.Direction.DOWN;
+		super.tileSize = tileSize;
 		loadImages();
+		setScale(scale);
 		//set initial size
-		this.setSize(tileSize,tileSize);
+		this.setSize(tileScaled,tileScaled);
 		this.setVisible(true);
 		update();
 	}
@@ -57,7 +56,7 @@ class ChapRender extends Animatable {
 	void loadImages() {
 		BufferedImage sheet;
 		try {
-			URL nameUrl = getClass().getResource(sheetName);
+			URL nameUrl = this.getClass().getResource(sheetName);
 			sheet = ImageIO.read(new File(nameUrl.getPath()));
 		} catch (IOException e) {
 			throw new Error("Unable to load sprite sheet for chap");
