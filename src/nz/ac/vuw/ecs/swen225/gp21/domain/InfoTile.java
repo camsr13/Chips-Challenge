@@ -20,7 +20,7 @@ public class InfoTile extends Tile {
 
 	@Override
 	public void onPlayerEnter() {
-
+		Game.instance.notifyObserversInfoTile(message);
 	}
 
 	@Override

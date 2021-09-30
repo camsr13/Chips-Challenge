@@ -12,7 +12,7 @@ public class ExitLockTile extends Tile {
 	 * @param location
 	 */
 	public ExitLockTile(Location location) {
-		super(location, true);
+		super(location, false);
 	}
 
 	@Override

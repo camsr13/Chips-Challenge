@@ -12,4 +12,14 @@ public interface Observer {
 	 * Notify that the game state has changed
 	 */
 	public void update();
+
+	/**
+	 * Notify that a infoTile has been stepped on.
+	 */
+	public void enterInfoTile(String message);
+
+	/**
+	 * Notify that the current level has ended.
+	 */
+	public void levelEnd();
 }

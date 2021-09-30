@@ -220,4 +220,24 @@ public class Game {
 			throw new IllegalStateException("Collected treasure count cannot exceed total treasures");
 		}
 	}
+
+	/**
+	 * Notify observers that a infoTile has been stepped on.
+	 * @param message
+	 */
+	public void notifyObserversInfoTile(String message){
+		for (Observer o : observers) {
+			o.enterInfoTile(message);
+		}
+	}
+
+	/**
+	 * Notify observers that the current level has ended.
+	 */
+	public void notifyObserversLevelEnded() {
+		Game.instance.setLevelComplete(true);
+		for (Observer o : observers) {
+			o.levelEnd();
+		}
+	}
 }
