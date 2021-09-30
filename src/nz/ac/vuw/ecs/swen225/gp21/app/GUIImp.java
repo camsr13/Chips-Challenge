@@ -116,7 +116,7 @@ public class GUIImp implements GUIAbstract{
 
     protected void initGUI(){
 
-    	startPopUp();
+    	//startPopUp();
 	    initFrame();
 	    initMenu();
 	    initBoard();
@@ -236,6 +236,7 @@ public class GUIImp implements GUIAbstract{
 	}
 
 	protected void doStartLevel1() {
+		
 		currFile = "persistancy/levels/level1.xml";
 		loadGame();
 
@@ -385,7 +386,7 @@ public class GUIImp implements GUIAbstract{
 		if(canMove) {
 			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.LEFT);
 			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.LEFT);
-			boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.LEFT);
+			boardRender.updateChap();
 			updateDisplay();
 			freezeMovement();
 		}
@@ -395,7 +396,7 @@ public class GUIImp implements GUIAbstract{
 		if(canMove) {
 			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.RIGHT);
 			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.RIGHT);
-			boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.RIGHT);
+			boardRender.updateChap();
 			updateDisplay();
 			freezeMovement();
 		}
@@ -405,7 +406,7 @@ public class GUIImp implements GUIAbstract{
 		if(canMove) {
 			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.DOWN);
 			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.DOWN);
-			boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.DOWN);
+			boardRender.updateChap();
 			updateDisplay();
 			freezeMovement();
 		}
@@ -415,7 +416,7 @@ public class GUIImp implements GUIAbstract{
 		if(canMove) {
 			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.UP);
 			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.UP);
-			boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.UP);
+			boardRender.updateChap();
 			updateDisplay();
 			freezeMovement();
 		}
@@ -495,6 +496,7 @@ public class GUIImp implements GUIAbstract{
         timer = new Timer(1001, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	timeFigureLabel.setText(String.valueOf(timeRemaining--));
+            	boardRender.updateOnTick();
 
             	if(timeRemaining <= 0) {
             		doTimeExpired();
@@ -580,13 +582,18 @@ public class GUIImp implements GUIAbstract{
 
 
 		game = currXML.getGameInstance();
-		boardRender = new BoardRender(game,500);
+		boardRender = new BoardRender(game);
 		gameBoard = boardRender.getPane();
 		RecReplay.newRecording();
 		RecReplay.getGUIImp(this);
 		countdown();
 		updateDisplay();
+		boardRender.initaliseBoard(500);
+		
 	}
+	
+	
+}
 	
 	
 }
