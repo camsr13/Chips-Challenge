@@ -145,11 +145,9 @@ public class GUIImp implements GUIAbstract{
     			break;
     		case 1:
     			doStartLevel2();
-    			loadGame();
     			break;
     		case 2:
-    			currFile = "testMap.xml";
-    			loadGame();
+    			doStartTest();
     			break;
     	}
 	}
@@ -238,6 +236,13 @@ public class GUIImp implements GUIAbstract{
 	protected void doStartLevel1() {
 
 		currFile = "levels/level1.xml";
+		loadGame();
+
+	}
+
+	protected void doStartTest() {
+
+		currFile = "levels/testMap.xml";
 		loadGame();
 
 	}
@@ -435,25 +440,11 @@ public class GUIImp implements GUIAbstract{
     	//stop game
     	timer.stop();
 
-    	Object[] options = {"Yes",
-                "No",};
+    	RecReplay.endRecording();
 
-    	int n = JOptionPane.showOptionDialog(frame,
-    		    "The game is over, you have Won! Would you like to save your game recording",
-    		    "Game Over",
-    		    JOptionPane.YES_NO_CANCEL_OPTION,
-    		    JOptionPane.QUESTION_MESSAGE,
-    		    null,
-    		    options,
-    		    options[0]);
+    	JOptionPane.showMessageDialog(null, "You have won!");
 
-    	switch(n){
-    		case 0:
-    			saveRecording();
-    			break;
-    		case 1:
-    			break;
-    	}
+
     	levelOver();
 
 	}
@@ -509,30 +500,14 @@ public class GUIImp implements GUIAbstract{
     }
 
 	private void doTimeExpired() {
-		// TODO Auto-generated method stub
 
     	//stop game
     	timer.stop();
 
-    	Object[] options = {"Yes",
-                "No",};
+    	RecReplay.endRecording();
 
-    	int n = JOptionPane.showOptionDialog(frame,
-    		    "The game is over, time is out, you have lost. Would you like to save your game recording",
-    		    "Game Over",
-    		    JOptionPane.YES_NO_CANCEL_OPTION,
-    		    JOptionPane.QUESTION_MESSAGE,
-    		    null,
-    		    options,
-    		    options[0]);
+    	JOptionPane.showMessageDialog(null, "Time has expired, you have lost :(");
 
-    	switch(n){
-    		case 0:
-    			saveRecording();
-    			break;
-    		case 1:
-    			break;
-    	}
     	levelOver();
 
 	}
@@ -549,26 +524,44 @@ public class GUIImp implements GUIAbstract{
 
 	private void levelOver() {
 
-		RecReplay.endRecording();
-		Object[] options = {"Restart Level",
-				"Choose Another Level",
-                "Exit Game X",};
+		Object[] options1 = {"Yes",
+				"No"};
 
     	int n = JOptionPane.showOptionDialog(frame,
-    		    "The game is over, time is out, you have lost",
+    		    "Would you like to Save your recording?",
     		    "Game Over",
     		    JOptionPane.YES_NO_CANCEL_OPTION,
     		    JOptionPane.QUESTION_MESSAGE,
     		    null,
-    		    options,
-    		    options[2]);
+    		    options1,
+    		    options1[0]);
 
     	switch(n){
     		case 0:
+    			saveRecording();
+    			break;
 
+    	}
+
+		Object[] options2 = {"Play Level 1",
+				"Play Level 2",
+                "Exit Game X",};
+
+    	int x = JOptionPane.showOptionDialog(frame,
+    		    "Whats Next?",
+    		    "Game Over",
+    		    JOptionPane.YES_NO_CANCEL_OPTION,
+    		    JOptionPane.QUESTION_MESSAGE,
+    		    null,
+    		    options2,
+    		    options2[2]);
+
+    	switch(x){
+    		case 0:
+    			doStartLevel1();
     			break;
     		case 1:
-    			doExitGameX();
+    			doStartLevel2();
     			break;
     		case 2:
     			doExitGameX();
@@ -586,6 +579,8 @@ public class GUIImp implements GUIAbstract{
 		}
 
 
+		levelTimeMax = currXML.getTimeLimit();
+		timeRemaining = currXML.getTimeLimit();
 		game = currXML.getGameInstance();
 		boardRender = new BoardRender(game);
 		gameBoard = boardRender.getPane();
@@ -594,7 +589,8 @@ public class GUIImp implements GUIAbstract{
 		countdown();
 		updateDisplay();
 		boardRender.initaliseBoard(500);
-
+		initBoard();
+		initSideBar();
 	}
 
 
