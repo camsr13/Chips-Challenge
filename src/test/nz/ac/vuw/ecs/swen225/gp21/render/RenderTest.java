@@ -43,7 +43,7 @@ public class RenderTest {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 		Game g = new Game();
-		Player p = new Player(new Location(4,4), 0);
+		Player p = new Player(new Location(6,6), 0);
 		g.setupGame(board, p, null, 0, 0, null, null);
 		BoardRender render = new BoardRender(g);
 		render.initaliseBoard(500);
@@ -57,19 +57,23 @@ public class RenderTest {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(render.getPane());
+		for (int x = 6; x > 2; x--) { 
+			p.setLocation(new Location(x,6));
+			render.updateOnTick();
+		}
+		for (int y = 6; y > 2; y--) {
+			p.setLocation(new Location(2,y));
+			render.updateOnTick();
+		}
 		
-		//TimeUnit.SECONDS.sleep(1);
-		p.setLocation(new Location(4,5));
-		render.update(Direction.LEFT);
-		//TimeUnit.SECONDS.sleep(1);
-		p.setLocation(new Location(3,5));
-		render.update(Direction.LEFT);
-		//TimeUnit.SECONDS.sleep(1);
-		p.setLocation(new Location(3,4));
-		render.update(Direction.UP);
-		//TimeUnit.SECONDS.sleep(1);
-		p.setLocation(new Location(4,4));
-		render.update(Direction.RIGHT);
+		for (int x = 2; x < 6; x++) { 
+			p.setLocation(new Location(x,2));
+			render.updateOnTick();
+		}
+		for (int y = 2; y < 7; y++) {
+			p.setLocation(new Location(6,y));
+			render.updateOnTick();
+		}
 		
 	}
 }

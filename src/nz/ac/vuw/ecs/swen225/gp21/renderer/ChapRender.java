@@ -48,14 +48,7 @@ class ChapRender extends Animatable {
 		update();
 	}
 	
-	/**
-	 * Updates the scale of chaps sprites
-	 * @param scale
-	 */
-	protected void setScale(double scale) {
-		this.scale = scale;
-		update();
-	}
+	
 	
 	/**
 	 * Loads the sprite sheet for chap
@@ -86,13 +79,6 @@ class ChapRender extends Animatable {
 		
 	}
 
-
-
-	@Override
-	void animate(int dir) {
-		// TODO Make chap animate in a direction
-		
-	}
 
 	@Override
 	Location getBoardLocation() {

@@ -3,18 +3,15 @@ package nz.ac.vuw.ecs.swen225.gp21.renderer;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.List;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.ArrowTile;
@@ -235,7 +232,6 @@ class BoardPanel extends JPanel {
 	 */
 	protected void setScale(double scale) {
 		this.scale = scale;
-		//paintComponent(this.getComponentGraphics(getGraphics()));
 	}
 	
 }

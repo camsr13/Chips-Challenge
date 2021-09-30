@@ -60,12 +60,6 @@ abstract class Animatable extends JLabel {
 	
 	
 	/**
-	 * Animates movement of the object in the specified direction
-	 * @param dir
-	 */
-	abstract void animate(int dir);
-	
-	/**
 	 * Loads the images for the animated object
 	 */
 	abstract void loadImages();
@@ -94,6 +88,15 @@ abstract class Animatable extends JLabel {
 	}
 	
 	/**
+	 * Updates the scale of the sprites
+	 * @param scale
+	 */
+	protected void setScale(double scale) {
+		this.scale = scale;
+		update();
+	}
+	
+	/**
 	 * Updates the facing direction of the object
 	 */
 	void update() {
@@ -116,23 +119,23 @@ abstract class Animatable extends JLabel {
 				currentDir = Direction.DOWN;
 				break;
 			}
-			currentFrame = 0;
+			currentFrame = 1;
 			framesLeft = frames - 1;
 			oldLocation = getBoardLocation();
-		} else if (framesLeft > 0) {
+		} else if (framesLeft > 1) {
 			currentFrame += 1;
 			framesLeft--;
 		} else {
+			framesLeft = 0;
 			currentFrame = 0;
 		}
-		System.out.println(currentFrame + " " + framesLeft);
+		
 		int width = (int) Math.round( this.getWidth() * scale );
 		int height = (int) Math.round( this.getHeight() * scale );
 		
 		int x = (int) Math.round(this.getBounds().x * scale);
 		int y = (int) Math.round(this.getBounds().y * scale);
 		int image = currentFrame + (currentDir.ordinal() *  frames);
-		System.out.println(currentDir.ordinal() * frames);
 		this.setBounds(x,y, width, height);
 		Image newImage = images.get(image).getScaledInstance(width, height, BufferedImage.SCALE_DEFAULT);
 		this.setIcon(new ImageIcon(newImage));

@@ -113,10 +113,8 @@ public class BoardRender {
 	
 	/**
 	 * Observer that refreshes the board based off either player movement or tick
-	 * @param dir Direction moved
 	 */
-	@Deprecated
-	public void update(Direction dir) {
+	public void update() {
 		updateOnTick();
 	}
 	
@@ -129,30 +127,34 @@ public class BoardRender {
 		int increment = 0;
 		int[] chapMove = chapIcon.getMoved();
 		
-		
-		
 		//board animation
-		
-		for (int i = 0; i < 30; i++) {
+		int frames = 16;
+		if(chapMove != null) {
+			for (int i = 0; i < frames; i++) {
+				
+				increment += tileSize/frames;
+				boardPanel.setOffsets(-(increment * chapMove[0]), -(increment * chapMove[1]));
+				boardPanel.revalidate();
+				boardPanel.repaint();
+				
+				if (i % (frames/4) == 0) {
+					chapIcon.update();
+				}
+				
+				try {
+					TimeUnit.MILLISECONDS.sleep(62);
+				} catch (InterruptedException e) {
+					throw new Error("Animation interupted");
+				}
+			}
 			
-			increment += tileSize/30;
-			boardPanel.setOffsets(-(increment * chapMove[0]), -(increment * chapMove[1]));
-			boardPanel.revalidate();
-			boardPanel.repaint();
-			if (i % 6 == 0) {
-				chapIcon.update();
-			}
-			try {
-				TimeUnit.MILLISECONDS.sleep(33);
-			} catch (InterruptedException e) {
-				throw new Error("Animation interupted");
-			}
+			boardPanel.setOffsets(0, 0);
+			boardPanel.updateChapPos();
 		}
 		
-		boardPanel.setOffsets(0, 0);
-		boardPanel.updateChapPos();
 		boardPanel.revalidate();
 		boardPanel.repaint();
+		
 		
 	}
 	/**
