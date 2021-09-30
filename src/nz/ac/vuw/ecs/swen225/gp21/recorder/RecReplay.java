@@ -117,6 +117,7 @@ public class RecReplay {
             File fileToSave = fileChooser.getSelectedFile();
             ReadXML xmlReader = new ReadXML();
             xmlReader.readXMLFile(fileToSave.getAbsolutePath());
+            loadRecording(fileToSave.getAbsolutePath());
         }
     }
 
@@ -318,7 +319,7 @@ public class RecReplay {
     /**
      * Loads the recording file ready for replay.
      */
-    public static void loadRecording() throws JDOMException, IOException {
+    public static void loadRecording(String fp) throws JDOMException, IOException {
         moveHistory.clear();
         Element root = ((Document) (new SAXBuilder()).build(new File("C:\\Users\\Hazel\\Desktop\\rec_tests\\test.xml"))).getRootElement();
 
