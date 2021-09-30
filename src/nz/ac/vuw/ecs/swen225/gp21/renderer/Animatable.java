@@ -150,13 +150,16 @@ abstract class Animatable extends JLabel {
 		return dir;
 	}
 	
+	void refreshChapPost() {
+		oldLocation = getBoardLocation();
+	}
 	/**
 	 * Updates the facing direction of the object
 	 */
 	void update() {
 		boolean next = false;
 		int[] moveMatrix = getMoved();
-		oldLocation = getBoardLocation();
+		
 		if ( moveMatrix != null ) {
 			currentDir = matrixToDir(moveMatrix);
 			

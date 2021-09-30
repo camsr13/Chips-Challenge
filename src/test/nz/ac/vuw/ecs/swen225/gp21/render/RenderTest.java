@@ -54,11 +54,9 @@ public class RenderTest {
 		
 		BoardRender render = new BoardRender(g);
 		render.initaliseBoard(1000);
-		/*JPanel panel = new JPanel();
+		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 405, 405);
-		panel.setOpaque(false);
-		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		render.getPane().add(panel, JLayeredPane.MODAL_LAYER);*/
+		panel.add(render.getPane());
 		JFrame frame = new JFrame();
 		frame.setSize(1280, 1024);
 		frame.setVisible(true);
@@ -66,29 +64,8 @@ public class RenderTest {
 		frame.add(render.getPane());
 		actor.setLocation(new Location(2,3));
 		render.updateOnTick();
-		
-		for (int x = 6; x > 2; x--) { 
-			p.setLocation(new Location(x,6));
-			render.updateChap();
-		}
-		//actor.setLocation(new Location(3,3));
-		//render.updateOnTick();
-		for (int y = 6; y > 2; y--) {
-			p.setLocation(new Location(2,y));
-			render.updateChap();
-		}
-		//actor.setLocation(new Location(3,2));
-		//render.updateOnTick();
-		for (int x = 2; x < 6; x++) { 
-			p.setLocation(new Location(x,2));
-			render.updateChap();
-		}
-		//actor.setLocation(new Location(2,2));
-		//render.updateOnTick();
-		for (int y = 2; y < 7; y++) {
-			p.setLocation(new Location(6,y));
-			render.updateChap();
-		}
+		g.inputDirection(Game.Direction.LEFT);
+		render.updateChap();
 		
 	}
 }

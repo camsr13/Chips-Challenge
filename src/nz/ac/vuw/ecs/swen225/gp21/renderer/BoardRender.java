@@ -1,6 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp21.renderer;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -128,34 +132,46 @@ public class BoardRender {
 		int[] chapMove = chapIcon.getMoved();
 		
 		//board animation
-		int frames = 32;
 		if(chapMove != null) {
-			for (int i = 0; i < frames; i++) {
-				
-				increment += tileSize/frames;
+			
+			
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(new TimerTask() {
+			int frames = 0;
+			int increment = 0;
+			int[] chapMove = chapIcon.getMoved();
+			@Override
+			public void run() {
+					
+				increment += tileSize/32;
 				boardPanel.setOffsets(-(increment * chapMove[0]), -(increment * chapMove[1]));
 				boardPanel.revalidate();
 				boardPanel.repaint();
-				
-				//actors.get(0).offsetSprite(frames, invDir(Animatable.matrixToDir(chapMove)));
-				
-				if (i % (frames/4) == 0) {
+					
+					
+				if (frames % (32/4) == 0) {
 					chapIcon.update();
 				}
-				
-				try {
-					TimeUnit.MILLISECONDS.sleep(31);
-				} catch (InterruptedException e) {
-					throw new Error("Animation interupted");
+					
+			
+				// TODO Auto-generated method stub
+				frames++;
+				if(frames == 32) {
+					this.cancel();
+					chapIcon.refreshChapPost();
+					boardPanel.setOffsets(0, 0);
+					boardPanel.updateChapPos();
 				}
 			}
 			
-			boardPanel.setOffsets(0, 0);
-			boardPanel.updateChapPos();
+		}, 31, 31);
+		
+		
 		}
 		
 		boardPanel.revalidate();
 		boardPanel.repaint();
+		
 		
 	}
 	
