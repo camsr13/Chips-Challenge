@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * @author Rhys Adcock
+ * @author Rhys Adcock 300419040
  *
  *         Game holds the player and tilemap and facilitates logic of gameplay
  *         components.

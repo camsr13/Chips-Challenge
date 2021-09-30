@@ -1,5 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
+/**
+ * @author Rhys Adcock 300419040
+ *
+ *         FreezeActor moves in its current direction until it encounters a tile it cannot path through and turns
+ *         around. If it encounters a player it will freeze them.
+ */
+
 public class FreezeActor extends Actor {
 
 	/**

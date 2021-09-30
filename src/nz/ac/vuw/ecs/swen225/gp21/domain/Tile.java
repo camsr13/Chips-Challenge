@@ -1,8 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
 /**
- * @author Rhys Adcock
+ * @author Rhys Adcock 300419040
  *
+ *         The base class which all tile implementations will extend.
  */
 public abstract class Tile {
 

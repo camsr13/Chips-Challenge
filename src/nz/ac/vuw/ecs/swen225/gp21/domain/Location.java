@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
+import java.util.Objects;
+
 /**
  * @author Rhys Adcock
  *
@@ -53,5 +55,10 @@ public class Location {
 		else {
 			return false;
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(x, y);
 	}
 }

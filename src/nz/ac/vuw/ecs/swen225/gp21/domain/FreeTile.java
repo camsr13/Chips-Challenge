@@ -1,10 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
 /**
- * An empty tile.
+ * @author Rhys Adcock 300419040
  *
- * @author Rhysa
- *
+ *         An empty tile that the player can move through.
  */
 public class FreeTile extends Tile {
 

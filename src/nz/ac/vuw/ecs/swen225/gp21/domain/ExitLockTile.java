@@ -3,7 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp21.domain;
 /**
  * This is a tile that acts as a WallTile until all treasures have been collected.
  *
- * @author Rhysa
+ * @author Rhys Adcock 300419040
  *
  */
 public class ExitLockTile extends Tile {
