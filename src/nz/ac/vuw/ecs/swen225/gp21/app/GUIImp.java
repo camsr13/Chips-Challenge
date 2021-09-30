@@ -231,13 +231,13 @@ public class GUIImp implements GUIAbstract{
 
 
 	protected void doStartLevel2() {
-		currFile = "persistancy/levels/level1.xml";
+		currFile = "levels/level1.xml";
 		loadGame();
 	}
 
 	protected void doStartLevel1() {
 		
-		currFile = "persistancy/levels/level1.xml";
+		currFile = "levels/level1.xml";
 		loadGame();
 
 	}
