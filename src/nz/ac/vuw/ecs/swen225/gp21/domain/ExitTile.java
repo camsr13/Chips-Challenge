@@ -1,10 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
 /**
- * TODO: exiting
+ * @author Rhys Adcock 300419040
  *
- * @author Rhysa
- *
+ *         When a player stands on an exit tile the game level will be marked as complete.
  */
 public class ExitTile extends Tile {
 

@@ -1,4 +1,11 @@
+
 package nz.ac.vuw.ecs.swen225.gp21.domain;
+
+/**
+ * @author Rhys Adcock 300419040
+ *
+ *         Actor is an abstract class which enemies that can more around the tilemap and interact with the player will extend.
+ */
 
 public abstract class Actor {
 

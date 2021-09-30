@@ -1,10 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
 /**
- * A tile that stores a message
+ * @author Rhys Adcock 300419040
  *
- * @author Rhysa
- *
+ *         A tile that stores a message.
  */
 public class InfoTile extends Tile {
 

@@ -4,7 +4,7 @@ package nz.ac.vuw.ecs.swen225.gp21.domain;
  * A tile representing a key that when entered is picked up and leaves the tile
  * a FreeTile
  * 
- * @author Rhysa
+ * @author Rhys Adcock 300419040
  *
  */
 public class KeyTile extends Tile {
