@@ -236,7 +236,7 @@ public class GUIImp implements GUIAbstract{
 	}
 
 	protected void doStartLevel1() {
-		
+
 		currFile = "levels/level1.xml";
 		loadGame();
 
@@ -455,7 +455,7 @@ public class GUIImp implements GUIAbstract{
     			break;
     	}
     	levelOver();
-		
+
 	}
 
 	protected void freezeMovement() {
@@ -534,16 +534,21 @@ public class GUIImp implements GUIAbstract{
     			break;
     	}
     	levelOver();
-    	
+
 	}
-	
+
 	private void saveRecording() {
-		
-		RecReplay.saveRecording();
+
+		try {
+			RecReplay.saveConfirmDialogue();
+		} catch (JDOMException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void levelOver() {
-		
+
 		RecReplay.endRecording();
 		Object[] options = {"Restart Level",
 				"Choose Another Level",
@@ -560,7 +565,7 @@ public class GUIImp implements GUIAbstract{
 
     	switch(n){
     		case 0:
-    			
+
     			break;
     		case 1:
     			doExitGameX();
@@ -572,7 +577,7 @@ public class GUIImp implements GUIAbstract{
 	}
 
 	protected void loadGame(){
-		
+
 		try {
 			currXML.readXMLFile(currFile);
 		} catch (JDOMException | IOException e) {
@@ -589,12 +594,12 @@ public class GUIImp implements GUIAbstract{
 		countdown();
 		updateDisplay();
 		boardRender.initaliseBoard(500);
-		
+
 	}
-	
-	
+
+
 }
-	
-	
+
+
 
 
