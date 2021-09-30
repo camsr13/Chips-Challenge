@@ -30,6 +30,7 @@ import org.jdom2.JDOMException;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.ReadXML;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.WriteXML;
 import nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.*;
 
@@ -92,6 +93,7 @@ public class GUIImp implements GUIAbstract{
 	//Game
 	private Game game = new Game();
 	private ReadXML currXML = new ReadXML();
+	private WriteXML saveXML = new WriteXML();
 	protected String currFile;
 
 
@@ -298,7 +300,7 @@ public class GUIImp implements GUIAbstract{
 	}
 
 	protected void doExitGameS() {
-		// TODO Auto-generated method stub
+		saveXML.writeXMLFile(saveXML.generateDocument(), "levels/currentSave.xml");
 
 
 	}
@@ -535,6 +537,7 @@ public class GUIImp implements GUIAbstract{
             public void actionPerformed(ActionEvent e) {
             	timeFigureLabel.setText(String.valueOf(timeRemaining--));
             	boardRender.updateOnTick();
+            	saveXML.updateTime(timeRemaining);
 
             	if(timeRemaining <= 0) {
             		doTimeExpired();
