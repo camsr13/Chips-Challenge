@@ -1,6 +1,9 @@
 package test.nz.ac.vuw.ecs.swen225.gp21.render;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.ExitLockTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.ExitTile;
@@ -15,6 +18,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.WallTile;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction;
 
+import java.awt.Color;
 import java.util.concurrent.TimeUnit;/**
  * Test file to load the render class independently of the rest of the game for testing
  * @author Jac Clarke
@@ -39,24 +43,31 @@ public class RenderTest {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 		Game g = new Game();
-		Player p = new Player(new Location(5,5), 0);
+		Player p = new Player(new Location(4,4), 0);
 		g.setupGame(board, p, null, 0, 0, null, null);
-		BoardRender render = new BoardRender(g, 512);
+		BoardRender render = new BoardRender(g);
+		render.initaliseBoard(500);
+		JPanel panel = new JPanel();
+		panel.setBounds(0, 0, 405, 405);
+		panel.setOpaque(false);
+		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		render.getPane().add(panel, JLayeredPane.MODAL_LAYER);
 		JFrame frame = new JFrame();
 		frame.setSize(1280, 1024);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(render.getPane());
 		
-		TimeUnit.SECONDS.sleep(1);
+		//TimeUnit.SECONDS.sleep(1);
 		p.setLocation(new Location(4,5));
 		render.update(Direction.LEFT);
-		TimeUnit.SECONDS.sleep(1);
+		//TimeUnit.SECONDS.sleep(1);
 		p.setLocation(new Location(3,5));
 		render.update(Direction.LEFT);
-		TimeUnit.SECONDS.sleep(1);
+		//TimeUnit.SECONDS.sleep(1);
 		p.setLocation(new Location(3,4));
 		render.update(Direction.UP);
+		//TimeUnit.SECONDS.sleep(1);
 		p.setLocation(new Location(4,4));
 		render.update(Direction.RIGHT);
 		

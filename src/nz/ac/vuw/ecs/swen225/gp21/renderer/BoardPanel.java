@@ -3,17 +3,25 @@ package nz.ac.vuw.ecs.swen225.gp21.renderer;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.List;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import nz.ac.vuw.ecs.swen225.gp21.domain.ArrowTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.ExitLockTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.ExitTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.FreeTile;
+import nz.ac.vuw.ecs.swen225.gp21.domain.FreezeTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
 import nz.ac.vuw.ecs.swen225.gp21.domain.InfoTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.KeyTile;
@@ -34,21 +42,60 @@ class BoardPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = -3951679614322867873L;
 	
+	//Constants
+	private static final String tileImageLocation = "images/Tile_sprite_sheet.png";
+	//translate games enum into image locations
+	private static final int[] colourOrder = {1, 3, 0, 2};
 	
+	//Number of sprites to load
+	private static final int numTiles = 16;
+	
+	private static final Class<?>[] tileOrder = { FreeTile.class, KeyTile.class, KeyTile.class, KeyTile.class,
+											KeyTile.class, TreasureTile.class, FreezeTile.class, InfoTile.class,
+											WallTile.class, LockTile.class, LockTile.class, LockTile.class,
+											LockTile.class, ExitLockTile.class, ExitTile.class, ArrowTile.class
+											};
+
+	/**
+	 * Size of the tiles in the image file (pixels)
+	 */
+	private final int tileSize;
+	/**
+	 * desired board width to be rendered, including offscreen tiles for moves
+	 */
+	private final int boardWidth;
+	private Location chapPos;
 	private Game game;
 	private double scale = 1.0;
-	private Map<Class<? extends Tile>, Image[]> images = new HashMap<Class<? extends Tile>, Image[]>();
+	private int xOffset = 0;
+	private int yOffset = 0;
+	private Map<Class<? extends Tile>, ArrayList<BufferedImage>> images = new HashMap<Class<? extends Tile>, ArrayList<BufferedImage>>();
 	
 	/**
 	 * Panel that is responsible for retrieving and displaying the board from game
 	 * @param game
+	 * @param tileSize 
+	 * @param boardWidth 
 	 * @param initialScale 
 	 */
-	protected BoardPanel(Game game, double initialScale) {
+	protected BoardPanel(Game game, int tileSize, int boardWidth, double initialScale) {
+		this.tileSize = tileSize;
+		this.boardWidth = boardWidth;
 		this.scale = initialScale;
 		this.game = game;
-		loadTileImages();
+		chapPos = game.getPlayer().getLocation();
+		loadTileSprites();
 	};
+	
+	/**
+	 * offsets the board for animation
+	 * @param x
+	 * @param y
+	 */
+	protected void setOffsets(int x, int y) {
+		xOffset = x;
+		yOffset = y;
+	}
 	
 	
 	/**
@@ -59,8 +106,14 @@ class BoardPanel extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		super.paintComponent(g);
 		g2d.scale(scale, scale);
-		draw(g2d);
-
+        draw(g2d);
+	}
+	
+	/**
+	 * 
+	 */
+	protected void updateChapPos() {
+		chapPos = game.getPlayer().getLocation();
 	}
 	
 	/**
@@ -74,13 +127,13 @@ class BoardPanel extends JPanel {
 		//BREAKPOINT: board info retrieved
 		Tile[][] boardTiles = game.getTilemap();
 		//BREAKPOINT: player info retrieved
-		Location chapPos = game.getPlayer().getLocation();
 		
 		
-		int i = 0;
-		for(int y = chapPos.getY() - 4; y < chapPos.getY() + 5; y++) {
-			int j = 0;
-			for(int x = chapPos.getX() - 4; x < chapPos.getX() + 5; x++) {
+		
+		int i = -1;
+		for(int y = chapPos.getY() - 5; y < chapPos.getY() + 6; y++) {
+			int j = -1;
+			for(int x = chapPos.getX() - 5; x < chapPos.getX() + 6; x++) {
 				//Get the tile if possible otherwise return null for the empty screen space
 				Tile paintTile;
 				Image toPaint;
@@ -91,33 +144,32 @@ class BoardPanel extends JPanel {
 				}
 				
 				
-				//Get the image of that tile type
-				toPaint = images.get(null)[0];
 				if (paintTile == null) {
-					toPaint = images.get(null)[0];
+					toPaint = images.get(null).get(0);
 				} else if(paintTile instanceof LockTile || paintTile instanceof KeyTile) {
 					
 					int colour;
 					
 					if(paintTile instanceof KeyTile) {
 						KeyTile tile = (KeyTile) paintTile;
-						colour = tile.getKeyColour().ordinal();
+						colour = colourOrder[tile.getKeyColour().ordinal()];
 					} else {
 						LockTile tile = (LockTile) paintTile;
-						colour = tile.getKeyColour().ordinal();
+						colour = colourOrder[tile.getKeyColour().ordinal()];
 					}
 					
-					toPaint = images.get(paintTile.getClass())[colour];
+					toPaint = images.get(paintTile.getClass()).get(colour);
 					
 				} else if(images.get(paintTile.getClass()) == null) {
 					System.out.println("error: No tile image for:" + paintTile.getClass());
-					toPaint = images.get(null)[0];
+					System.out.println("Defaulting to no image");
+					toPaint = images.get(null).get(0);
 				} else {
-					toPaint = images.get(paintTile.getClass())[0];
+					toPaint = images.get(paintTile.getClass()).get(0);
 				} 	
 				
 				//Draw the image in the required location
-				g.drawImage(toPaint, j * 128, i * 128 , this);
+				g.drawImage(toPaint, j * tileSize + xOffset, i * tileSize + yOffset, this);
 				
 				j++;
 			}
@@ -126,61 +178,55 @@ class BoardPanel extends JPanel {
 	}
 	
 	/**
-	 * Attempts to load all the required images for displaying the board
+	 * Attempts to load the tiles images from the sprite sheet
 	 * and stores them in the image map with their associated objects
+	 * 
 	 */
-	private void loadTileImages() {
+	@SuppressWarnings("unchecked")
+	private void loadTileSprites() {
+		URL imageURL =  getClass().getResource(tileImageLocation);
+		BufferedImage sheet;
+		try {
+			sheet = ImageIO.read(new File(imageURL.getPath()));
+		} catch (IOException e) {
+			//Pass the error on as a critical error
+			throw new Error("Unable to load the sprite sheet for the tiles."
+					+ " Please check that it is correctly stored in the 'images' folder.");
+		}
 		
-		//wall
-		ImageIcon wall = new ImageIcon(this.getClass().getResource("images/wall.png"));
-		Image[] wallImages = {wall.getImage()};
-		images.put(WallTile.class, wallImages);
+		//Now get the sub images
+		int y = 0;
+		int x = 0;
+		int i = 0;
+		while ( i < numTiles ) {
+			BufferedImage subImage = sheet.getSubimage(x, y, tileSize, tileSize);
+			Class<? extends Tile> curTile;
+			try {
+				/*
+				 * Java generics requires we supress the unchecked class cast,
+				 * even though we surround the cast in a try catch
+				 */
+				 curTile = (Class<? extends Tile>) tileOrder[i];
+			} catch (ClassCastException e){
+				throw new Error("Class for tile " + i + " is not castable to Tile" );
+			}
+			
+			if(images.get(curTile) == null) {
+				images.put(curTile, new ArrayList<BufferedImage>());
+			}
+			images.get(curTile).add(subImage);
+			x += 64;
+			i++;
+			if(x >= sheet.getWidth()) {
+				y += tileSize;
+				x = 0;
+			}
+		}
 		
-		
-		//floor
-		ImageIcon floor = new ImageIcon(this.getClass().getResource("images/floor.png"));
-		Image[] floorImages = {floor.getImage()};
-		images.put(FreeTile.class,floorImages);
-		
-		
-		//exit lock
-		ImageIcon dl = new ImageIcon(this.getClass().getResource("images/exit lock.png"));
-		Image[] exitLockImage = { dl.getImage()};
-		images.put(ExitLockTile.class, exitLockImage);
-		
-		//out of board bounds image
-		ImageIcon blankIcon = new ImageIcon(this.getClass().getResource("images/blank.png"));
-		Image[] blankIcons = {blankIcon.getImage()};
-		images.put(null,  blankIcons);
-		
-		//infomation icon
-		ImageIcon infoIcon = new ImageIcon(this.getClass().getResource("images/Help.png"));
-		images.put(InfoTile.class, new Image[] {infoIcon.getImage()});
-		
-		//Exit tile
-		ImageIcon e = new ImageIcon(this.getClass().getResource("images/exit.png"));
-		images.put(ExitTile.class, new Image[]{e.getImage()});
-		
-		//Exit tile
-		ImageIcon tres = new ImageIcon(this.getClass().getResource("images/treasure.png"));
-		images.put(TreasureTile.class, new Image[]{tres.getImage()});
-		
-		//doors
-		ImageIcon dr = new ImageIcon(this.getClass().getResource("images/Red_door.png"));
-		ImageIcon dy = new ImageIcon(this.getClass().getResource("images/Yellow_door.png"));
-		ImageIcon dg = new ImageIcon(this.getClass().getResource("images/Green_door.png"));
-		ImageIcon db = new ImageIcon(this.getClass().getResource("images/Blue_door.png"));
-		Image[] doorImages = {db.getImage(), dy.getImage(), dg.getImage(), dr.getImage()};
-		images.put(LockTile.class, doorImages);
-		
-		//keys
-		ImageIcon kr = new ImageIcon(this.getClass().getResource("images/Red_key.png"));
-		ImageIcon ky = new ImageIcon(this.getClass().getResource("images/Yellow_key.png"));
-		ImageIcon kg = new ImageIcon(this.getClass().getResource("images/Green_key.png"));
-		ImageIcon kb = new ImageIcon(this.getClass().getResource("images/Blue_key.png"));
-		images.put(KeyTile.class, new Image[] {kb.getImage(), ky.getImage(), kg.getImage(),kr.getImage()});
-		
-		
+		//add the blank tile, always in the bottom right
+		BufferedImage blankImage = sheet.getSubimage(sheet.getWidth() - tileSize, sheet.getHeight() - tileSize, tileSize, tileSize);
+		images.put(null, new ArrayList<BufferedImage>());
+		images.get(null).add(blankImage);
 	}
 	
 	/**

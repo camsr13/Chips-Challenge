@@ -1,10 +1,11 @@
 package test.nz.ac.vuw.ecs.swen225.gp21.persistency;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.*;
-import nz.ac.vuw.ecs.swen225.gp21.persistency.readXML;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.ReadXML;
 import org.jdom2.JDOMException;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.IOException;
 
 public class ReadFileTests {
@@ -12,13 +13,13 @@ public class ReadFileTests {
     @Test
     public void testReadTestMap_01() throws JDOMException, IOException {
         new Game();
-        readXML readXML = new readXML();
+        ReadXML readXML = new ReadXML();
         readXML.readXMLFile();
         //get the created tilemap from Game and print it
         Tile[][] tilemap = Game.instance.getTilemap();
         for(int y = 0; y < tilemap[0].length; y++){
-            for(int x = 0; x < tilemap.length; x++){
-                System.out.print(tilemap[x][y].toChar() + "");
+            for (Tile[] tiles : tilemap) {
+                System.out.print(tiles[y].toChar() + "");
             }
             System.out.println();
         }
@@ -44,13 +45,13 @@ public class ReadFileTests {
     @Test
     public void testReadLevel1_01() throws JDOMException, IOException {
         new Game();
-        readXML readXML = new readXML();
-        readXML.readXMLFile("src/nz/ac/vuw/ecs/swen225/gp21/persistency/level1.xml");
+        ReadXML readXML = new ReadXML();
+        readXML.readXMLFile("levels/level1.xml");
         //get the created tilemap from Game and print it
         Tile[][] tilemap = Game.instance.getTilemap();
         for(int y = 0; y < tilemap[0].length; y++){
-            for(int x = 0; x < tilemap.length; x++){
-                System.out.print(tilemap[x][y].toChar() + "");
+            for (Tile[] tiles : tilemap) {
+                System.out.print(tiles[y].toChar() + "");
             }
             System.out.println();
         }
@@ -66,13 +67,13 @@ public class ReadFileTests {
     @Test
     public void testReadLevel2_01() throws JDOMException, IOException {
         new Game();
-        readXML readXML = new readXML();
-        readXML.readXMLFile("src/nz/ac/vuw/ecs/swen225/gp21/persistency/level2.xml");
+        ReadXML readXML = new ReadXML();
+        readXML.readXMLFile("levels/level2.xml");
         //get the created tilemap from Game and print it
         Tile[][] tilemap = Game.instance.getTilemap();
         for(int y = 0; y < tilemap[0].length; y++){
-            for(int x = 0; x < tilemap.length; x++){
-                System.out.print(tilemap[x][y].toChar() + "");
+            for (Tile[] tiles : tilemap) {
+                System.out.print(tiles[y].toChar() + "");
             }
             System.out.println();
         }
@@ -87,16 +88,21 @@ public class ReadFileTests {
 
     @Test
     public void testReadCurrentSave_01() throws JDOMException, IOException {
-        new Game();
-        readXML readXML = new readXML();
-        readXML.readXMLFile("src/nz/ac/vuw/ecs/swen225/gp21/persistency/currentSave.xml");
-        //get the created tilemap from Game and print it
-        Tile[][] tilemap = Game.instance.getTilemap();
-        for(int y = 0; y < tilemap[0].length; y++){
-            for(int x = 0; x < tilemap.length; x++){
-                System.out.print(tilemap[x][y].toChar() + "");
+        if(new File("levels/currentSave.xml").isFile()){
+            new Game();
+            ReadXML readXML = new ReadXML();
+            readXML.readXMLFile("levels/currentSave.xml");
+            //get the created tilemap from Game and print it
+            Tile[][] tilemap = Game.instance.getTilemap();
+            for(int y = 0; y < tilemap[0].length; y++){
+                for (Tile[] tiles : tilemap) {
+                    System.out.print(tiles[y].toChar() + "");
+                }
+                System.out.println();
             }
-            System.out.println();
+        }else{
+            System.out.println("No file found");
         }
+
     }
 }

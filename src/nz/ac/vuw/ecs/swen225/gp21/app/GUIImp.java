@@ -23,11 +23,13 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import org.jdom2.JDOMException;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
-import nz.ac.vuw.ecs.swen225.gp21.persistency.readXML;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.ReadXML;
 import nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.*;
 
@@ -74,6 +76,11 @@ public class GUIImp implements GUIAbstract{
 	private final JButton west = new JButton("Left");
 	private final JButton pause = new JButton("Pause");
 
+	//Boolean if Movement allowed
+	private boolean canMove = true;
+	private boolean waitSecond = true;
+
+
     //Create MenuBar and buttons
 	private JMenuBar menuBar = new JMenuBar();
 
@@ -84,15 +91,14 @@ public class GUIImp implements GUIAbstract{
 
 	//Game
 	private Game game = new Game();
-	private readXML currXML = new readXML();
+	private ReadXML currXML = new ReadXML();
 	protected String currFile;
-
-
 
 
 	//Content Panel
 	private final JPanel area = new CustomPanel(700, 500);
 
+	private final RecReplay recorder = new RecReplay();
 
     public GUIImp() {
 		initGUI();
@@ -115,7 +121,7 @@ public class GUIImp implements GUIAbstract{
 	    initMenu();
 	    initBoard();
 	    initSideBar();
-	    countdown();
+
     }
 
     protected void startPopUp() {
@@ -155,6 +161,7 @@ public class GUIImp implements GUIAbstract{
 		frame.setLocationByPlatform(true);
 		frame.pack();
 	}
+
 
     protected void initMenu(){
     	//Create menuBar options
@@ -224,12 +231,12 @@ public class GUIImp implements GUIAbstract{
 
 
 	protected void doStartLevel2() {
-		currFile = "level2.xml";
+		currFile = "persistancy/levels/level1.xml";
 		loadGame();
 	}
 
 	protected void doStartLevel1() {
-		currFile = "level1.xml";
+		currFile = "persistancy/levels/level1.xml";
 		loadGame();
 
 	}
@@ -267,7 +274,9 @@ public class GUIImp implements GUIAbstract{
     	timePanel.add(timeTitleLabel);
     	timePanel.add(timeFigureLabel);
     	keysPanel.add(keysLabel);
+    	keysPanel.add(keysFigureLabel);
     	treasuresPanel.add(treasuresLabel);
+    	treasuresPanel.add(treasuresFigureLabel);
 
     	//add parts parts to sideBarSouth
 		sidebarNorth.setBackground(Color.WHITE);
@@ -372,35 +381,98 @@ public class GUIImp implements GUIAbstract{
 
 	}
 
-	protected void doWestMove() {
-
-		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.LEFT);
-		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.LEFT);
-		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.LEFT);
-
+	public void doWestMove() {
+		if(canMove) {
+			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.LEFT);
+			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.LEFT);
+			boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.LEFT);
+			updateDisplay();
+			freezeMovement();
+		}
 	}
 
-	protected void doEastMove() {
-		// TODO Auto-generated method stub
-		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.RIGHT);
-		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.RIGHT);
-		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.RIGHT);
+	public void doEastMove() {
+		if(canMove) {
+			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.RIGHT);
+			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.RIGHT);
+			boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.RIGHT);
+			updateDisplay();
+			freezeMovement();
+		}
 	}
 
-	protected void doSouthMove() {
-		// TODO Auto-generated method stub
-		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.DOWN);
-		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.DOWN);
-		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.DOWN);
+	public void doSouthMove() {
+		if(canMove) {
+			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.DOWN);
+			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.DOWN);
+			boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.DOWN);
+			updateDisplay();
+			freezeMovement();
+		}
 	}
 
-	protected void doNorthMove() {
-		// TODO Auto-generated method stub
-		game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.UP);
-		RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.UP);
-		boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.UP);
+	public void doNorthMove() {
+		if(canMove) {
+			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.UP);
+			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.UP);
+			boardRender.update(nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction.UP);
+			updateDisplay();
+			freezeMovement();
+		}
 	}
 
+	private void updateDisplay() {
+
+		treasuresFigureLabel.setText(String.valueOf(game.getTotalTreasures()-game.getCollectedTreasures()));
+		if(game.isLevelComplete()) {
+			levelCompleted();
+		}
+	}
+
+	private void levelCompleted() {
+
+    	//stop game
+    	timer.stop();
+
+    	Object[] options = {"Yes",
+                "No",};
+
+    	int n = JOptionPane.showOptionDialog(frame,
+    		    "The game is over, you have Won! Would you like to save your game recording",
+    		    "Game Over",
+    		    JOptionPane.YES_NO_CANCEL_OPTION,
+    		    JOptionPane.QUESTION_MESSAGE,
+    		    null,
+    		    options,
+    		    options[0]);
+
+    	switch(n){
+    		case 0:
+    			saveRecording();
+    			break;
+    		case 1:
+    			break;
+    	}
+    	levelOver();
+		
+	}
+
+	protected void freezeMovement() {
+
+		canMove = false;
+		int wait = 1000;
+		Timer freezeTimer = new Timer(1000, new ActionListener() {
+            public void actionPerformed(ActionEvent i) {
+            	if(waitSecond) {
+            		canMove = true;
+            	}
+            	waitSecond = true;
+
+            }
+        });
+		freezeTimer.start();
+
+	}
 	/**
 	 * This helper class initialises GridBagConstraints with two options (gridx, gridy). By default GridBagConstraints
 	 * only supports initialisation with either 0 options, or every option.
@@ -416,10 +488,11 @@ public class GUIImp implements GUIAbstract{
 
     public JFrame getMainWindow() {
 		return frame;
+
 	}
 
     protected void countdown() {
-        timer = new Timer(1000, new ActionListener() {
+        timer = new Timer(1001, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	timeFigureLabel.setText(String.valueOf(timeRemaining--));
 
@@ -439,7 +512,39 @@ public class GUIImp implements GUIAbstract{
     	//stop game
     	timer.stop();
 
-    	Object[] options = {"Restart Level",
+    	Object[] options = {"Yes",
+                "No",};
+
+    	int n = JOptionPane.showOptionDialog(frame,
+    		    "The game is over, time is out, you have lost. Would you like to save your game recording",
+    		    "Game Over",
+    		    JOptionPane.YES_NO_CANCEL_OPTION,
+    		    JOptionPane.QUESTION_MESSAGE,
+    		    null,
+    		    options,
+    		    options[0]);
+
+    	switch(n){
+    		case 0:
+    			saveRecording();
+    			break;
+    		case 1:
+    			break;
+    	}
+    	levelOver();
+    	
+	}
+	
+	private void saveRecording() {
+		
+		RecReplay.saveRecording();
+	}
+
+	private void levelOver() {
+		
+		RecReplay.endRecording();
+		Object[] options = {"Restart Level",
+				"Choose Another Level",
                 "Exit Game X",};
 
     	int n = JOptionPane.showOptionDialog(frame,
@@ -453,16 +558,19 @@ public class GUIImp implements GUIAbstract{
 
     	switch(n){
     		case 0:
-    			loadGame();
+    			
     			break;
     		case 1:
+    			doExitGameX();
+    			break;
+    		case 2:
     			doExitGameX();
     			break;
     	}
 	}
 
 	protected void loadGame(){
-
+		
 		try {
 			currXML.readXMLFile(currFile);
 		} catch (JDOMException | IOException e) {
@@ -475,7 +583,11 @@ public class GUIImp implements GUIAbstract{
 		boardRender = new BoardRender(game,500);
 		gameBoard = boardRender.getPane();
 		RecReplay.newRecording();
-
+		RecReplay.getGUIImp(this);
+		countdown();
+		updateDisplay();
 	}
+	
+	
 }
 

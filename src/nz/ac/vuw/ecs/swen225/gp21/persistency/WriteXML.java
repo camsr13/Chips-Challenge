@@ -5,12 +5,11 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Rhys Hanrahan
@@ -21,7 +20,7 @@ import java.util.List;
  *
  */
 
-public class writeXML {
+public class WriteXML {
 
     private Player player;
     private Tile[][] tileMap;
@@ -29,7 +28,7 @@ public class writeXML {
     private int totalTreasures;
     private int collectedTreasures;
     private ExitLockTile exitLock;
-    private List<Actor> actors;
+    private int timeLimit;
 
     /**
      *
@@ -41,8 +40,6 @@ public class writeXML {
         XMLOutputter xmlOutputter = new XMLOutputter();
         try(FileOutputStream fileOutputStream = new FileOutputStream(fileDirectory)){
             xmlOutputter.output(document, fileOutputStream);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -62,7 +59,7 @@ public class writeXML {
         totalTreasures = Game.instance.getTotalTreasures();
         collectedTreasures = Game.instance.getCollectedTreasures();
         exitLock = Game.instance.getExitLock();
-        actors = Game.instance.getActors();
+        List<Actor> actors = Game.instance.getActors();
 
         //creates new document and root element
         Document document = new Document();
@@ -72,7 +69,7 @@ public class writeXML {
         generateMapVariables(mapElement);
         //call generateKeysHeld() to write the hashMap of keys on the board and keys the player has
         generateKeysHeld(mapElement);
-        //call generatePlayer() to write the playerinfo section with location
+        //call generatePlayer() to write the playerInfo section with location
         generatePlayer(mapElement);
         //call generate actors to write all the actors on the current level
         generateActors(mapElement, actors);
@@ -85,42 +82,56 @@ public class writeXML {
      *
      * generateMapSize gets the number of rows and columns in tileMap and writes them to the xml file under 'size' within 'mapSize'
      *
-     * @param mapElement
+     * @param mapElement main document element
      */
     private void generateMapVariables(Element mapElement){
         Element mapVariableElement = new Element("mapVariables");
         mapElement.addContent(mapVariableElement);
         //write the number of rows in tileRow
-        Element sizeElement = new Element("sizeX");
-        sizeElement.addContent(String.valueOf(tileMap.length));
-        mapVariableElement.addContent(sizeElement);
+        Element varElement = new Element("sizeX");
+        varElement.addContent(String.valueOf(tileMap.length));
+        mapVariableElement.addContent(varElement);
         //write the number of columns in tileRow
-        sizeElement = new Element("sizeY");
-        sizeElement.addContent(String.valueOf(tileMap[0].length));
-        mapVariableElement.addContent(sizeElement);
+        varElement = new Element("sizeY");
+        varElement.addContent(String.valueOf(tileMap[0].length));
+        mapVariableElement.addContent(varElement);
         //write the total number of treasures that are on the current map
-        sizeElement = new Element("total");
-        sizeElement.addContent(String.valueOf(totalTreasures));
-        mapVariableElement.addContent(sizeElement);
+        varElement = new Element("total");
+        varElement.addContent(String.valueOf(totalTreasures));
+        mapVariableElement.addContent(varElement);
         //write the number of collected treasures
-        sizeElement = new Element("collected");
-        sizeElement.addContent(String.valueOf(collectedTreasures));
-        mapVariableElement.addContent(sizeElement);
+        varElement = new Element("collected");
+        varElement.addContent(String.valueOf(collectedTreasures));
+        mapVariableElement.addContent(varElement);
         //write the number of columns in tileRow
-        sizeElement = new Element("exitLockX");
-        sizeElement.addContent(String.valueOf(exitLock.getLocation().getX()));
-        mapVariableElement.addContent(sizeElement);
+        varElement = new Element("exitLockX");
+        varElement.addContent(String.valueOf(exitLock.getLocation().getX()));
+        mapVariableElement.addContent(varElement);
         //write the number of columns in tileRow
-        sizeElement = new Element("exitLockY");
-        sizeElement.addContent(String.valueOf(exitLock.getLocation().getY()));
-        mapVariableElement.addContent(sizeElement);
+        varElement = new Element("exitLockY");
+        varElement.addContent(String.valueOf(exitLock.getLocation().getY()));
+        mapVariableElement.addContent(varElement);
+        //write the current time left on the time limit on the level
+        varElement = new Element("time");
+        varElement.addContent(String.valueOf(timeLimit));
+        mapVariableElement.addContent(varElement);
+    }
+
+    /**
+     *
+     * Update local time in writeXML so it can be saved
+     *
+     * @param time timeRemaining
+     */
+    public void updateTime(int time) {
+        timeLimit = time;
     }
 
     /**
      *
      * generateKeysHeld read the hashMap of keysHeld and writes it to the save file
      *
-     * @param mapElement
+     * @param mapElement main document element
      */
     private void generateKeysHeld(Element mapElement){
         //create new tileRowElement for each tileRow
@@ -139,16 +150,16 @@ public class writeXML {
      *
      * generatePlayer gets the x, y location of the player and it to the xml file under 'location' within 'player'
      *
-     * @param mapElement
+     * @param mapElement main document element
      */
     private void generatePlayer(Element mapElement){
         Element playerElement = new Element("player");
         mapElement.addContent(playerElement);
-        //write x coord location of player
+        //write x coordinates location of player
         Element locationElement = new Element("location");
         locationElement.addContent(Integer.toString(player.getLocation().getX()));
         playerElement.addContent(locationElement);
-        //write y coord location of player
+        //write y coordinates location of player
         locationElement = new Element("location");
         locationElement.addContent(Integer.toString(player.getLocation().getY()));
         playerElement.addContent(locationElement);
@@ -162,8 +173,8 @@ public class writeXML {
      *
      * generateActors uses the list of actors for a given level and writes their location and direction for each actor
      *
-     * @param mapElement
-     * @param actors
+     * @param mapElement main document element
+     * @param actors arraylist of actors
      */
     private void generateActors(Element mapElement, List<Actor> actors){
         //check if the current level contains any actors
@@ -185,8 +196,8 @@ public class writeXML {
      *
      * generateTileRow cycles through each row of tileMap and writes each tile type to the xml file
      *
-     * @param mapElement
-     * @param tileMap
+     * @param mapElement main document element
+     * @param tileMap 2d array of all tiles of the level
      */
     private void generateTileRows(Element mapElement, Tile[][] tileMap){
         //create new tileRowElement for each tileRow
@@ -194,9 +205,9 @@ public class writeXML {
             Element tileRowElement = new Element("tileRow");
             mapElement.addContent(tileRowElement);
             //add a new tileElement for each tile in a tileRow
-            for(int x = 0; x < tileMap.length; x++){
+            for (Tile[] tiles : tileMap) {
                 Element tileElement = new Element("tile");
-                tileElement.addContent(getTileType(tileMap[x][y], tileElement));
+                tileElement.addContent(getTileType(tiles[y], tileElement));
                 tileRowElement.addContent(tileElement);
             }
         }
@@ -206,8 +217,8 @@ public class writeXML {
      *
      * getTileType checks what tile type the current tile is and saves returns a corresponding string word
      *
-     * @param tile
-     * @param tileElement
+     * @param tile the tile, we want the type of
+     * @param tileElement the current element of the tile
      * @return a string representing the tile type
      */
     private String getTileType(Tile tile, Element tileElement){
@@ -236,7 +247,7 @@ public class writeXML {
         }else if(tile instanceof FreezeTile){
             return "freeze";
         }
-        //Incase error or unknown tile type occurs save as wall tile
+        //In case error or unknown tile type occurs save as wall tile
         else{
             return "wall";
         }
@@ -247,7 +258,7 @@ public class writeXML {
      * getLockColour is passed a tile then returns a colour string from a corresponding colour enum
      * passed tile is set to be a LockTile as this method is only called when its known the tile is a locked tile
      *
-     * @param tile
+     * @param tile the tile we want the colour of
      * @return a colour string
      */
     private String getLockColour(Tile tile){
@@ -269,7 +280,7 @@ public class writeXML {
      * getKeyColour is passed a tile then returns a colour string from a corresponding colour enum
      * passed tile is set to be a KeyTile as this method is only called when its known the tile is a key tile
      *
-     * @param tile
+     * @param tile the key tile we want the colour of
      * @return a colour string
      */
     private String getKeyColour(Tile tile){
@@ -290,8 +301,8 @@ public class writeXML {
      *
      * get the colour of keys on the map and return string colour
      *
-     * @param colour
-     * @return
+     * @param colour enum colour we want the string of
+     * @return the string variant of the enum colour
      */
     private String getKeysHeldColour(Game.KeyColour colour){
         if(colour == Game.KeyColour.BLUE){
@@ -312,8 +323,8 @@ public class writeXML {
      * getDirection is a method used when writing arrow tiles to the xml file
      * When writing an arrowTile a enum Game.direction is passed and a string direction is returned
      *
-     * @param direction
-     * @return string
+     * @param direction the direction enum we want the string value of
+     * @return string the string variant of the passed direction
      */
     private String getDirection(Game.Direction direction){
         if(direction == Game.Direction.UP){
