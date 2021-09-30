@@ -23,11 +23,13 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import org.jdom2.JDOMException;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
-import nz.ac.vuw.ecs.swen225.gp21.persistency.readXML;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.ReadXML;
 import nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.*;
 
@@ -89,13 +91,14 @@ public class GUIImp implements GUIAbstract{
 
 	//Game
 	private Game game = new Game();
-	private readXML currXML = new readXML();
+	private ReadXML currXML = new ReadXML();
 	protected String currFile;
 
 
 	//Content Panel
 	private final JPanel area = new CustomPanel(700, 500);
 
+	private final RecReplay recorder = new RecReplay();
 
     public GUIImp() {
 		initGUI();
@@ -228,12 +231,12 @@ public class GUIImp implements GUIAbstract{
 
 
 	protected void doStartLevel2() {
-		currFile = "/am/st-james/home1/richarcame1/eclipse-workspace5/gogo/swen225-group-project-main/src/nz/ac/vuw/ecs/swen225/gp21/persistency/level2.xml";
+		currFile = "persistancy/levels/level1.xml";
 		loadGame();
 	}
 
 	protected void doStartLevel1() {
-		currFile = "/am/st-james/home1/richarcame1/eclipse-workspace5/gogo/swen225-group-project-main/src/nz/ac/vuw/ecs/swen225/gp21/persistency/level1.xml";
+		currFile = "persistancy/levels/level1.xml";
 		loadGame();
 
 	}
@@ -421,7 +424,37 @@ public class GUIImp implements GUIAbstract{
 	private void updateDisplay() {
 
 		treasuresFigureLabel.setText(String.valueOf(game.getTotalTreasures()-game.getCollectedTreasures()));
+		if(game.isLevelComplete()) {
+			levelCompleted();
+		}
+	}
 
+	private void levelCompleted() {
+
+    	//stop game
+    	timer.stop();
+
+    	Object[] options = {"Yes",
+                "No",};
+
+    	int n = JOptionPane.showOptionDialog(frame,
+    		    "The game is over, you have Won! Would you like to save your game recording",
+    		    "Game Over",
+    		    JOptionPane.YES_NO_CANCEL_OPTION,
+    		    JOptionPane.QUESTION_MESSAGE,
+    		    null,
+    		    options,
+    		    options[0]);
+
+    	switch(n){
+    		case 0:
+    			saveRecording();
+    			break;
+    		case 1:
+    			break;
+    	}
+    	levelOver();
+		
 	}
 
 	protected void freezeMovement() {
@@ -479,7 +512,39 @@ public class GUIImp implements GUIAbstract{
     	//stop game
     	timer.stop();
 
-    	Object[] options = {"Restart Level",
+    	Object[] options = {"Yes",
+                "No",};
+
+    	int n = JOptionPane.showOptionDialog(frame,
+    		    "The game is over, time is out, you have lost. Would you like to save your game recording",
+    		    "Game Over",
+    		    JOptionPane.YES_NO_CANCEL_OPTION,
+    		    JOptionPane.QUESTION_MESSAGE,
+    		    null,
+    		    options,
+    		    options[0]);
+
+    	switch(n){
+    		case 0:
+    			saveRecording();
+    			break;
+    		case 1:
+    			break;
+    	}
+    	levelOver();
+    	
+	}
+	
+	private void saveRecording() {
+		
+		RecReplay.saveRecording();
+	}
+
+	private void levelOver() {
+		
+		RecReplay.endRecording();
+		Object[] options = {"Restart Level",
+				"Choose Another Level",
                 "Exit Game X",};
 
     	int n = JOptionPane.showOptionDialog(frame,
@@ -493,9 +558,12 @@ public class GUIImp implements GUIAbstract{
 
     	switch(n){
     		case 0:
-    			loadGame();
+    			
     			break;
     		case 1:
+    			doExitGameX();
+    			break;
+    		case 2:
     			doExitGameX();
     			break;
     	}
@@ -515,8 +583,11 @@ public class GUIImp implements GUIAbstract{
 		boardRender = new BoardRender(game,500);
 		gameBoard = boardRender.getPane();
 		RecReplay.newRecording();
+		RecReplay.getGUIImp(this);
 		countdown();
 		updateDisplay();
 	}
+	
+	
 }
 

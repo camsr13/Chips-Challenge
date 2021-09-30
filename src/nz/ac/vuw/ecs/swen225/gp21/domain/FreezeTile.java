@@ -1,5 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
+/**
+ * @author Rhys Adcock 300419040
+ *
+ *         A tile that will freeze the player when they stand on it.
+ */
+
 public class FreezeTile extends Tile {
 
     /**
