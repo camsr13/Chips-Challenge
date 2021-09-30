@@ -40,9 +40,14 @@ public class Level {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     for (int[] row : this.grid) {
-      for (int cell : row) {
-        sb.append(cell).append(" ");
-        if (cell == row.length - 1) {
+      for (int i = 0; i < row.length; i++) {
+        if (row[i] == Integer.MAX_VALUE) {
+          sb.append("X");
+        } else {
+          sb.append(row[i]);
+        }
+        sb.append(" ");
+        if (i == row.length - 1) {
           sb.append("\n");
         }
       }

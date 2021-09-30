@@ -103,17 +103,31 @@ public class ReadXML {
 
                 //check for what the tile type is then add it to the tile map
                 //In case an error happens/or missing tile type put a wall tile instead
-                switch (childElement.getText()) {
-                    case "free" -> tilemap[count][i] = new FreeTile(new Location(count, i));
-                    case "door" -> tilemap[count][i] = new LockTile(new Location(count, i), getColour(childElement.getAttributeValue("colour")));
-                    case "key" -> tilemap[count][i] = new KeyTile(new Location(count, i), getColour(childElement.getAttributeValue("colour")));
-                    case "treasure" -> tilemap[count][i] = new TreasureTile(new Location(count, i));
-                    case "info" -> tilemap[count][i] = new InfoTile(new Location(count, i), childElement.getAttributeValue("info"));
-                    case "gate" -> tilemap[count][i] = new ExitLockTile(new Location(count, i));
-                    case "exit" -> tilemap[count][i] = new ExitTile(new Location(count, i));
-                    case "arrow" -> tilemap[count][i] = new ArrowTile(new Location(count, i), getDirection(childElement.getAttributeValue("direction")));
-                    case "freeze" -> tilemap[count][i] = new FreezeTile(new Location(count, i));
-                    default -> tilemap[count][i] = new WallTile(new Location(count, i));
+                if(childElement.getText().equals("free")){
+                    tilemap[count][i] = new FreeTile(new Location(count, i));
+                }else if(childElement.getText().equals("wall")){
+                    tilemap[count][i] = new WallTile(new Location(count, i));
+                }else if(childElement.getText().equals("door")){
+                    tilemap[count][i] = new LockTile(new Location(count, i), getColour(childElement.getAttributeValue("colour")));
+                }else if(childElement.getText().equals("key")){
+                    tilemap[count][i] = new KeyTile(new Location(count, i), getColour(childElement.getAttributeValue("colour")));
+                }else if(childElement.getText().equals("treasure")){
+                    tilemap[count][i] = new TreasureTile(new Location(count, i));
+                }else if(childElement.getText().equals("info")){
+                    tilemap[count][i] = new InfoTile(new Location(count, i), childElement.getAttributeValue("info"));
+                }else if(childElement.getText().equals("gate")){
+                    tilemap[count][i] = new ExitLockTile(new Location(count, i));
+                }else if(childElement.getText().equals("exit")){
+                    tilemap[count][i] = new ExitTile(new Location(count, i));
+                }else if(childElement.getText().equals("arrow")){
+                    tilemap[count][i] = new ArrowTile(new Location(count, i), getDirection(childElement.getAttributeValue("direction")));
+                }else if(childElement.getText().equals("freeze")){
+                    tilemap[count][i] = new FreezeTile(new Location(count, i));
+                }
+                //Incase an error happens/or missing tile type put a wall tile instead
+                else{
+                    tilemap[count][i] = new WallTile(new Location(count, i));
+
                 }
 
                 //count increase to loop through the file
@@ -131,13 +145,16 @@ public class ReadXML {
      * @return colour enum
      */
     private Game.KeyColour getColour(String colour){
-        return switch (colour) {
-            case "blue" -> Game.KeyColour.BLUE;
-            case "yellow" -> Game.KeyColour.YELLOW;
-            case "red" -> Game.KeyColour.RED;
-            case "green" -> Game.KeyColour.GREEN;
-            default -> null;
-        };
+        if(colour.equals("blue")){
+            return Game.KeyColour.BLUE;
+        }else if(colour.equals("yellow")){
+            return Game.KeyColour.YELLOW;
+        }else if(colour.equals("red")){
+            return Game.KeyColour.RED;
+        }else if(colour.equals("green")){
+            return Game.KeyColour.GREEN;
+        }
+        return null;
     }
 
     /**
@@ -148,13 +165,16 @@ public class ReadXML {
      * @return enum direction from game
      */
     private Game.Direction getDirection(String direction){
-        return switch (direction) {
-            case "up" -> Game.Direction.UP;
-            case "down" -> Game.Direction.DOWN;
-            case "left" -> Game.Direction.LEFT;
-            case "right" -> Game.Direction.RIGHT;
-            default -> null;
-        };
+        if(direction.equals("up")){
+            return Game.Direction.UP;
+        }else if(direction.equals("down")){
+            return Game.Direction.DOWN;
+        }else if(direction.equals("left")){
+            return Game.Direction.LEFT;
+        }else if(direction.equals("right")){
+            return Game.Direction.RIGHT;
+        }
+        return null;
     }
 
 

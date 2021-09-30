@@ -1,8 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp21.domain;
 
 /**
- * @author Rhys Adcock
+ * @author Rhys Adcock 300419040
  *
+ *         Player stores the current position and contains the logic that allows the player to move and interact with
+ *         the game.
  */
 public class Player {
 
