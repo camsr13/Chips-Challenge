@@ -4,7 +4,11 @@ package nz.ac.vuw.ecs.swen225.gp21.renderer;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
@@ -18,8 +22,8 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
  *
  */
 class ChapRender extends Animatable {
+	
 	private final String sheetName = "images/chap_sprite_sheet.png";
-
 	/**
 	 * Serial id
 	 */
@@ -58,10 +62,14 @@ class ChapRender extends Animatable {
 	@Override
 	void loadImages() {
 		BufferedImage sheet = null;
+		URL nameUrl = this.getClass().getResource(sheetName);
+		
 		try {
-			URL nameUrl = this.getClass().getResource(sheetName);
-			sheet = ImageIO.read(new File(nameUrl.getPath()));
+			sheet = ImageIO.read(new File(nameUrl.toURI()));
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -84,7 +92,6 @@ class ChapRender extends Animatable {
 
 	@Override
 	Location getBoardLocation() {
-		// TODO Auto-generated method stub
 		return game.getPlayer().getLocation();
 	}
 

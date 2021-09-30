@@ -128,7 +128,6 @@ public class BoardRender {
 	 * Updates and animates chaps position
 	 */
 	public void updateChap() {
-		int increment = 0;
 		int[] chapMove = chapIcon.getMoved();
 		
 		//board animation
@@ -154,8 +153,6 @@ public class BoardRender {
 					chapIcon.update();
 				}
 					
-			
-				// TODO Auto-generated method stub
 				frames++;
 				if(frames == totalFrames) {
 					this.cancel();
