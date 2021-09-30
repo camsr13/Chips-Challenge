@@ -137,7 +137,7 @@ public class BoardRender {
 				boardPanel.revalidate();
 				boardPanel.repaint();
 				
-				actors.get(0).offsetSprite(frames, invDir(Animatable.matrixToDir(chapMove)));
+				//actors.get(0).offsetSprite(frames, invDir(Animatable.matrixToDir(chapMove)));
 				
 				if (i % (frames/4) == 0) {
 					chapIcon.update();
