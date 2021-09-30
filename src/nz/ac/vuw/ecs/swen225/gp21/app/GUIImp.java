@@ -106,7 +106,7 @@ public class GUIImp implements GUIAbstract{
 
 		public GUIImp(String file) {
     	this.currFile = file;
-    	loadGame();
+    	loadLevel();
 			initFrame();
 			initMenu();
 			initBoard();
@@ -189,13 +189,58 @@ public class GUIImp implements GUIAbstract{
 
     	JMenuItem startLevel1 = new JMenuItem(new AbstractAction("Play Level 1") {
 		    public void actionPerformed(ActionEvent ae) {
+
+		    	timer.stop();
+				clearLevel();
+
+				Object[] options1 = {"Yes",
+						"No"};
+
+		    	int n = JOptionPane.showOptionDialog(frame,
+		    		    "Would you like to Save your recording?",
+		    		    "Game Over",
+		    		    JOptionPane.YES_NO_CANCEL_OPTION,
+		    		    JOptionPane.QUESTION_MESSAGE,
+		    		    null,
+		    		    options1,
+		    		    options1[0]);
+
+		    	switch(n){
+		    		case 0:
+		    			saveRecording();
+		    			break;
+
+		    	}
+
 		    	doStartLevel1();
 		    }
 		});
 
     	JMenuItem startLevel2 = new JMenuItem(new AbstractAction("Play Level 2") {
 		    public void actionPerformed(ActionEvent ae) {
-		    	doStartLevel2();
+		    	timer.stop();
+				clearLevel();
+
+				Object[] options1 = {"Yes",
+						"No"};
+
+		    	int n = JOptionPane.showOptionDialog(frame,
+		    		    "Would you like to Save your recording?",
+		    		    "Game Over",
+		    		    JOptionPane.YES_NO_CANCEL_OPTION,
+		    		    JOptionPane.QUESTION_MESSAGE,
+		    		    null,
+		    		    options1,
+		    		    options1[0]);
+
+		    	switch(n){
+		    		case 0:
+		    			saveRecording();
+		    			break;
+
+		    	}
+
+		    	doStartLevel1();
 		    }
 		});
 
@@ -229,21 +274,21 @@ public class GUIImp implements GUIAbstract{
 
 
 	protected void doStartLevel2() {
-		currFile = "levels/level1.xml";
-		loadGame();
+		currFile = "levels/level2.xml";
+		loadLevel();
 	}
 
 	protected void doStartLevel1() {
 
 		currFile = "levels/level1.xml";
-		loadGame();
+		loadLevel();
 
 	}
 
 	protected void doStartTest() {
 
 		currFile = "levels/testMap.xml";
-		loadGame();
+		loadLevel();
 
 	}
 
@@ -375,7 +420,7 @@ public class GUIImp implements GUIAbstract{
     			doExitGameX();
     			break;
     		case 3:
-    			loadGame();
+    			loadLevel();
     			break;
 
     	}
@@ -462,6 +507,7 @@ public class GUIImp implements GUIAbstract{
 
             }
         });
+		freezeTimer.setRepeats(false);
 		freezeTimer.start();
 
 	}
@@ -494,7 +540,6 @@ public class GUIImp implements GUIAbstract{
             	}
             }
         });
-
         timer.start();
 
     }
@@ -523,6 +568,9 @@ public class GUIImp implements GUIAbstract{
 	}
 
 	private void levelOver() {
+
+		timer.stop();
+		clearLevel();
 
 		Object[] options1 = {"Yes",
 				"No"};
@@ -558,9 +606,13 @@ public class GUIImp implements GUIAbstract{
 
     	switch(x){
     		case 0:
+    			timer.stop();
+				clearLevel();
     			doStartLevel1();
     			break;
     		case 1:
+    			timer.stop();
+				clearLevel();
     			doStartLevel2();
     			break;
     		case 2:
@@ -569,7 +621,8 @@ public class GUIImp implements GUIAbstract{
     	}
 	}
 
-	protected void loadGame(){
+	protected void loadLevel(){
+
 
 		try {
 			currXML.readXMLFile(currFile);
@@ -578,19 +631,32 @@ public class GUIImp implements GUIAbstract{
 			e.printStackTrace();
 		}
 
-
+		//Get time Limit
 		levelTimeMax = currXML.getTimeLimit();
 		timeRemaining = currXML.getTimeLimit();
+
+
 		game = currXML.getGameInstance();
 		boardRender = new BoardRender(game);
 		gameBoard = boardRender.getPane();
+		boardRender.initaliseBoard(500);
 		RecReplay.newRecording();
 		RecReplay.getGUIImp(this);
-		countdown();
-		updateDisplay();
-		boardRender.initaliseBoard(500);
 		initBoard();
 		initSideBar();
+		countdown();
+		updateDisplay();
+
+	}
+
+	private void clearLevel() {
+
+		game = null;
+		levelTimeMax = 0;
+		timeRemaining = 0;
+		boardRender = null;
+		initBoard();
+
 	}
 
 
