@@ -21,6 +21,8 @@ public class MovementTests {
 			}
 		}
 		tilemap[1][1] = new FreeTile(new Location(1, 1));
+		Game.instance.setupGame(tilemap, player, null, 0, 0, null, null);
+
 		player.move(Game.Direction.UP);
 		assert (player.getLocation().getY() == 1);
 	}
@@ -35,6 +37,8 @@ public class MovementTests {
 				tilemap[x][y] = new FreeTile(new Location(x, y));
 			}
 		}
+		Game.instance.setupGame(tilemap, player, null, 0, 0, null, null);
+
 		player.move(Game.Direction.UP);
 		assert (player.getLocation().getY() == 0);
 	}
