@@ -68,33 +68,36 @@ abstract class Animatable extends JLabel {
 	 */
 	abstract Location getBoardLocation();
 	
+	/**
+	 * Sees if the animatable has moved
+	 * @return Direction of movement
+	 */
+	public int[] getMoved() {
+		int[] dir = null;
+		Location curLocation = getBoardLocation();
+		if (!oldLocation.equals(curLocation)) {
+			//figure out direction moved
+			int dy = oldLocation.getY() - curLocation.getY();
+			int dx = oldLocation .getX() - curLocation.getX();
+			dir = new int[] {dx, dy};
+		}
+		oldLocation = curLocation;
+		return dir;
+	}
 	
 	/**
 	 * Updates the facing direction of the object
 	 */
 	void update() {
-		Location curLocation = getBoardLocation();
-		int dir = 0;
-		if (!oldLocation.equals(curLocation)) {
-			//figure out direction moved
-			int dy = curLocation.getY() - oldLocation.getY();
-			int dx = curLocation .getX() - oldLocation.getX();
-			//translate into a direction
-		    if ( dx == 0 ) {
-		    	
-		    } else if ( dy == 0 ) {
-		    	
-		    } else {
-		    	//error incorrect movement
-		    }
-		}
+		//Location curLocation = getBoardLocation();
+		
 		int width = (int) Math.round( this.getWidth() * scale );
 		int height = (int) Math.round( this.getHeight() * scale );
 		
 		int x = (int) Math.round(this.getBounds().x * scale);
 		int y = (int) Math.round(this.getBounds().y * scale);
 		this.setBounds(x,y, width, height);
-		Image newImage = images.get(dir).getScaledInstance(width, height, BufferedImage.SCALE_DEFAULT);
+		Image newImage = images.get(0).getScaledInstance(width, height, BufferedImage.SCALE_DEFAULT);
 		this.setIcon(new ImageIcon(newImage));
 		scale = 1;
 	}

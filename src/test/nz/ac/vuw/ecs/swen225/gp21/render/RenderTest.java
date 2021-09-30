@@ -1,6 +1,9 @@
 package test.nz.ac.vuw.ecs.swen225.gp21.render;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.ExitLockTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.ExitTile;
@@ -15,6 +18,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.WallTile;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction;
 
+import java.awt.Color;
 import java.util.concurrent.TimeUnit;/**
  * Test file to load the render class independently of the rest of the game for testing
  * @author Jac Clarke
@@ -42,7 +46,12 @@ public class RenderTest {
 		Player p = new Player(new Location(4,4), 0);
 		g.setupGame(board, p, null, 0, 0, null, null);
 		BoardRender render = new BoardRender(g);
-		render.initaliseBoard(1000);
+		render.initaliseBoard(500);
+		JPanel panel = new JPanel();
+		panel.setBounds(0, 0, 405, 405);
+		panel.setOpaque(false);
+		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		render.getPane().add(panel, JLayeredPane.MODAL_LAYER);
 		JFrame frame = new JFrame();
 		frame.setSize(1280, 1024);
 		frame.setVisible(true);

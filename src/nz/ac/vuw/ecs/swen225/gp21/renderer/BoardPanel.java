@@ -64,9 +64,11 @@ class BoardPanel extends JPanel {
 	 * desired board width to be rendered, including offscreen tiles for moves
 	 */
 	private final int boardWidth;
-	
+	private Location chapPos;
 	private Game game;
 	private double scale = 1.0;
+	private int xOffset = 0;
+	private int yOffset = 0;
 	private Map<Class<? extends Tile>, ArrayList<BufferedImage>> images = new HashMap<Class<? extends Tile>, ArrayList<BufferedImage>>();
 	
 	/**
@@ -81,8 +83,19 @@ class BoardPanel extends JPanel {
 		this.boardWidth = boardWidth;
 		this.scale = initialScale;
 		this.game = game;
+		chapPos = game.getPlayer().getLocation();
 		loadTileSprites();
 	};
+	
+	/**
+	 * offsets the board for animation
+	 * @param x
+	 * @param y
+	 */
+	protected void setOffsets(int x, int y) {
+		xOffset = x;
+		yOffset = y;
+	}
 	
 	
 	/**
@@ -94,7 +107,13 @@ class BoardPanel extends JPanel {
 		super.paintComponent(g);
 		g2d.scale(scale, scale);
         draw(g2d);
-
+	}
+	
+	/**
+	 * 
+	 */
+	protected void updateChapPos() {
+		chapPos = game.getPlayer().getLocation();
 	}
 	
 	/**
@@ -108,13 +127,13 @@ class BoardPanel extends JPanel {
 		//BREAKPOINT: board info retrieved
 		Tile[][] boardTiles = game.getTilemap();
 		//BREAKPOINT: player info retrieved
-		Location chapPos = game.getPlayer().getLocation();
 		
 		
-		int i = 0;
-		for(int y = chapPos.getY() - 4; y < chapPos.getY() + 5; y++) {
-			int j = 0;
-			for(int x = chapPos.getX() - 4; x < chapPos.getX() + 5; x++) {
+		
+		int i = -1;
+		for(int y = chapPos.getY() - 5; y < chapPos.getY() + 6; y++) {
+			int j = -1;
+			for(int x = chapPos.getX() - 5; x < chapPos.getX() + 6; x++) {
 				//Get the tile if possible otherwise return null for the empty screen space
 				Tile paintTile;
 				Image toPaint;
@@ -150,7 +169,7 @@ class BoardPanel extends JPanel {
 				} 	
 				
 				//Draw the image in the required location
-				g.drawImage(toPaint, j * tileSize, i * tileSize , this);
+				g.drawImage(toPaint, j * tileSize + xOffset, i * tileSize + yOffset, this);
 				
 				j++;
 			}
