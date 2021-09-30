@@ -80,8 +80,9 @@ public class BoardRender {
 	/**
 	 * Loads the board components 
 	 * @param size
+	 * @return The actual size
 	 */
-	public void initaliseBoard(int size) {
+	public int initaliseBoard(int size) {
 		
 		scaledTile = (int) Math.floor(getScale(size) * tileSize);
 		double initScale = (double) scaledTile/(double)tileSize;
@@ -106,6 +107,7 @@ public class BoardRender {
 		basePane.add(boardPanel,JLayeredPane.DEFAULT_LAYER);
 		basePane.add(chapIcon,JLayeredPane.PALETTE_LAYER);
 		basePane.setVisible(true);
+		return scaledTile * boardWidth;
 	}
 	
 
@@ -128,7 +130,7 @@ public class BoardRender {
 		int[] chapMove = chapIcon.getMoved();
 		
 		//board animation
-		int frames = 16;
+		int frames = 32;
 		if(chapMove != null) {
 			for (int i = 0; i < frames; i++) {
 				
@@ -142,7 +144,7 @@ public class BoardRender {
 				}
 				
 				try {
-					TimeUnit.MILLISECONDS.sleep(62);
+					TimeUnit.MILLISECONDS.sleep(31);
 				} catch (InterruptedException e) {
 					throw new Error("Animation interupted");
 				}

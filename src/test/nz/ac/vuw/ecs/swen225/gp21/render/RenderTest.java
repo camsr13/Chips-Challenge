@@ -46,7 +46,7 @@ public class RenderTest {
 		Player p = new Player(new Location(6,6), 0);
 		g.setupGame(board, p, null, 0, 0, null, null);
 		BoardRender render = new BoardRender(g);
-		render.initaliseBoard(500);
+		render.initaliseBoard(1000);
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 405, 405);
 		panel.setOpaque(false);
