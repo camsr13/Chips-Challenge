@@ -58,16 +58,16 @@ public class RenderTest {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(render.getPane());
 		
-		TimeUnit.SECONDS.sleep(1);
+		//TimeUnit.SECONDS.sleep(1);
 		p.setLocation(new Location(4,5));
 		render.update(Direction.LEFT);
-		TimeUnit.SECONDS.sleep(1);
+		//TimeUnit.SECONDS.sleep(1);
 		p.setLocation(new Location(3,5));
 		render.update(Direction.LEFT);
-		TimeUnit.SECONDS.sleep(1);
+		//TimeUnit.SECONDS.sleep(1);
 		p.setLocation(new Location(3,4));
 		render.update(Direction.UP);
-		TimeUnit.SECONDS.sleep(1);
+		//TimeUnit.SECONDS.sleep(1);
 		p.setLocation(new Location(4,4));
 		render.update(Direction.RIGHT);
 		

@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
+import nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender.Direction;
 
 /**
  * An extended JLable which handles the rendering and animation of the players character "Chap".
@@ -25,7 +26,7 @@ class ChapRender extends Animatable {
 	 */
 	private static final long serialVersionUID = 2763313205526639958L;
 	
-	
+	private static final int chapFrames = 4;
 	private final int tileSize;
 	/**
 	 * Creates a JPanel type object which represents the player
@@ -34,12 +35,14 @@ class ChapRender extends Animatable {
 	 * @param tileSize 
 	 */
 	protected ChapRender(Game game, double scale, int tileSize) {
+		super.frames = chapFrames;
 		super.game = game;
 		super.scale = scale;
 		super.oldLocation = game.getPlayer().getLocation();
+		super.currentDir = Direction.DOWN;
 		this.tileSize = tileSize;
 		loadImages();
-		//set inital size
+		//set initial size
 		this.setSize(tileSize,tileSize);
 		this.setVisible(true);
 		update();

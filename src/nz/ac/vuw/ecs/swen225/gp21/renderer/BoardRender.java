@@ -66,13 +66,22 @@ public class BoardRender {
 		this.game = game;
 	}
 	
+	/**
+	 * Depreciated method, to allow main to run without changes
+	 * @param game
+	 * @param size
+	 */
+	@Deprecated
+	public BoardRender(Game game, int size) {
+		this.game = game;
+		initaliseBoard(size);
+	}
 	
 	/**
-	 * Loads the components re
+	 * Loads the board components 
 	 * @param size
 	 */
 	public void initaliseBoard(int size) {
-		
 		
 		scaledTile = (int) Math.floor(getScale(size) * tileSize);
 		double initScale = (double) scaledTile/(double)tileSize;
@@ -108,7 +117,6 @@ public class BoardRender {
 	 */
 	@Deprecated
 	public void update(Direction dir) {
-		
 		updateOnTick();
 	}
 	
@@ -117,20 +125,30 @@ public class BoardRender {
 	 * 
 	 */
 	public void updateOnTick() {
-		chapIcon.update();
+		
 		int increment = 0;
 		int[] chapMove = chapIcon.getMoved();
-		for (int i = 0; i < 4; i++) {
-			increment += tileSize/4;
-			boardPanel.setOffsets(increment * chapMove[0], increment * chapMove[1]);
+		
+		
+		
+		//board animation
+		
+		for (int i = 0; i < 30; i++) {
+			
+			increment += tileSize/30;
+			boardPanel.setOffsets(-(increment * chapMove[0]), -(increment * chapMove[1]));
 			boardPanel.revalidate();
 			boardPanel.repaint();
+			if (i % 6 == 0) {
+				chapIcon.update();
+			}
 			try {
-				TimeUnit.MILLISECONDS.sleep(200);
+				TimeUnit.MILLISECONDS.sleep(33);
 			} catch (InterruptedException e) {
 				throw new Error("Animation interupted");
 			}
 		}
+		
 		boardPanel.setOffsets(0, 0);
 		boardPanel.updateChapPos();
 		boardPanel.revalidate();

@@ -180,6 +180,7 @@ class BoardPanel extends JPanel {
 	/**
 	 * Attempts to load the tiles images from the sprite sheet
 	 * and stores them in the image map with their associated objects
+	 * 
 	 */
 	@SuppressWarnings("unchecked")
 	private void loadTileSprites() {
@@ -200,10 +201,14 @@ class BoardPanel extends JPanel {
 		while ( i < numTiles ) {
 			BufferedImage subImage = sheet.getSubimage(x, y, tileSize, tileSize);
 			Class<? extends Tile> curTile;
-			if (Tile.class.isAssignableFrom(tileOrder[i])) {
+			try {
+				/*
+				 * Java generics requires we supress the unchecked class cast,
+				 * even though we surround the cast in a try catch
+				 */
 				 curTile = (Class<? extends Tile>) tileOrder[i];
-			} else {
-				throw new Error("Class for tile " + i + " is not an extension of Tile" );
+			} catch (ClassCastException e){
+				throw new Error("Class for tile " + i + " is not castable to Tile" );
 			}
 			
 			if(images.get(curTile) == null) {
