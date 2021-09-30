@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp21.recorder;
 
 import nz.ac.vuw.ecs.swen225.gp21.app.GUIImp;
-import nz.ac.vuw.ecs.swen225.gp21.persistency.WriteXML;
+import nz.ac.vuw.ecs.swen225.gp21.persistency.*;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -99,9 +99,35 @@ public class RecReplay {
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = fileChooser.getSelectedFile();
-            //writeSaveXML(document, fileToSave.getAbsolutePath());
+
             xmlWriter.writeXMLFile(document, fileToSave.getAbsolutePath());
             System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+        }
+    }
+
+    public static void selectReplayFileDialogue() throws JDOMException, IOException {
+        JFrame window = GUI.getMainWindow();
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Specify a file to save");
+
+        int userSelection = fileChooser.showSaveDialog(window);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            ReadXML xmlReader = new ReadXML();
+            xmlReader.readXMLFile(fileToSave.getAbsolutePath());
+        }
+    }
+
+
+
+    public static void saveConfirmDialogue() throws JDOMException, IOException {
+        int result = JOptionPane.showConfirmDialog(null,
+                "Do you want to save a recording?", "Save recording: ",JOptionPane.YES_NO_OPTION);
+
+        if (result == JOptionPane.OK_OPTION) {
+            saveRecording();
         }
     }
 
@@ -205,7 +231,7 @@ public class RecReplay {
      *
      * @throws TransformerException
      */
-    public static void saveRecording() {
+    public static void saveRecording() throws JDOMException, IOException {
         WriteXML xmlWriter = new WriteXML();
         Document document = xmlWriter.generateDocument();
         //creates new document and root element
@@ -283,8 +309,10 @@ public class RecReplay {
 
     // REPLAY
 
-    public static void onReplay() {
+    public static void onReplay() throws JDOMException, IOException {
         //TODO
+        selectReplayFileDialogue();
+        selectModeDialogue();
     }
 
     /**
@@ -363,5 +391,10 @@ public class RecReplay {
         };
         thread = new Thread(run);
         thread.start();
+    }
+
+    public static void main(String[] args) throws JDOMException, IOException {
+        newRecording();
+        saveRecording();
     }
 }
