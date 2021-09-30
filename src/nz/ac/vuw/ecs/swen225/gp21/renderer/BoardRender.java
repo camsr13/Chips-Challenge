@@ -137,7 +137,7 @@ public class BoardRender {
 			
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
-			int totalFrames = 32;
+			int totalFrames = 16;
 			int frames = 0;
 			int increment = 0;
 			int[] chapMove = chapIcon.getMoved();

@@ -57,12 +57,12 @@ class ChapRender extends Animatable {
 	 */
 	@Override
 	void loadImages() {
-		BufferedImage sheet;
+		BufferedImage sheet = null;
 		try {
 			URL nameUrl = this.getClass().getResource(sheetName);
 			sheet = ImageIO.read(new File(nameUrl.getPath()));
 		} catch (IOException e) {
-			throw new Error("Unable to load sprite sheet for chap");
+			e.printStackTrace();
 		}
 		
 		int y = 0;
