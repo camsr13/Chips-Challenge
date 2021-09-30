@@ -116,7 +116,7 @@ public class GUIImp implements GUIAbstract{
 
     protected void initGUI(){
 
-    	//startPopUp();
+    	startPopUp();
 	    initFrame();
 	    initMenu();
 	    initBoard();
@@ -596,5 +596,5 @@ public class GUIImp implements GUIAbstract{
 }
 	
 	
-}
+
 
