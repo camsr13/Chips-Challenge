@@ -1,17 +1,12 @@
 package test.nz.ac.vuw.ecs.swen225.gp21.domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import nz.ac.vuw.ecs.swen225.gp21.domain.*;
 import org.junit.*;
 
-import nz.ac.vuw.ecs.swen225.gp21.domain.FreeTile;
-import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game.KeyColour;
-import nz.ac.vuw.ecs.swen225.gp21.domain.KeyTile;
-import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
-import nz.ac.vuw.ecs.swen225.gp21.domain.LockTile;
-import nz.ac.vuw.ecs.swen225.gp21.domain.Player;
-import nz.ac.vuw.ecs.swen225.gp21.domain.Tile;
 
 public class KeyTests {
 
@@ -34,7 +29,9 @@ public class KeyTests {
 		}
 		tilemap[1][0] = new KeyTile(new Location(1, 0), KeyColour.BLUE);
 		HashMap<KeyColour, Integer> keysHeld = emptyKeySet();
-		game.setupGame(tilemap, player, keysHeld, 0, 0, null, null);
+		ArrayList<Actor> actors = new ArrayList<>();
+		ExitLockTile exitLock = new ExitLockTile(new Location(0, 0));
+		Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);
 
 		player.move(Game.Direction.UP);
 		assert (player.getLocation().getY() == 0);
@@ -53,7 +50,9 @@ public class KeyTests {
 		}
 		tilemap[1][0] = new KeyTile(new Location(1, 0), KeyColour.YELLOW);
 		HashMap<KeyColour, Integer> keysHeld = emptyKeySet();
-		game.setupGame(tilemap, player, keysHeld, 0, 0, null, null);
+		ArrayList<Actor> actors = new ArrayList<>();
+		ExitLockTile exitLock = new ExitLockTile(new Location(0, 0));
+		Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);
 
 		player.move(Game.Direction.UP);
 		assert (player.getLocation().getY() == 0);
@@ -72,7 +71,9 @@ public class KeyTests {
 		}
 		tilemap[1][0] = new KeyTile(new Location(1, 0), KeyColour.BLUE);
 		HashMap<KeyColour, Integer> keysHeld = emptyKeySet();
-		game.setupGame(tilemap, player, keysHeld, 0, 0, null, null);
+		ArrayList<Actor> actors = new ArrayList<>();
+		ExitLockTile exitLock = new ExitLockTile(new Location(0, 0));
+		Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);
 
 		player.move(Game.Direction.UP);
 		assert (game.getTilemap()[1][0] instanceof FreeTile);
@@ -90,7 +91,9 @@ public class KeyTests {
 		}
 		tilemap[1][0] = new LockTile(new Location(1, 0), KeyColour.BLUE);
 		HashMap<KeyColour, Integer> keysHeld = emptyKeySet();
-		game.setupGame(tilemap, player, keysHeld, 0, 0, null, null);
+		ArrayList<Actor> actors = new ArrayList<>();
+		ExitLockTile exitLock = new ExitLockTile(new Location(0, 0));
+		Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);
 
 		player.move(Game.Direction.UP);
 		assert (player.getLocation().getY() == 1);
@@ -108,9 +111,11 @@ public class KeyTests {
 		}
 		tilemap[1][0] = new LockTile(new Location(1, 0), KeyColour.BLUE);
 		HashMap<KeyColour, Integer> keysHeld = emptyKeySet();
-		game.setupGame(tilemap, player, keysHeld, 0, 0, null, null);
-		game.addKey(KeyColour.BLUE);
+		ArrayList<Actor> actors = new ArrayList<>();
+		ExitLockTile exitLock = new ExitLockTile(new Location(0, 0));
+		Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);
 
+		game.addKey(KeyColour.BLUE);
 		player.move(Game.Direction.UP);
 		assert (player.getLocation().getY() == 0);
 	}
@@ -127,9 +132,11 @@ public class KeyTests {
 		}
 		tilemap[1][0] = new LockTile(new Location(1, 0), KeyColour.BLUE);
 		HashMap<KeyColour, Integer> keysHeld = emptyKeySet();
-		game.setupGame(tilemap, player, keysHeld, 0, 0, null, null);
-		game.addKey(KeyColour.BLUE);
+		ArrayList<Actor> actors = new ArrayList<>();
+		ExitLockTile exitLock = new ExitLockTile(new Location(0, 0));
+		Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);
 
+		game.addKey(KeyColour.BLUE);
 		player.move(Game.Direction.UP);
 		assert (game.getTilemap()[1][0] instanceof FreeTile);
 	}
@@ -146,8 +153,9 @@ public class KeyTests {
 		}
 		tilemap[1][0] = new LockTile(new Location(1, 0), KeyColour.BLUE);
 		HashMap<KeyColour, Integer> keysHeld = emptyKeySet();
-		game.setupGame(tilemap, player, keysHeld, 0, 0, null, null);
-		game.addKey(KeyColour.YELLOW);
+		ArrayList<Actor> actors = new ArrayList<>();
+		ExitLockTile exitLock = new ExitLockTile(new Location(0, 0));
+		Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);		game.addKey(KeyColour.YELLOW);
 
 		player.move(Game.Direction.UP);
 		assert (player.getLocation().getY() == 1);

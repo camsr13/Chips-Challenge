@@ -1,13 +1,10 @@
 package test.nz.ac.vuw.ecs.swen225.gp21.domain;
 
+import nz.ac.vuw.ecs.swen225.gp21.domain.*;
 import org.junit.jupiter.api.Test;
 
-import nz.ac.vuw.ecs.swen225.gp21.domain.FreeTile;
-import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
-import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
-import nz.ac.vuw.ecs.swen225.gp21.domain.Player;
-import nz.ac.vuw.ecs.swen225.gp21.domain.Tile;
-import nz.ac.vuw.ecs.swen225.gp21.domain.WallTile;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MovementTests {
 	@Test
@@ -21,7 +18,10 @@ public class MovementTests {
 			}
 		}
 		tilemap[1][1] = new FreeTile(new Location(1, 1));
-		Game.instance.setupGame(tilemap, player, null, 0, 0, null, null);
+		HashMap<Game.KeyColour, Integer> keysHeld = new HashMap<>();
+		ArrayList<Actor> actors = new ArrayList<>();
+		ExitLockTile exitLock = new ExitLockTile(new Location(0, 0));
+		Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);
 
 		player.move(Game.Direction.UP);
 		assert (player.getLocation().getY() == 1);
@@ -37,7 +37,10 @@ public class MovementTests {
 				tilemap[x][y] = new FreeTile(new Location(x, y));
 			}
 		}
-		Game.instance.setupGame(tilemap, player, null, 0, 0, null, null);
+		HashMap<Game.KeyColour, Integer> keysHeld = new HashMap<>();
+		ArrayList<Actor> actors = new ArrayList<>();
+		ExitLockTile exitLock = new ExitLockTile(new Location(0, 0));
+		Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);
 
 		player.move(Game.Direction.UP);
 		assert (player.getLocation().getY() == 0);
