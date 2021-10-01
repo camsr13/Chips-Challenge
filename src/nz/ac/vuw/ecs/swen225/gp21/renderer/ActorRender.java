@@ -51,7 +51,7 @@ class ActorRender extends Animatable {
 		super.currentDir = actor.currentDirection;
 		super.oldLocation = actor.getLocation();
 		loadImages();
-		System.out.println(scale*tileSize);
+		//System.out.println(scale*tileSize);
 		setScale(scale);
 		this.setBorder(BorderFactory.createLineBorder(Color.BLUE, 1));
 		this.setBounds((actor.getLocation().getX() - 2)*tileScaled,

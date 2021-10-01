@@ -63,7 +63,7 @@ public class FreezeActorImage extends ActorImage {
 				Location loc = f.getLocation();
 				int x = chapPos.getX() - loc.getX();
 				int y = chapPos.getY() - loc.getY();
-				System.out.println(x +" " + y);
+				//System.out.println(x +" " + y);
 				//if() {
 					//int x = tileSize * loc.getX();
 					//g.drawImage(curImage, );

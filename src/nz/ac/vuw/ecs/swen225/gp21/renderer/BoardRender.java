@@ -86,7 +86,7 @@ public class BoardRender {
 				basePane.add(newActor, JLayeredPane.PALETTE_LAYER);
 			}
 		}
-		System.out.println(scaledTile);
+		//System.out.println(scaledTile);
 		chapIcon = new ChapRender(game, initScale, tileSize);
 		chapIcon.setBounds(chapPos, chapPos, scaledTile, scaledTile);
 		chapIcon.setOpaque(false);
