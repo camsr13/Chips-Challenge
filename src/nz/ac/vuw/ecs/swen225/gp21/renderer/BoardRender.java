@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp21.renderer;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class BoardRender {
 	private JLayeredPane basePane = new JLayeredPane();
 	private ChapRender chapIcon;
 	private Game game;
+	private JLabel frozenText = new JLabel();
 	private boolean isAnimating = true;
 	
 	/**
@@ -70,6 +72,9 @@ public class BoardRender {
 				}
 			}
 		}
+		frozenText.setBounds(5,0,64,64);
+		frozenText.setText("Frozen!");
+		frozenText.setForeground(Color.red);
 		chapIcon = new ChapRender(game, initScale, tileSize);
 		chapIcon.setBounds(chapPos, chapPos, scaledTile, scaledTile);
 		chapIcon.setOpaque(false);
@@ -81,6 +86,7 @@ public class BoardRender {
 		
 		basePane.add(boardPanel,JLayeredPane.DEFAULT_LAYER);
 		basePane.add(chapIcon,JLayeredPane.MODAL_LAYER);
+		basePane.add(frozenText, JLayeredPane.PALETTE_LAYER);
 		basePane.setPreferredSize(new Dimension(scaledTile * 9,scaledTile * 9));
 		basePane.setOpaque(false);
 		basePane.setVisible(true);
@@ -125,7 +131,6 @@ public class BoardRender {
 	public void updateChap() {
 		if (isAnimating) {
 			int[] chapMove = chapIcon.getMoved();
-		
 			//board animation
 			if(chapMove != null) {
 				
@@ -178,8 +183,13 @@ public class BoardRender {
 	 * Updates actors which move on ticks
 	 */
 	public void updateOnTick() {
-		
-		
+		if(game.getPlayer().getTimeFrozen() > 0) 
+			frozenText.setVisible(true);
+		else
+			frozenText.setVisible(false);
+		for (ActorImage ai :actorImages) {
+			ai.setImageByDir();
+		}
 		updateChap();
 	}
 	/**
