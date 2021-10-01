@@ -1,9 +1,7 @@
 package test.nz.ac.vuw.ecs.swen225.gp21.render;
 
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
+
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.ExitLockTile;
@@ -11,6 +9,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.ExitTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.FreeTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.FreezeActor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
+import nz.ac.vuw.ecs.swen225.gp21.domain.Game.KeyColour;
 import nz.ac.vuw.ecs.swen225.gp21.domain.KeyTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
 import nz.ac.vuw.ecs.swen225.gp21.domain.LockTile;
@@ -19,11 +18,12 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Tile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.WallTile;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.BoardRender;
 
-import java.awt.Color;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeUnit;/**
- * Test file to load the render class independently of the rest of the game for testing
+/**
+ * Test/demo file to load the render class independently of the rest of the game for testing
  * @author Jac Clarke
  *
  */
@@ -50,22 +50,20 @@ public class RenderTest {
 		FreezeActor actor = new FreezeActor(new Location(2,2), Game.Direction.UP);
 		List<Actor> actors = new ArrayList<Actor>();
 		actors.add(actor);
-		g.setupGame(board, p, null, 0, 0, null, actors);
+		g.setupGame(board, p, new HashMap<KeyColour, Integer>(), 0, 0, new ExitLockTile(null), actors);
 		
 		BoardRender render = new BoardRender(g);
 		render.initaliseBoard(600);
-		//JPanel panel = new JPanel();
-		//panel.setBounds(0, 0, 405, 405);
-		//panel.add(render.getPane());
 		JFrame frame = new JFrame();
 		frame.setSize(1280, 1024);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(render.getPane());
-		actor.setLocation(new Location(2,3));
-		render.updateOnTick();
+		
 		g.inputDirection(Game.Direction.LEFT);
 		render.updateChap();
+		actor.setLocation(new Location(2,3));
+		render.updateOnTick();
 		
 	}
 }

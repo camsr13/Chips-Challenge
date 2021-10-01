@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -61,28 +62,32 @@ class BoardPanel extends JPanel {
 	 */
 	private final int tileSize;
 	/**
-	 * desired board width to be rendered, including offscreen tiles for moves
+	 * Desired board width to be rendered, including offscreen tiles for moves
 	 */
 	private final int boardWidth;
+	
 	private Location chapPos;
 	private Game game;
 	private double scale = 1.0;
 	private int xOffset = 0;
 	private int yOffset = 0;
 	private Map<Class<? extends Tile>, ArrayList<BufferedImage>> images = new HashMap<Class<? extends Tile>, ArrayList<BufferedImage>>();
+	private List<ActorImage> actorImages;
 	
 	/**
-	 * Panel that is responsible for retrieving and displaying the board from game
-	 * @param game
-	 * @param tileSize 
-	 * @param boardWidth 
-	 * @param initialScale 
+	 * Creates a JPanel that is responsible for retrieving and displaying the board from game
+	 * @param game the game to render the board from
+	 * @param tileSize the size of the tile images
+	 * @param boardWidth the number of tiles of the board that should render
+	 * @param initialScale the initial scale board should be rendered at
+	 * @param actorImages The list of actor image objects to render on the board
 	 */
-	protected BoardPanel(Game game, int tileSize, int boardWidth, double initialScale) {
-		this.tileSize = tileSize;
+	protected BoardPanel(Game game, int tileSize, int boardWidth, double initialScale, List<ActorImage> actorImages) {
+		this.tileSize = tileSize; 
 		this.boardWidth = boardWidth;
 		this.scale = initialScale;
 		this.game = game;
+		this.actorImages = actorImages;
 		chapPos = game.getPlayer().getLocation();
 		loadTileSprites();
 		createActors();
@@ -98,8 +103,8 @@ class BoardPanel extends JPanel {
 	
 	/**
 	 * offsets the board for animation
-	 * @param x
-	 * @param y
+	 * @param x x offset
+	 * @param y y offset
 	 */
 	protected void setOffsets(int x, int y) {
 		xOffset = x;
@@ -116,10 +121,13 @@ class BoardPanel extends JPanel {
 		super.paintComponent(g);
 		g2d.scale(scale, scale);
         draw(g2d);
+        for (ActorImage a : actorImages) {
+			a.drawActor(g2d, chapPos, new int[] {xOffset, yOffset}, this);
+		}
 	}
 	
 	/**
-	 * 
+	 * Updates the players position after an animation
 	 */
 	protected void updateChapPos() {
 		chapPos = game.getPlayer().getLocation();
@@ -140,9 +148,10 @@ class BoardPanel extends JPanel {
 		
 		
 		int i = -1;
-		for(int y = chapPos.getY() - 5; y < chapPos.getY() + 6; y++) {
+		int lowerBound = (boardWidth - 1 )/ 2;
+		for(int y = chapPos.getY() - lowerBound; y < chapPos.getY() + 6; y++) {
 			int j = -1;
-			for(int x = chapPos.getX() - 5; x < chapPos.getX() + 6; x++) {
+			for(int x = chapPos.getX() - lowerBound; x < chapPos.getX() + 6; x++) {
 				//Get the tile if possible otherwise return null for the empty screen space
 				Tile paintTile;
 				Image toPaint;
