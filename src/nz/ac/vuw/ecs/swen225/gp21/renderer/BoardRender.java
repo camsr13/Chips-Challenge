@@ -2,13 +2,9 @@ package nz.ac.vuw.ecs.swen225.gp21.renderer;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
 
@@ -33,19 +29,16 @@ public class BoardRender {
 	 * Size of the tiles in the image file (pixels)
 	 */
 	private static final int tileSize = 64;
+	
 	/**
 	 * desired board width to be rendered, including offscreen tiles for moves
 	 */
 	private static final int boardWidth = 11;
+	
 	private int panelSize = boardWidth * tileSize;
 	
-	private List<ActorImage> actors;
+	private List<ActorImage> actorImages;
 	private int scaledTile;
-	/**
-	 * A Simple enum to keep track of what direction non board objects are facing
-	 * @author Jac Clarke
-	 *
-	 */
 	
 	/**
 	 * Generates board objects and puts them into the output layered pane
@@ -53,17 +46,6 @@ public class BoardRender {
 	 */
 	public BoardRender(Game game) {
 		this.game = game;
-	}
-	
-	/**
-	 * Depreciated method, to allow main to run without changes
-	 * @param game
-	 * @param size
-	 */
-	@Deprecated
-	public BoardRender(Game game, int size) {
-		this.game = game;
-		initaliseBoard(size);
 	}
 	
 	/**
@@ -78,23 +60,21 @@ public class BoardRender {
 		int chapPos = (int) Math.round(((scaledTile * (boardWidth))/2) - 1.5*scaledTile);
 		
 		List<Actor> gameActors = game.getActors();
-		actors = new ArrayList<ActorImage>();
+		actorImages = new ArrayList<ActorImage>();
 		if (gameActors != null) {
 			for (Actor a : gameActors) {
 				if(a instanceof FreezeActor) {
 					FreezeActor f = (FreezeActor) a;
-					//FreezeActorImage newActor = new FreezeActorImage ( game, f, tileSize );
-					//actors.add(newActor);
-				//basePane.add(newActor, JLayeredPane.PALETTE_LAYER);
+					FreezeActorImage newActor = new FreezeActorImage (f, tileSize );
+					actorImages.add(newActor);
 				}
 			}
 		}
-		//System.out.println(scaledTile);
 		chapIcon = new ChapRender(game, initScale, tileSize);
 		chapIcon.setBounds(chapPos, chapPos, scaledTile, scaledTile);
 		chapIcon.setOpaque(false);
 
-		boardPanel = new BoardPanel(game, tileSize, boardWidth , initScale);
+		boardPanel = new BoardPanel(game, tileSize, boardWidth , initScale, actorImages);
 		boardPanel.setOpaque(false);
 		boardPanel.setVisible(true);
 		boardPanel.setBounds(0,0, scaledTile * (boardWidth-2), scaledTile * (boardWidth-2));
@@ -198,6 +178,8 @@ public class BoardRender {
 	 * Updates actors which move on ticks
 	 */
 	public void updateOnTick() {
+		
+		
 		updateChap();
 	}
 	/**
