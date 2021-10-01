@@ -2,7 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp21.renderer;
 
 
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -16,16 +15,17 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
 /**
  * A Modified JLabel base which can be used for objects that aren't part of the board
  * and animate when they move.
+ * SudentID: 300511942
  * @author Jac Clarke
  *
  */
 abstract class Animatable extends JLabel {
 	/**
-	 * 
+	 * Serial id to satisfy warnings
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * 
+	 * The direction the animatable is vacing
 	 */
 	protected Game.Direction currentDir;
 	
@@ -35,12 +35,20 @@ abstract class Animatable extends JLabel {
 	protected int frames;
 	
 	private int currentFrame = 0;
+	/**
+	 * Frames left in the animation
+	 */
 	protected int framesLeft = 0;
-	
+	/**
+	 * The tile size of the board
+	 */
 	protected int tileSize;
+	/**
+	 * the tile size of the board after it is scaled
+	 */
 	protected int tileScaled;
 	/**
-	 * 
+	 * The previous location of the animatable before it moved
 	 */
 	protected Location oldLocation;
 	/**
@@ -60,11 +68,6 @@ abstract class Animatable extends JLabel {
 	 * Scales the animatable
 	 */
 	double scale = 1.0;
-	
-	/**
-	 * Updates the bounds for he animatable
-	 */
-	abstract void setBounds();
 	
 	/**
 	 * Loads the images for the animated object
@@ -117,7 +120,6 @@ abstract class Animatable extends JLabel {
 		}
 		int width = tileScaled;
 		int height = tileScaled;
-		setBounds();
 		int x = this.getBounds().x;
 		int y = this.getBounds().y;
 		int image = currentFrame + (currentDir.ordinal() *  frames);
@@ -153,7 +155,11 @@ abstract class Animatable extends JLabel {
 		return dir;
 	}
 	
-	void refreshLocation() {
+	/**
+	 * Updates chaps location after a move.
+	 * Sets the direction in case animation is disabled
+	 */
+	protected void refreshLocation() {
 		int[] move = getMoved();
 		if(move != null) {
 			currentDir = matrixToDir(move);
@@ -163,7 +169,7 @@ abstract class Animatable extends JLabel {
 	/**
 	 * Updates the facing direction of the object
 	 */
-	void update() {
+	protected void update() {
 		boolean next = false;
 		int[] moveMatrix = getMoved();
 		

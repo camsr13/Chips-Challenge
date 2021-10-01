@@ -1,7 +1,7 @@
 package test.nz.ac.vuw.ecs.swen225.gp21.domain;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.*;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,13 +21,13 @@ public class FreezeTileTests {
         ExitLockTile exitLock = new ExitLockTile(new Location(0, 0));
         Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);
 
-        player.move(Game.Direction.RIGHT);
-        assert(player.getTimeFrozen() == 1);
-        player.move(Game.Direction.RIGHT);
-        assert(player.getLocation().getX() == 1);
+        Game.instance.getPlayer().move(Game.Direction.RIGHT);
+        assert(Game.instance.getPlayer().getTimeFrozen() == 1);
+        Game.instance.getPlayer().move(Game.Direction.RIGHT);
+        assert(Game.instance.getPlayer().getLocation().getX() == 1);
         Game.instance.tick();
-        assert(player.getTimeFrozen() == 0);
-        player.move(Game.Direction.RIGHT);
-        assert(player.getLocation().getX() == 2);
+        assert(Game.instance.getPlayer().getTimeFrozen() == 0);
+        Game.instance.getPlayer().move(Game.Direction.RIGHT);
+        assert(Game.instance.getPlayer().getLocation().getX() == 2);
     }
 }
