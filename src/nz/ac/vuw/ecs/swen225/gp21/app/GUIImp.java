@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp21.app;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -75,7 +76,10 @@ public class GUIImp implements GUIAbstract{
 	private JTextArea timeTitleLabel = new JTextArea("Time");
 	private JTextArea timeFigureLabel = new JTextArea("0");
 	private JTextArea keysLabel = new JTextArea("Keys Collected");
-	private JTextArea keysFigureLabel = new JTextArea("0");
+	private JTextArea redKeysLabel = new JTextArea("0");
+	private JTextArea greenKeysLabel = new JTextArea("0");
+	private JTextArea blueKeysLabel = new JTextArea("0");
+	private JTextArea yellowKeysLabel = new JTextArea("0");
 	private JTextArea treasuresLabel = new JTextArea("Treasures Remaining");
 	private JTextArea treasuresFigureLabel = new JTextArea("0");
 
@@ -112,9 +116,12 @@ public class GUIImp implements GUIAbstract{
 	private final RecReplay recorder = new RecReplay();
 
 
-	//
-	nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction lastMove;
+	//Stores the last given move direction
+	Game.Direction lastMove;
+	//Stores whether it is a half second tick
 	private Boolean halfTick = true;
+	//Stores length of interval for countdown timer
+	private int countdownInt =  500;
 
 	/** Constructor
 	*/
@@ -338,7 +345,10 @@ public class GUIImp implements GUIAbstract{
     	timePanel.add(timeTitleLabel);
     	timePanel.add(timeFigureLabel);
     	keysPanel.add(keysLabel);
-    	keysPanel.add(keysFigureLabel);
+    	keysPanel.add(redKeysLabel);
+    	keysPanel.add(greenKeysLabel);
+    	keysPanel.add(blueKeysLabel);
+    	keysPanel.add(yellowKeysLabel);
     	treasuresPanel.add(treasuresLabel);
     	treasuresPanel.add(treasuresFigureLabel);
 
@@ -346,6 +356,13 @@ public class GUIImp implements GUIAbstract{
     	timePanel.setBorder(new EmptyBorder(7, 7, 7, 7));
     	keysPanel.setBorder(new EmptyBorder(7, 7, 7, 7));
     	treasuresPanel.setBorder(new EmptyBorder(7, 7, 7, 7));
+
+    	levelPanel.setBackground(Color.BLACK);
+    	timePanel.setBackground(Color.BLACK);
+    	keysPanel.setBackground(Color.BLACK);
+    	treasuresPanel.setBackground(Color.BLACK);
+
+
 
     	//add parts parts to sideBarSouth
 		sidebarNorth.add(levelPanel, BorderLayout.NORTH);
@@ -500,13 +517,11 @@ public class GUIImp implements GUIAbstract{
 		System.exit(0);
 	}
 
-    /** This method pauses the game, stoping the clock and triggering a JOptionPane
+    /** This method pauses the game, stopping the clock and triggering a JOptionPane
      * with user action options.
      *
      */
     protected void doPauseGame() {
-		// TODO Auto-generated method stub
-
     	//stop game
     	timer.stop();
 
@@ -591,6 +606,14 @@ public class GUIImp implements GUIAbstract{
 
 		//UPdate Treasures collected.
 		treasuresFigureLabel.setText(String.valueOf(game.getTotalTreasures()-game.getCollectedTreasures()));
+
+		//Update keys
+		//redKeysLabel.setText("Red Keys =" + game.geyKeys(Game.KeyColour.RED));
+		//redKeysLabel.setText("Blue Keys =" + game.geyKeys(Game.KeyColour.BLUE));
+		//redKeysLabel.setText("Yellow Keys =" + game.geyKeys(Game.KeyColour.YELLOW));
+		//redKeysLabel.setText("Green Keys =" + game.geyKeys(Game.KeyColour.GREEN));
+
+
 		if(game.isLevelComplete()) {
 			levelCompleted();
 		}
@@ -644,7 +667,7 @@ public class GUIImp implements GUIAbstract{
      *
      */
     protected void countdown() {
-        timer = new Timer(500, new ActionListener() {
+        timer = new Timer(countdownInt, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	if(halfTick) {
 
@@ -715,12 +738,7 @@ public class GUIImp implements GUIAbstract{
 
 	private void saveRecording() {
 
-		try {
-			RecReplay.saveConfirmDialogue();
-		} catch (JDOMException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		RecReplay.saveRecording();
 	}
 
 	private void levelOver() {
@@ -776,6 +794,9 @@ public class GUIImp implements GUIAbstract{
     	}
 	}
 
+	/** This method loads a new level and starts a new game.
+	 *
+	 */
 	protected void loadLevel(){
 
 
@@ -815,6 +836,12 @@ public class GUIImp implements GUIAbstract{
 
 	}
 
+	/**Sets the interval for the countdown timer
+	 * @param i the amount of milliseconds to be set as the interval
+	 */
+	public void setTimer(int i) {
+		countdownInt = i;
+	}
 
 }
 
