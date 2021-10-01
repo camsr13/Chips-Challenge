@@ -73,6 +73,7 @@ public class RecReplay {
         // adds to actionHistory
         if (isRecording) {
             moveHistory.add(direction.toString());
+            System.out.println(direction.toString());
         }
     }
 
@@ -232,7 +233,7 @@ public class RecReplay {
      *
      * @throws TransformerException
      */
-    public static void saveRecording() throws JDOMException, IOException {
+    public static void saveRecording() {
         WriteXML xmlWriter = new WriteXML();
         Document document = xmlWriter.generateDocument();
         //creates new document and root element
@@ -244,7 +245,7 @@ public class RecReplay {
         // player moves
         Element playerMovesElem = new Element("playerMoves");
         root.addContent(playerMovesElem);
-
+        System.out.println(moveHistory);
         for (String move : moveHistory) {
             addPlayerMovesElement(playerMovesElem, moveHistory.poll());
         }
@@ -304,7 +305,7 @@ public class RecReplay {
         // TODO ends recording and resets vars
         isRecording = false;
         isRunning = false;
-        moveHistory.clear();
+        //moveHistory.clear();
     }
 
 
@@ -321,7 +322,7 @@ public class RecReplay {
      */
     public static void loadRecording(String fp) throws JDOMException, IOException {
         moveHistory.clear();
-        Element root = ((Document) (new SAXBuilder()).build(new File("C:\\Users\\Hazel\\Desktop\\rec_tests\\test.xml"))).getRootElement();
+        Element root = ((Document) (new SAXBuilder()).build(new File(fp))).getRootElement();
 
         Element playerMoves = root.getChild("playerMoves");
         System.out.println(playerMoves);
