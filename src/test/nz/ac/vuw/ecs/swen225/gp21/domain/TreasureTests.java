@@ -3,6 +3,9 @@ package test.nz.ac.vuw.ecs.swen225.gp21.domain;
 import nz.ac.vuw.ecs.swen225.gp21.domain.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class TreasureTests {
 
     @Test
@@ -14,7 +17,9 @@ public class TreasureTests {
         tilemap[1][0] = new TreasureTile(new Location(1, 0));
         ExitLockTile exitLock = new ExitLockTile(new Location(2, 0));
         tilemap[2][0] = exitLock;
-        Game.instance.setupGame(tilemap, player, null, 1, 0, exitLock, null);
+        HashMap<Game.KeyColour, Integer> keysHeld = new HashMap<>();
+        ArrayList<Actor> actors = new ArrayList<>();
+        Game.instance.setupGame(tilemap, player, keysHeld, 1, 0, exitLock, actors);
 
         player.move(Game.Direction.RIGHT);
         assert player.getLocation().getX() == 1;
@@ -33,7 +38,9 @@ public class TreasureTests {
         tilemap[2][0] = new TreasureTile(new Location(2, 0));
         ExitLockTile exitLock = new ExitLockTile(new Location(3, 0));
         tilemap[3][0] = exitLock;
-        Game.instance.setupGame(tilemap, player, null, 2, 0, exitLock, null);
+        HashMap<Game.KeyColour, Integer> keysHeld = new HashMap<>();
+        ArrayList<Actor> actors = new ArrayList<>();
+        Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);
 
         player.move(Game.Direction.RIGHT);
         assert player.getLocation().getX() == 1;

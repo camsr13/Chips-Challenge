@@ -170,7 +170,15 @@ public class Game {
 	 */
 	public void setupGame(Tile[][] tilemap, Player player, HashMap<KeyColour, Integer> keysHeld, int totalTreasure,
 			int collectedTreasures, ExitLockTile exitLock, List<Actor> actors) {
-		// TODO: null checks
+
+		if (tilemap == null ||
+			player == null ||
+			keysHeld == null ||
+			exitLock == null ||
+			actors == null) {
+			throw new IllegalArgumentException("No setup parameters can be null");
+		}
+
 		this.tilemap = tilemap;
 		this.player = player;
 		this.keysHeld = keysHeld;
@@ -239,5 +247,14 @@ public class Game {
 		for (Observer o : observers) {
 			o.levelEnd();
 		}
+	}
+
+	/**
+	 * Returns the number of keys held of the specified colour.
+	 * @param keyColour
+	 * @return Then number of keys held
+	 */
+	public int geyKeys(Game.KeyColour keyColour) {
+		return keysHeld.get(keyColour);
 	}
 }
