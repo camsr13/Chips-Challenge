@@ -27,6 +27,7 @@ public class BoardRender {
 	private JLayeredPane basePane = new JLayeredPane();
 	private ChapRender chapIcon;
 	private Game game;
+	private boolean isAnimating = false;
 	
 	/**
 	 * Size of the tiles in the image file (pixels)
@@ -128,49 +129,55 @@ public class BoardRender {
 	
 	/**
 	 * Updates and animates chaps position
+	 * @return 
 	 */
-	public void updateChap() {
-		int[] chapMove = chapIcon.getMoved();
-		
-		//board animation
-		if(chapMove != null) {
-			
-			
-		Timer timer = new Timer();
-		timer.scheduleAtFixedRate(new TimerTask() {
-			int totalFrames = 16;
-			int frames = 0;
-			int increment = 0;
+	public boolean updateChap() {
+		if (!isAnimating) {
 			int[] chapMove = chapIcon.getMoved();
-			@Override
-			public void run() {
+		
+			//board animation
+			if(chapMove != null) {
+				isAnimating = true;
+				
+				Timer timer = new Timer();
+				timer.scheduleAtFixedRate(new TimerTask() {
+					int totalFrames = 16;
+					int frames = 0;
+					int increment = 0;
+					int[] chapMove = chapIcon.getMoved();
+					@Override
+					public void run() {
+							
+						increment += tileSize/totalFrames;
+						boardPanel.setOffsets(-(increment * chapMove[0]), -(increment * chapMove[1]));
+						boardPanel.revalidate();
+						boardPanel.repaint();
+							
+							
+						if (frames % (totalFrames/4) == 0) {
+							chapIcon.update();
+						}
+							
+						frames++;
+						if(frames == totalFrames) {
+							this.cancel();
+							isAnimating = false;
+							chapIcon.refreshLocation();
+							boardPanel.setOffsets(0, 0);
+							boardPanel.updateChapPos();
+						}
+					}
 					
-				increment += tileSize/totalFrames;
-				boardPanel.setOffsets(-(increment * chapMove[0]), -(increment * chapMove[1]));
-				boardPanel.revalidate();
-				boardPanel.repaint();
-					
-					
-				if (frames % (totalFrames/4) == 0) {
-					chapIcon.update();
-				}
-					
-				frames++;
-				if(frames == totalFrames) {
-					this.cancel();
-					chapIcon.refreshLocation();
-					boardPanel.setOffsets(0, 0);
-					boardPanel.updateChapPos();
-				}
-			}
+				}, 28, 28);
 			
-		}, 28, 28);
-		
-		
+			
+			}
+			return true;
 		}
 		
 		boardPanel.revalidate();
 		boardPanel.repaint();
+		return false;
 		
 	}
 	
