@@ -14,10 +14,12 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import nz.ac.vuw.ecs.swen225.gp21.domain.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.ArrowTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.ExitLockTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.ExitTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.FreeTile;
+import nz.ac.vuw.ecs.swen225.gp21.domain.FreezeActor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.FreezeTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
 import nz.ac.vuw.ecs.swen225.gp21.domain.InfoTile;
@@ -83,7 +85,16 @@ class BoardPanel extends JPanel {
 		this.game = game;
 		chapPos = game.getPlayer().getLocation();
 		loadTileSprites();
+		createActors();
 	};
+	
+	private void createActors() {
+		for(Actor a : game.getActors()) {
+			if(a instanceof FreezeActor) {
+				
+			}
+		}
+	}
 	
 	/**
 	 * offsets the board for animation

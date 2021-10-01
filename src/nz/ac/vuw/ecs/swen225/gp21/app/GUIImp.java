@@ -34,9 +34,14 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.ReadXML;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.WriteXML;
 import nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay;
+import nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.*;
 
 
+/**
+ * @author richarcame1
+ *
+ */
 public class GUIImp implements GUIAbstract{
 
 
@@ -65,14 +70,14 @@ public class GUIImp implements GUIAbstract{
 	private final JPanel pausePanel = new CustomPanel(250, 30);
 
 	//Sidebar Labels
-	JTextArea levelLabel = new JTextArea("Level");
-	JTextArea levelFigureLabel = new JTextArea("");
-	JTextArea timeTitleLabel = new JTextArea("Time");
-	JTextArea timeFigureLabel = new JTextArea("0");
-	JTextArea keysLabel = new JTextArea("Keys Collected");
-	JTextArea keysFigureLabel = new JTextArea("0");
-	JTextArea treasuresLabel = new JTextArea("Treasures Remaining");
-	JTextArea treasuresFigureLabel = new JTextArea("0");
+	private JTextArea levelLabel = new JTextArea("Level");
+	private JTextArea levelFigureLabel = new JTextArea("");
+	private JTextArea timeTitleLabel = new JTextArea("Time");
+	private JTextArea timeFigureLabel = new JTextArea("0");
+	private JTextArea keysLabel = new JTextArea("Keys Collected");
+	private JTextArea keysFigureLabel = new JTextArea("0");
+	private JTextArea treasuresLabel = new JTextArea("Treasures Remaining");
+	private JTextArea treasuresFigureLabel = new JTextArea("0");
 
 	//Navigation and Pause Buttons
 	private final JButton north = new JButton("Up");
@@ -90,7 +95,6 @@ public class GUIImp implements GUIAbstract{
 	private JMenuBar menuBar = new JMenuBar();
 
 	//Temp board placeholder
-	private final JPanel board = new CustomPanel(500, 500);
 	private JLayeredPane gameBoard = new JLayeredPane();
 	private BoardRender boardRender;
 
@@ -102,20 +106,25 @@ public class GUIImp implements GUIAbstract{
 
 
 	//Content Panel
-	private final JPanel area = new CustomPanel(800, 500);
+	private final JPanel area = new CustomPanel(900, 500);
 	GridBagConstraints gbc = new GridBagConstraints();
 
 	private final RecReplay recorder = new RecReplay();
 
-	//Colours
-	Color backgroundColor = new Color(10,10,255);
-	Color panelsColor = new Color(10,10,255);
-	Color buttonsColor = new Color(10,10,255);
 
+	//
+	nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction lastMove;
+	private Boolean halfTick = true;
+
+	/** Constructor
+	*/
     public GUIImp() {
 		initGUI();
 	}
 
+    /** Testing Constructor for Recorder
+     * @param file - A string representing the filename of the Recording
+    */
 	public GUIImp(String file) {
 	this.currFile = file;
 	loadLevel();
@@ -126,6 +135,9 @@ public class GUIImp implements GUIAbstract{
 		countdown();
 	}
 
+    /** This method initialises and adds all JSwing components to the GUI.
+     *
+     */
     protected void initGUI(){
 
     	startPopUp();
@@ -136,11 +148,14 @@ public class GUIImp implements GUIAbstract{
 
     }
 
+	/**
+	 *
+	 */
 	protected void initFrame() {
 
 		frame.setResizable(true);
 		frame.setContentPane(area);
-		area.setBackground(Color.BLACK);
+		area.setBackground(Color.DARK_GRAY);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationByPlatform(true);
 		frame.pack();
@@ -151,6 +166,9 @@ public class GUIImp implements GUIAbstract{
 	}
 
 
+    /** This method initialises the adds the menu bar and the menu items to the GUi, adding the functionailty
+     * to menu items as well.
+     */
     protected void initMenu(){
     	//Create menuBar options
     	JMenu menuGame = new JMenu("Game");
@@ -289,6 +307,9 @@ public class GUIImp implements GUIAbstract{
 
 
 
+	/**This method initialises the board onto the content pane.
+	 *
+	 */
 	protected void initBoard(){
 
     	//padding around the board
@@ -298,6 +319,9 @@ public class GUIImp implements GUIAbstract{
 
     }
 
+    /** This method initialises the Side bar containing game-state info and movement buttons.
+     *
+     */
     protected void initSideBar(){
 
     	//add sidebar to content frame
@@ -393,6 +417,9 @@ public class GUIImp implements GUIAbstract{
 
     }
 
+    /**This method is called upon launch, promoting the user to enter which level they would like to play upon load
+     *
+     */
     protected void startPopUp() {
 
     	Object[] options = {"Load Level 1",
@@ -421,11 +448,17 @@ public class GUIImp implements GUIAbstract{
     	}
 	}
 
+    /**This comment loads and starts Level 2.
+     *
+     */
     protected void doStartLevel2() {
 		currFile = "levels/level2.xml";
 		loadLevel();
 	}
 
+    /**This comment loads and starts Level 1.
+	 *
+	 */
 	protected void doStartLevel1() {
 
 		currFile = "levels/level1.xml";
@@ -433,6 +466,9 @@ public class GUIImp implements GUIAbstract{
 
 	}
 
+	/**This comment loads and starts the test Map.
+	 *
+	 */
 	protected void doStartTest() {
 
 		currFile = "levels/testMap.xml";
@@ -440,21 +476,34 @@ public class GUIImp implements GUIAbstract{
 
 	}
 
+	/** This method is called when resuming the game from a paused state.
+	 *
+	 */
 	protected void doResumeGame() {
 		timer.start();
 
 	}
 
+	/**This method first saves a XML file of the game before closing the program.
+	 *
+	 */
 	protected void doExitGameS() {
 		saveXML.writeXMLFile(saveXML.generateDocument(), "levels/currentSave.xml");
-
+		System.exit(0);
 
 	}
 
+	/** This method exits the program without a save.
+	 *
+	 */
 	protected void doExitGameX() {
 		System.exit(0);
 	}
 
+    /** This method pauses the game, stoping the clock and triggering a JOptionPane
+     * with user action options.
+     *
+     */
     protected void doPauseGame() {
 		// TODO Auto-generated method stub
 
@@ -497,43 +546,44 @@ public class GUIImp implements GUIAbstract{
 
 	}
 
+
+	/**
+	 * Sets the move direction to the Left, which will execute via the Countdown() timer
+	 */
 	public void doWestMove() {
 		if(canMove) {
-			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.LEFT);
-			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.LEFT);
-			boardRender.updateChap();
-			updateDisplay();
-			freezeMovement();
+			lastMove = Game.Direction.LEFT;
+			canMove = false;
 		}
 	}
 
+	/**
+	 * Sets the move direction to the Right, which will execute via the Countdown() timer
+	 */
 	public void doEastMove() {
 		if(canMove) {
-			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.RIGHT);
-			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.RIGHT);
-			boardRender.updateChap();
-			updateDisplay();
-			freezeMovement();
+			lastMove = Game.Direction.RIGHT;
+			canMove = false;
 		}
 	}
 
+	/**
+	 * Sets the move direction downwards, which will execute via the Countdown() timer
+	 */
 	public void doSouthMove() {
 		if(canMove) {
-			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.DOWN);
-			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.DOWN);
-			boardRender.updateChap();
-			updateDisplay();
-			freezeMovement();
+			lastMove = Game.Direction.DOWN;
+			canMove = false;
 		}
 	}
 
+	/**
+	 * Sets the move direction upwards, which will execute via the Countdown() timer
+	 */
 	public void doNorthMove() {
 		if(canMove) {
-			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.UP);
-			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.UP);
-			boardRender.updateChap();
-			updateDisplay();
-			freezeMovement();
+			lastMove = Game.Direction.UP;
+			canMove = false;
 		}
 	}
 
@@ -561,10 +611,12 @@ public class GUIImp implements GUIAbstract{
 
 	}
 
+	/**
+	 * This is a legacy method which stops movements from being accepted whilst animations are occurring
+	 */
 	protected void freezeMovement() {
 
 		canMove = false;
-		int wait = 1000;
 		Timer freezeTimer = new Timer(1000, new ActionListener() {
             public void actionPerformed(ActionEvent i) {
             	if(waitSecond) {
@@ -578,34 +630,64 @@ public class GUIImp implements GUIAbstract{
 		freezeTimer.start();
 
 	}
-	/**
-	 * This helper class initialises GridBagConstraints with two options (gridx, gridy). By default GridBagConstraints
-	 * only supports initialisation with either 0 options, or every option.
-	 */
-	private static class MoveButtonConstraints extends GridBagConstraints {
-		public MoveButtonConstraints(int gridx, int gridy) {
-			super();
-			this.gridx = gridx;
-			this.gridy = gridy;
-		}
-	}
-
-
+	/** Gets the GUI's frame object
+     * @return the GUI's JSwing frame object
+     */
     public JFrame getMainWindow() {
 		return frame;
 
 	}
 
+    /** This method handles the JSwing timer along with the logic that occurs on each tick, including updating Game
+     * and Renderer packages to be aware of player movement, counting down time remaining and updating Key and
+     * Treasure counts
+     *
+     */
     protected void countdown() {
-        timer = new Timer(1001, new ActionListener() {
+        timer = new Timer(500, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	if(halfTick) {
 
-            	//For every tick
-            	timeFigureLabel.setText(String.valueOf(timeRemaining--));
-            	boardRender.updateOnTick();
-            	saveXML.updateTime(timeRemaining);
-            	boardRender.updateChap();
-            	Game.instance.tick();
+            		halfTick = false;
+
+            		if(lastMove != null) {
+            			canMove = true;
+            			game.inputDirection(lastMove);
+
+            			boardRender.updateChap();
+
+                		switch(lastMove) {
+                			case DOWN :
+                				RecReplay.addAction(RecReplay.Direction.DOWN);
+                				break;
+                			case UP :
+                				RecReplay.addAction(RecReplay.Direction.UP);
+                				break;
+                			case LEFT :
+                				RecReplay.addAction(RecReplay.Direction.LEFT);
+                				break;
+                			case RIGHT :
+                				RecReplay.addAction(RecReplay.Direction.RIGHT);
+                				break;
+                		}
+                		lastMove = null;
+            		}
+
+            	}else {
+
+            		//For every tick
+
+        			timeFigureLabel.setText(String.valueOf(timeRemaining--));
+	            	saveXML.updateTime(timeRemaining);
+	            	Game.instance.tick();
+	            	updateDisplay();
+
+	            	halfTick = true;
+
+	            	boardRender.updateOnTick();
+
+	            	updateDisplay();
+            	}
 
             	//When time expires
             	if(timeRemaining <= 0) {
@@ -712,7 +794,7 @@ public class GUIImp implements GUIAbstract{
 		game = currXML.getGameInstance();
 		boardRender = new BoardRender(game);
 		gameBoard = boardRender.getPane();
-		boardRender.initaliseBoard(500);
+		boardRender.initaliseBoard(603);
 		RecReplay.newRecording();
 		RecReplay.getGUIImp(this);
 		initBoard();

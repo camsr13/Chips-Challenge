@@ -17,7 +17,7 @@ public class FuzzTest {
 
     private final int M = Integer.MAX_VALUE;
 
-    private final int[][] grid1 = new int[][] {
+    private final int[][] level1grid = new int[][] {
         new int[] {M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M},
         new int[] {M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M},
         new int[] {M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M},
@@ -32,7 +32,10 @@ public class FuzzTest {
         new int[] {M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M},
         new int[] {M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M},
     };
-    private final int[][] grid2 = new int[][] {
+    private final Set<Pair> level1doors = Set.of(new Pair(3, 6), new Pair(9, 6),
+        new Pair(12, 3), new Pair(12, 9), new Pair(18, 9));
+
+    private final int[][] level2grid = new int[][] {
         new int[] {M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M},
         new int[] {M, M, 0, M, 0, 0, 0, 0, M, 0, M, 0, 0, 0, 0, M, 0, 0, 0, M},
         new int[] {M, 0, 0, M, 0, 0, 0, 0, M, 0, M, 0, 0, 0, 0, M, 0, 0, 0, M},
@@ -68,8 +71,8 @@ public class FuzzTest {
     /**
      * The number of seconds the random exploration should run (at the most).
      */
-    private final int TIMEOUT = 30;
-    private final int MOVE_DELAY = 900;
+    private final int TIMEOUT = 600;
+    private final int MOVE_DELAY = 1000;
 
     /**
      * Converts a specified direction to the Runnable used to move in that direction.
@@ -139,47 +142,104 @@ public class FuzzTest {
         return preferredDirections;
     }
 
+    private Set<Pair> findUnvisited(Level level, int startRow, int startCol) {
+        int[][] grid = level.grid;
+
+        Set<Pair> unvisited = new HashSet<>();
+        Deque<Pair> queue = new ArrayDeque<>();
+        queue.add(new Pair(startRow, startCol));
+
+        while(!queue.isEmpty()) {
+            Pair currPair = queue.pollFirst();
+            int currRow = currPair.row;
+            int currCol = currPair.col;
+            if (grid[currRow][currCol] == 0 && !unvisited.contains(currPair) && !level.closedDoors.contains(currPair)) {
+                unvisited.add(currPair);
+                if (currCol > 0) {
+                    queue.addLast(new Pair(currRow, currCol-1)); // west
+                }
+                if (currCol < grid[0].length - 1) {
+                    queue.addLast(new Pair(currRow, currCol+1)); // east
+                }
+                if (currRow > 0) {
+                    queue.addLast(new Pair(currRow - 1, currCol)); // north
+                }
+                if (currRow < grid.length - 1) {
+                    queue.addLast(new Pair(currRow + 1, currCol)); // south
+                }
+            }
+        }
+
+        return unvisited;
+    }
+
     /**
-     * Explores a random path, noting on the grid where it has already been.
-     * @param grid The grid to explore.
-     * @param startRow The row the player starts in.
-     * @param startCol The column the player starts in.
+     * Explores a level, noting on a grid where it has already been.
+     * @param level The level to explore.
      * @throws InterruptedException If the delay between moves in interrupted.
      */
-    private void exploreGrid(int[][] grid, int startRow, int startCol) throws InterruptedException {
+    private void exploreLevel(Level level) throws InterruptedException {
+        int[][] grid = level.grid;
+        int startRow = level.startRow;
+        int startCol = level.startCol;
+        Set<Pair> unvisited = findUnvisited(level, startRow, startCol);
+
         Random random = new Random();
 
         int currRow = startRow;
         int currCol = startCol;
 
         grid[currRow][currCol] += 1;
+        unvisited.remove(new Pair(currRow, currCol));
 
         for (int i = 0; i < MOVES; i++) {
             List<Direction> directions = getPreferredDirections(grid, currRow, currCol);
             Direction direction = directions.get(random.nextInt(directions.size()));
             Runnable move = getRunnableFromDirection(direction);
 
+            int nextRow = currRow;
+            int nextCol = currCol;
+
             switch (direction) {
                 case NORTH:
-                    currRow--;
+                    nextRow--;
+//                    currRow--;
                     break;
                 case EAST:
-                    currCol++;
+                    nextCol++;
+//                    currCol++;
                     break;
                 case WEST:
-                    currCol--;
+                    nextCol--;
+//                    currCol--;
                     break;
                 case SOUTH:
-                    currRow++;
+                    nextRow++;
+//                    currRow++;
                     break;
             }
 
-            TimeUnit.MILLISECONDS.sleep(MOVE_DELAY);
+            // TODO:
+            Pair nextPair = new Pair(nextRow, nextCol);
+            if (level.closedDoors.contains(nextPair)) {
+                if (unvisited.isEmpty()) {
+                    level.closedDoors.remove(nextPair);
+                    unvisited = findUnvisited(level, nextRow, nextCol);
+                } else {
+                    continue;
+                }
+            }
+            currRow = nextRow;
+            currCol = nextCol;
 
             grid[currRow][currCol] += 1;
+            unvisited.remove(new Pair(currRow, currCol));
 
             // Execute move
             move.run();
+            System.out.println(direction);
+
+            TimeUnit.MILLISECONDS.sleep(MOVE_DELAY);
         }
     }
 
@@ -204,7 +264,7 @@ public class FuzzTest {
     }
 
     /**
-     * Tests a given level by initialising a GUI and performing {@link #exploreGrid} for a maximum of {@link #TIMEOUT}
+     * Tests a given level by initialising a GUI and performing {@link #exploreLevel} for a maximum of {@link #TIMEOUT}
      * seconds.
      * @param level The level.
      */
@@ -221,7 +281,7 @@ public class FuzzTest {
 
         // Explore randomly
         runWithTimeout(TIMEOUT, TimeUnit.SECONDS, (Callable<Void>) () -> {
-            exploreGrid(level.grid, level.startRow, level.startCol);
+            exploreLevel(level);
             return null;
         });
     }
@@ -241,7 +301,7 @@ public class FuzzTest {
      */
     @Test
     void test1() {
-        Level level = new Level(grid1, 9, 3, "levels/level1.xml");
+        Level level = new Level(level1grid, 9, 3, "levels/level1.xml", level1doors);
         testLevel(level);
 
         System.out.println(level);
@@ -252,10 +312,10 @@ public class FuzzTest {
      */
     @Test
     void test2() {
-        Level level = new Level(grid2, 8, 9, "levels/level2.xml");
-        testLevel(level);
-
-        System.out.println(level);
+//        Level level = new Level(level2grid, 8, 9, "levels/level2.xml");
+//        testLevel(level);
+//
+//        System.out.println(level);
     }
 
     /**

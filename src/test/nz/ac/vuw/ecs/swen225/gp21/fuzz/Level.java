@@ -1,5 +1,7 @@
 package test.nz.ac.vuw.ecs.swen225.gp21.fuzz;
 
+import java.util.Set;
+
 /**
  * Represents a level of the game.
  * @author Rhys Macdonald -- 300516792
@@ -23,17 +25,20 @@ public class Level {
    */
   public final String XMLFile;
 
+  public final Set<Pair> closedDoors;
+
   /**
    * @param grid See {@link #grid}.
    * @param startRow See {@link #startRow}.
    * @param startCol See {@link #startCol}.
    * @param XMLFile See {@link #XMLFile}.
    */
-  public Level(int[][] grid, int startRow, int startCol, String XMLFile) {
+  public Level(int[][] grid, int startRow, int startCol, String XMLFile, Set<Pair> closedDoors) {
     this.grid = grid;
     this.startRow = startRow;
     this.startCol = startCol;
     this.XMLFile = XMLFile;
+    this.closedDoors = closedDoors;
   }
 
   @Override
