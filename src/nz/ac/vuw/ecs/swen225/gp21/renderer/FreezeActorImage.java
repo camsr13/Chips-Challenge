@@ -22,15 +22,18 @@ class FreezeActorImage extends ActorImage {
 	private static final int frames = 4;
 	private static List<BufferedImage> freezeImages = null;
 	private Game.Direction currentDir =  Game.Direction.DOWN;
+	private Game game;
 	
 	/**
 	 * Draws the image for the Freeze Actor onto the board
 	 * @param actor the actor to be rendered
 	 * @param tileSize the tile size for the board
+	 * @param game to check if the actors are still there
 	 */
-	protected FreezeActorImage(FreezeActor actor, int tileSize) {
+	protected FreezeActorImage(Game game, FreezeActor actor, int tileSize) {
 		super(actor, tileSize, frames);
 		this.actor = actor;
+		this.game = game;
 		this.tileSize = tileSize;
 		
 		if (freezeImages == null) {
@@ -56,6 +59,7 @@ class FreezeActorImage extends ActorImage {
 	 */
 	@Override 
 	void drawActor(Graphics2D g, Location chapPos, int[] offsets,JPanel board) {
+		if(game.getActors().contains(actor)) {
 				Location loc = actor.getLocation();
 				int x = loc.getX() - chapPos.getX() ;
 				int y = loc.getY() - chapPos.getY() ;
@@ -64,7 +68,7 @@ class FreezeActorImage extends ActorImage {
 				if(x > -6 && x < 6 && y > -6 && y < 6) {
 					g.drawImage(image, relX * tileSize + offsets[0], relY* tileSize + offsets[1] ,board);
 				}
-			
+			}
 		}
 	/**
 	 * Sets the direction the freeze actor is facing

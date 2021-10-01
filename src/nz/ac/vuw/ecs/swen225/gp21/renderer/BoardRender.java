@@ -67,7 +67,7 @@ public class BoardRender {
 			for (Actor a : gameActors) {
 				if(a instanceof FreezeActor) {
 					FreezeActor f = (FreezeActor) a;
-					FreezeActorImage newActor = new FreezeActorImage (f, tileSize );
+					FreezeActorImage newActor = new FreezeActorImage (game, f, tileSize );
 					actorImages.add(newActor);
 				}
 			}
@@ -187,9 +187,6 @@ public class BoardRender {
 			frozenText.setVisible(true);
 		else
 			frozenText.setVisible(false);
-		for (ActorImage ai :actorImages) {
-			ai.setImageByDir();
-		}
 		updateChap();
 	}
 	/**
