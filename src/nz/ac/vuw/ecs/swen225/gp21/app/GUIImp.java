@@ -54,13 +54,15 @@ public class GUIImp implements GUIAbstract{
 	private final JFrame frame = new JFrame("Game");
 
 	//SideBar to house clock, level and chips count
-	private final JPanel sideBar = new CustomPanel(250, 500);
+	private final JPanel sideBar = new CustomPanel(300, 500);
 	private final JPanel sidebarNorth = new CustomPanel(250, 250);
 	private final JPanel sidebarSouth = new CustomPanel(250, 250);
 	private final JPanel levelPanel = new CustomPanel(250, 30);
 	private final JPanel timePanel = new CustomPanel(250, 30);
 	private final JPanel keysPanel = new CustomPanel(250, 100);
-	private final JPanel treasuresPanel = new CustomPanel(250, 100);
+	private final JPanel treasuresPanel = new CustomPanel(250, 30);
+	private final JPanel movePanel = new CustomPanel(250, 100);
+	private final JPanel pausePanel = new CustomPanel(250, 30);
 
 	//Sidebar Labels
 	JTextArea levelLabel = new JTextArea("Level");
@@ -99,12 +101,16 @@ public class GUIImp implements GUIAbstract{
 	protected String currFile;
 
 
-
 	//Content Panel
-	private final JPanel area = new CustomPanel(700, 500);
+	private final JPanel area = new CustomPanel(800, 500);
 	GridBagConstraints gbc = new GridBagConstraints();
 
 	private final RecReplay recorder = new RecReplay();
+
+	//Colours
+	Color backgroundColor = new Color(10,10,255);
+	Color panelsColor = new Color(10,10,255);
+	Color buttonsColor = new Color(10,10,255);
 
     public GUIImp() {
 		initGUI();
@@ -134,12 +140,12 @@ public class GUIImp implements GUIAbstract{
 
 		frame.setResizable(true);
 		frame.setContentPane(area);
-		area.setBackground(Color.green);
+		area.setBackground(Color.BLACK);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationByPlatform(true);
 		frame.pack();
 		area.setLayout(new BorderLayout(3, 3));
-		area.setBorder(new EmptyBorder(5, 5, 5, 5));
+		area.setBorder(new EmptyBorder(20, 20, 20, 20));
 
 
 	}
@@ -296,10 +302,12 @@ public class GUIImp implements GUIAbstract{
 
     	//add sidebar to content frame
     	area.add(sideBar, BorderLayout.EAST);
-    	sideBar.setLayout(new BorderLayout(3, 3));
+    	sideBar.setBackground(Color.GREEN);
+    	sidebarSouth.setBackground(Color.GREEN);
+    	sidebarNorth.setBackground(Color.GREEN);
     	sideBar.add(sidebarNorth, BorderLayout.NORTH);
 		sideBar.add(sidebarSouth, BorderLayout.SOUTH);
-		sidebarSouth.setLayout(new GridBagLayout());
+		movePanel.setLayout(new GridBagLayout());
 
 
     	levelPanel.add(levelLabel);
@@ -310,36 +318,38 @@ public class GUIImp implements GUIAbstract{
     	treasuresPanel.add(treasuresLabel);
     	treasuresPanel.add(treasuresFigureLabel);
 
+    	levelPanel.setBorder(new EmptyBorder(7, 7, 7, 7));
+    	timePanel.setBorder(new EmptyBorder(7, 7, 7, 7));
+    	keysPanel.setBorder(new EmptyBorder(7, 7, 7, 7));
+    	treasuresPanel.setBorder(new EmptyBorder(7, 7, 7, 7));
+
     	//add parts parts to sideBarSouth
-		sidebarNorth.setBackground(Color.WHITE);
 		sidebarNorth.add(levelPanel, BorderLayout.NORTH);
 		sidebarNorth.add(timePanel, BorderLayout.CENTER);
-		sidebarNorth.add(keysPanel, BorderLayout.SOUTH);
 		sidebarNorth.add(treasuresPanel, BorderLayout.SOUTH);
-
-		//add buttons to sidebar
-		//gbc.gridheight = 1;
-		//gbc.gridwidth = 1;
+		sidebarNorth.add(keysPanel, BorderLayout.SOUTH);
+		sidebarSouth.add(movePanel, BorderLayout.NORTH);
+		sidebarSouth.add(pausePanel, BorderLayout.SOUTH);
 
 		gbc.gridx = 1;
 		gbc.gridy = 0;
-		sidebarSouth.add(north, gbc);
+		movePanel.add(north, gbc);
 
 		gbc.gridx = 1;
 		gbc.gridy = 2;
-		sidebarSouth.add(south, gbc);
+		movePanel.add(south, gbc);
 
 		gbc.gridx = 0;
 		gbc.gridy = 1;
-		sidebarSouth.add(west, gbc);
+		movePanel.add(west, gbc);
 
 		gbc.gridx = 2;
 		gbc.gridy = 1;
-		sidebarSouth.add(east, gbc);
+		movePanel.add(east, gbc);
 
-		gbc.gridx = 1;
-		gbc.gridy = 4;
-		sidebarSouth.add(pause, gbc);
+		//gbc.gridx = 1;
+		//gbc.gridy = 4;
+		pausePanel.add(pause);
 
 		//hotkeys
 		south.setMnemonic(KeyEvent.VK_DOWN);
@@ -725,5 +735,4 @@ public class GUIImp implements GUIAbstract{
 
 
 }
-
 
