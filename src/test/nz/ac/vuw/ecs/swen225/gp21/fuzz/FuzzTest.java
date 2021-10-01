@@ -32,8 +32,8 @@ public class FuzzTest {
         new int[] {M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M},
         new int[] {M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M},
     };
-    private final Set<Pair> level1doors = Set.of(new Pair(3, 6), new Pair(9, 6),
-        new Pair(12, 3), new Pair(12, 9), new Pair(18, 9));
+    private final Set<Pair> level1doors = Set.of(new Pair(6, 3), new Pair(6, 9),
+        new Pair(3, 12), new Pair(9, 12), new Pair(9, 18));
 
     private final int[][] level2grid = new int[][] {
         new int[] {M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M},
@@ -66,13 +66,14 @@ public class FuzzTest {
         new int[] {M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, M},
         new int[] {M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M}
     };
+    private final Set<Pair> level2doors = Set.of();
 
     private final int MOVES = 9999999;
     /**
      * The number of seconds the random exploration should run (at the most).
      */
-    private final int TIMEOUT = 600;
-    private final int MOVE_DELAY = 1000;
+    private final int TIMEOUT = 30;
+    private final int MOVE_DELAY = 1500;
 
     /**
      * Converts a specified direction to the Runnable used to move in that direction.
@@ -96,20 +97,20 @@ public class FuzzTest {
      * @param col The column used to specify the cell.
      * @return The map.
      */
-    private Map<Direction, Integer> getNeighbours(int[][] grid, int row, int col) {
-        Map<Direction, Integer> r = new HashMap<>();
+    private Map<Direction, Pair> getNeighbours(int[][] grid, int row, int col) {
+        Map<Direction, Pair> r = new HashMap<>();
 
         if (row > 0) {
-            r.put(Direction.NORTH, grid[row-1][col]);
+            r.put(Direction.NORTH, new Pair(row-1,col));
         }
         if (col < grid[0].length - 1) {
-            r.put(Direction.EAST, grid[row][col+1]);
+            r.put(Direction.EAST, new Pair(row,col+1));
         }
         if (col > 0) {
-            r.put(Direction.WEST, grid[row][col-1]);
+            r.put(Direction.WEST, new Pair(row,col-1));
         }
         if (row < grid.length - 1) {
-            r.put(Direction.SOUTH, grid[row+1][col]);
+            r.put(Direction.SOUTH, new Pair(row+1,col));
         }
 
         return r;
@@ -118,23 +119,36 @@ public class FuzzTest {
     /**
      * Finds a specified cell's neighbouring cells with the least visits, converts those into directions and stores the
      * directions in a list.
-     * @param grid The grid the cell is from.
+     * @param level The level.
      * @param row The row used to specify the cell.
      * @param col The column used to specify the cell.
      * @return The list of directions.
      */
-    private List<Direction> getPreferredDirections(int[][] grid, int row, int col) {
-        Map<Direction, Integer> neighbours = getNeighbours(grid, row, col);
+    private List<Direction> getPreferredDirections(Level level, int row, int col, Set<Pair> unvisited) {
+        int[][] grid = level.grid;
+
+        Map<Direction, Pair> neighbours = getNeighbours(grid, row, col);
         List<Direction> preferredDirections = new ArrayList<>();
 
         int min = Integer.MAX_VALUE;
-        for (Map.Entry<Direction, Integer> entry : neighbours.entrySet()) {
-            int value = entry.getValue();
-            if (entry.getValue() < min) {
+        for (Map.Entry<Direction, Pair> entry : neighbours.entrySet()) {
+            Pair pair = entry.getValue();
+            int value = grid[pair.row][pair.col];
+
+            if (level.closedDoors.contains(pair)) {
+                if (unvisited.isEmpty()) {
+                    level.closedDoors.remove(pair);
+                    unvisited = findUnvisited(level, pair.row, pair.col);
+                } else {
+                    continue;
+                }
+            }
+
+            if (value < min) {
                 preferredDirections.clear();
                 preferredDirections.add(entry.getKey());
                 min = value;
-            } else if (entry.getValue() == min) {
+            } else if (value == min) {
                 preferredDirections.add(entry.getKey());
             }
         }
@@ -193,7 +207,7 @@ public class FuzzTest {
         unvisited.remove(new Pair(currRow, currCol));
 
         for (int i = 0; i < MOVES; i++) {
-            List<Direction> directions = getPreferredDirections(grid, currRow, currCol);
+            List<Direction> directions = getPreferredDirections(level, currRow, currCol, unvisited);
             Direction direction = directions.get(random.nextInt(directions.size()));
             Runnable move = getRunnableFromDirection(direction);
 
@@ -220,15 +234,15 @@ public class FuzzTest {
             }
 
             // TODO:
-            Pair nextPair = new Pair(nextRow, nextCol);
-            if (level.closedDoors.contains(nextPair)) {
-                if (unvisited.isEmpty()) {
-                    level.closedDoors.remove(nextPair);
-                    unvisited = findUnvisited(level, nextRow, nextCol);
-                } else {
-                    continue;
-                }
-            }
+//            Pair nextPair = new Pair(nextRow, nextCol);
+//            if (level.closedDoors.contains(nextPair)) {
+//                if (unvisited.isEmpty()) {
+//                    level.closedDoors.remove(nextPair);
+//                    unvisited = findUnvisited(level, nextRow, nextCol);
+//                } else {
+//                    continue;
+//                }
+//            }
             currRow = nextRow;
             currCol = nextCol;
 
@@ -312,10 +326,10 @@ public class FuzzTest {
      */
     @Test
     void test2() {
-//        Level level = new Level(level2grid, 8, 9, "levels/level2.xml");
-//        testLevel(level);
-//
-//        System.out.println(level);
+        Level level = new Level(level2grid, 8, 9, "levels/level2.xml", level2doors);
+        testLevel(level);
+
+        System.out.println(level);
     }
 
     /**
