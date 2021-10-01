@@ -26,8 +26,9 @@ public class FreezeActorImage extends ActorImage {
 	private int tileSize;
 	private static final String sheetName = "images/Freeze_Actor_Sheet.png";
 	private static  ArrayList<BufferedImage> images = null;
-	protected FreezeActorImage(FreezeActor actor, int tileSize) {
+	protected FreezeActorImage(Game game, FreezeActor actor, int tileSize) {
 		this.actor = actor;
+		this.game = game;
 		this.tileSize = tileSize;
 		if(images == null) {
 			loadImages();
@@ -63,7 +64,7 @@ public class FreezeActorImage extends ActorImage {
 				Location loc = f.getLocation();
 				int x = chapPos.getX() - loc.getX();
 				int y = chapPos.getY() - loc.getY();
-				System.out.println(x +" " + y);
+				//System.out.println(x +" " + y);
 				//if() {
 					//int x = tileSize * loc.getX();
 					//g.drawImage(curImage, );

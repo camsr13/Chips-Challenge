@@ -39,7 +39,7 @@ public class BoardRender {
 	private static final int boardWidth = 11;
 	private int panelSize = boardWidth * tileSize;
 	
-	private List<ActorRender> actors;
+	private List<ActorImage> actors;
 	private int scaledTile;
 	/**
 	 * A Simple enum to keep track of what direction non board objects are facing
@@ -78,26 +78,31 @@ public class BoardRender {
 		int chapPos = (int) Math.round(((scaledTile * (boardWidth))/2) - 1.5*scaledTile);
 		
 		List<Actor> gameActors = game.getActors();
-		actors = new ArrayList<ActorRender>();
+		actors = new ArrayList<ActorImage>();
 		if (gameActors != null) {
-			for (int i = 0; i < gameActors.size(); i++) {
-				ActorRender newActor = new ActorRender(game, (FreezeActor) gameActors.get(i), initScale, tileSize );
-				actors.add(newActor);
-				basePane.add(newActor, JLayeredPane.PALETTE_LAYER);
+			for (Actor a : gameActors) {
+				if(a instanceof FreezeActor) {
+					FreezeActor f = (FreezeActor) a;
+					//FreezeActorImage newActor = new FreezeActorImage ( game, f, tileSize );
+					//actors.add(newActor);
+				//basePane.add(newActor, JLayeredPane.PALETTE_LAYER);
+				}
 			}
 		}
-		System.out.println(scaledTile);
+		//System.out.println(scaledTile);
 		chapIcon = new ChapRender(game, initScale, tileSize);
 		chapIcon.setBounds(chapPos, chapPos, scaledTile, scaledTile);
 		chapIcon.setOpaque(false);
 
 		boardPanel = new BoardPanel(game, tileSize, boardWidth , initScale);
+		boardPanel.setOpaque(false);
 		boardPanel.setVisible(true);
 		boardPanel.setBounds(0,0, scaledTile * (boardWidth-2), scaledTile * (boardWidth-2));
 		
 		basePane.add(boardPanel,JLayeredPane.DEFAULT_LAYER);
 		basePane.add(chapIcon,JLayeredPane.MODAL_LAYER);
 		basePane.setPreferredSize(new Dimension(scaledTile * 9,scaledTile * 9));
+		basePane.setOpaque(false);
 		basePane.setVisible(true);
 		return scaledTile * boardWidth;
 	}
@@ -168,7 +173,7 @@ public class BoardRender {
 						}
 					}
 					
-				}, 14, 14);
+				}, 28, 28);
 			
 			
 			}
@@ -184,9 +189,7 @@ public class BoardRender {
 	 * Updates actors which move on ticks
 	 */
 	public void updateOnTick() {
-		for(ActorRender a : actors) {
-			a.animateSprite();
-		}
+		updateChap();
 	}
 	/**
 	 * Sets the scale of the board
