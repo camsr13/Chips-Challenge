@@ -17,7 +17,7 @@ public class FreezeTile extends Tile {
 
     @Override
     public void onPlayerEnter() {
-        Game.instance.getPlayer().freeze(1);
+        Game.instance.getPlayer().freeze(2);
     }
 
     @Override
