@@ -88,7 +88,6 @@ public class RecReplay {
             File fileToSave = fileChooser.getSelectedFile();
 
             xmlWriter.writeXMLFile(document, fileToSave.getAbsolutePath());
-            System.out.println("Save as file: " + fileToSave.getAbsolutePath());
         }
     }
 
@@ -201,7 +200,7 @@ public class RecReplay {
         // Adds player moves to xml save
         Element playerMovesElem = new Element("playerMoves");
         root.addContent(playerMovesElem);
-        System.out.println(moveHistory);
+
         for (String move : moveHistory) {
             addPlayerMovesElement(playerMovesElem, moveHistory.poll());
         }
@@ -231,7 +230,6 @@ public class RecReplay {
      */
     public static void endRecording() {
         isRecording = false;
-        moveHistory.clear();
     }
 
 
@@ -264,7 +262,6 @@ public class RecReplay {
 
         Element root = ((Document) (new SAXBuilder()).build(new File(fp))).getRootElement();
         Element playerMoves = root.getChild("playerMoves");
-        System.out.println(playerMoves);
         List<Element> moves = playerMoves.getChildren();
 
         // Adds all moves to move history
