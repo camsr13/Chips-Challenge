@@ -127,11 +127,11 @@ public class BoardRender {
 		return invDir;
 	}
 	
+	
 	/**
 	 * Updates and animates chaps position
-	 * @return 
 	 */
-	public boolean updateChap() {
+	public void updateChap() {
 		if (!isAnimating) {
 			int[] chapMove = chapIcon.getMoved();
 		
@@ -168,16 +168,14 @@ public class BoardRender {
 						}
 					}
 					
-				}, 28, 28);
+				}, 14, 14);
 			
 			
 			}
-			return true;
 		}
 		
 		boardPanel.revalidate();
 		boardPanel.repaint();
-		return false;
 		
 	}
 	
