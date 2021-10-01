@@ -184,9 +184,7 @@ public class BoardRender {
 	 * Updates actors which move on ticks
 	 */
 	public void updateOnTick() {
-		for(ActorRender a : actors) {
-			a.animateSprite();
-		}
+		updateChap();
 	}
 	/**
 	 * Sets the scale of the board
