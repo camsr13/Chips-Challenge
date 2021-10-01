@@ -2,6 +2,10 @@ package test.nz.ac.vuw.ecs.swen225.gp21.fuzz;
 
 import java.util.Objects;
 
+/**
+ * Represents a cell of a level grid.
+ * @author Rhys Macdonald -- 300516792
+ */
 public class Pair {
   public final int row;
   public final int col;
