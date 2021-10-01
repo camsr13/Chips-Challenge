@@ -3,6 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp21.renderer;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -95,6 +96,7 @@ public class BoardRender {
 		
 		basePane.add(boardPanel,JLayeredPane.DEFAULT_LAYER);
 		basePane.add(chapIcon,JLayeredPane.MODAL_LAYER);
+		basePane.setPreferredSize(new Dimension(scaledTile * 9,scaledTile * 9));
 		basePane.setVisible(true);
 		return scaledTile * boardWidth;
 	}
@@ -200,6 +202,7 @@ public class BoardRender {
 		chapIcon.setScale(scale);
 		boardPanel.setScale(scale);
 		boardPanel.setBounds(0,0, scaledTile * (boardWidth - 2), scaledTile * (boardWidth - 2));
+		basePane.setPreferredSize(new Dimension(scaledTile * 9,scaledTile * 9));
 		return scaledTile * (boardWidth - 2);
 	}
 	

@@ -45,12 +45,13 @@ class BoardPanel extends JPanel {
 	private static final int[] colourOrder = {1, 3, 0, 2};
 	
 	//Number of sprites to load
-	private static final int numTiles = 16;
+	private static final int numTiles = 19;
 	
 	private static final Class<?>[] tileOrder = { FreeTile.class, KeyTile.class, KeyTile.class, KeyTile.class,
 											KeyTile.class, TreasureTile.class, FreezeTile.class, InfoTile.class,
 											WallTile.class, LockTile.class, LockTile.class, LockTile.class,
-											LockTile.class, ExitLockTile.class, ExitTile.class, ArrowTile.class
+											LockTile.class, ExitLockTile.class, ExitTile.class, ArrowTile.class,
+											ArrowTile.class, ArrowTile.class, ArrowTile.class
 											};
 
 	/**
@@ -161,6 +162,10 @@ class BoardPanel extends JPanel {
 					System.out.println("error: No tile image for:" + paintTile.getClass());
 					System.out.println("Defaulting to no image");
 					toPaint = images.get(null).get(0);
+				} else if(paintTile instanceof ArrowTile) {
+					ArrowTile tile = (ArrowTile) paintTile;
+					int dir = tile.getDirection().ordinal();
+					toPaint = images.get(paintTile.getClass()).get(dir);
 				} else {
 					toPaint = images.get(paintTile.getClass()).get(0);
 				} 	
