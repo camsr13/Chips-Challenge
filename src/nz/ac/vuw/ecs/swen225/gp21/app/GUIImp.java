@@ -34,6 +34,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.ReadXML;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.WriteXML;
 import nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay;
+import nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction;
 import nz.ac.vuw.ecs.swen225.gp21.renderer.*;
 
 
@@ -90,7 +91,6 @@ public class GUIImp implements GUIAbstract{
 	private JMenuBar menuBar = new JMenuBar();
 
 	//Temp board placeholder
-	private final JPanel board = new CustomPanel(500, 500);
 	private JLayeredPane gameBoard = new JLayeredPane();
 	private BoardRender boardRender;
 
@@ -102,7 +102,7 @@ public class GUIImp implements GUIAbstract{
 
 
 	//Content Panel
-	private final JPanel area = new CustomPanel(800, 500);
+	private final JPanel area = new CustomPanel(900, 500);
 	GridBagConstraints gbc = new GridBagConstraints();
 
 	private final RecReplay recorder = new RecReplay();
@@ -111,6 +111,10 @@ public class GUIImp implements GUIAbstract{
 	Color backgroundColor = new Color(10,10,255);
 	Color panelsColor = new Color(10,10,255);
 	Color buttonsColor = new Color(10,10,255);
+
+	//
+	nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction lastMove;
+	Boolean halfTick = true;
 
     public GUIImp() {
 		initGUI();
@@ -140,7 +144,7 @@ public class GUIImp implements GUIAbstract{
 
 		frame.setResizable(true);
 		frame.setContentPane(area);
-		area.setBackground(Color.BLACK);
+		area.setBackground(Color.DARK_GRAY);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationByPlatform(true);
 		frame.pack();
@@ -529,11 +533,8 @@ public class GUIImp implements GUIAbstract{
 
 	public void doNorthMove() {
 		if(canMove) {
-			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.UP);
-			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.UP);
-			boardRender.updateChap();
-			updateDisplay();
-			freezeMovement();
+			lastMove = Game.Direction.UP;
+			canMove = false;
 		}
 	}
 
@@ -597,15 +598,51 @@ public class GUIImp implements GUIAbstract{
 	}
 
     protected void countdown() {
-        timer = new Timer(1001, new ActionListener() {
+        timer = new Timer(500, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	if(halfTick) {
 
-            	//For every tick
-            	timeFigureLabel.setText(String.valueOf(timeRemaining--));
-            	boardRender.updateOnTick();
-            	saveXML.updateTime(timeRemaining);
-            	boardRender.updateChap();
-            	Game.instance.tick();
+            		halfTick = false;
+
+	            	canMove = true;
+
+            		if(lastMove != null) {
+
+            			boardRender.updateChap();
+
+            			game.inputDirection(lastMove);
+
+                		switch(lastMove) {
+                			case DOWN :
+                				RecReplay.addAction(RecReplay.Direction.DOWN);
+                				break;
+                			case UP :
+                				RecReplay.addAction(RecReplay.Direction.UP);
+                				break;
+                			case LEFT :
+                				RecReplay.addAction(RecReplay.Direction.LEFT);
+                				break;
+                			case RIGHT :
+                				RecReplay.addAction(RecReplay.Direction.RIGHT);
+                				break;
+                		}
+            		}
+
+            	}else {
+
+            		//For every tick
+
+        			timeFigureLabel.setText(String.valueOf(timeRemaining--));
+	            	saveXML.updateTime(timeRemaining);
+	            	Game.instance.tick();
+	            	updateDisplay();
+
+	            	halfTick = true;
+
+	            	boardRender.updateOnTick();
+
+	            	updateDisplay();
+            	}
 
             	//When time expires
             	if(timeRemaining <= 0) {
@@ -712,7 +749,7 @@ public class GUIImp implements GUIAbstract{
 		game = currXML.getGameInstance();
 		boardRender = new BoardRender(game);
 		gameBoard = boardRender.getPane();
-		boardRender.initaliseBoard(500);
+		boardRender.initaliseBoard(603);
 		RecReplay.newRecording();
 		RecReplay.getGUIImp(this);
 		initBoard();
