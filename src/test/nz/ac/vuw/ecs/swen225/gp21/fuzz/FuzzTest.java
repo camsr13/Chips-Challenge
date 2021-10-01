@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
  * @author Rhys Macdonald - 300516792
  */
 public class FuzzTest {
+    private Deque<Direction> threeMoveHistory = new ArrayDeque<>();
 
     private Runnable north, east, south, west;
 
@@ -66,14 +67,15 @@ public class FuzzTest {
         new int[] {M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, M},
         new int[] {M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M}
     };
-    private final Set<Pair> level2doors = Set.of();
+    private final Set<Pair> level2doors = Set.of(new Pair(6, 6), new Pair(6, 9),
+        new Pair(6, 12), new Pair(6, 17), new Pair(27, 15));
 
     private final int MOVES = 9999999;
     /**
      * The number of seconds the random exploration should run (at the most).
      */
     private final int TIMEOUT = 30;
-    private final int MOVE_DELAY = 1500;
+    private final int MOVE_DELAY = 1000;
 
     /**
      * Converts a specified direction to the Runnable used to move in that direction.
@@ -134,6 +136,12 @@ public class FuzzTest {
         for (Map.Entry<Direction, Pair> entry : neighbours.entrySet()) {
             Pair pair = entry.getValue();
             int value = grid[pair.row][pair.col];
+
+            // TODO: implement repeated move block
+//            boolean repeatedMoves = threeMoveHistory.stream().allMatch(i -> i.equals(threeMoveHistory.peek()));
+//            if (repeatedMoves) {
+//                continue;
+//            }
 
             if (level.closedDoors.contains(pair)) {
                 if (unvisited.isEmpty()) {
@@ -211,46 +219,30 @@ public class FuzzTest {
             Direction direction = directions.get(random.nextInt(directions.size()));
             Runnable move = getRunnableFromDirection(direction);
 
-            int nextRow = currRow;
-            int nextCol = currCol;
-
             switch (direction) {
                 case NORTH:
-                    nextRow--;
-//                    currRow--;
+                    currRow--;
                     break;
                 case EAST:
-                    nextCol++;
-//                    currCol++;
+                    currCol++;
                     break;
                 case WEST:
-                    nextCol--;
-//                    currCol--;
+                    currCol--;
                     break;
                 case SOUTH:
-                    nextRow++;
-//                    currRow++;
+                    currRow++;
                     break;
             }
-
-            // TODO:
-//            Pair nextPair = new Pair(nextRow, nextCol);
-//            if (level.closedDoors.contains(nextPair)) {
-//                if (unvisited.isEmpty()) {
-//                    level.closedDoors.remove(nextPair);
-//                    unvisited = findUnvisited(level, nextRow, nextCol);
-//                } else {
-//                    continue;
-//                }
-//            }
-            currRow = nextRow;
-            currCol = nextCol;
 
             grid[currRow][currCol] += 1;
             unvisited.remove(new Pair(currRow, currCol));
 
             // Execute move
             move.run();
+            threeMoveHistory.addFirst(direction);
+            if (threeMoveHistory.size() > 3) {
+                threeMoveHistory.removeLast();
+            }
             System.out.println(direction);
 
             TimeUnit.MILLISECONDS.sleep(MOVE_DELAY);
