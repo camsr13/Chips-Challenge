@@ -189,6 +189,26 @@ public class GUIImp implements GUIAbstract{
 		    }
 		});
 
+    	JMenuItem loadGame = new JMenuItem(new AbstractAction("Load Game") {
+		    public void actionPerformed(ActionEvent ae) {
+
+		    }
+		});
+
+    	JMenuItem replayGame = new JMenuItem(new AbstractAction("Replay Game") {
+		    public void actionPerformed(ActionEvent ae) {
+		    	try {
+					RecReplay.onReplay();
+				} catch (JDOMException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
+		});
+
     	JMenuItem startLevel1 = new JMenuItem(new AbstractAction("Play Level 1") {
 		    public void actionPerformed(ActionEvent ae) {
 
@@ -257,6 +277,8 @@ public class GUIImp implements GUIAbstract{
     	menuGame.add(exitGameS);
     	menuGame.add(exitGameX);
     	menuGame.add(resumeGame);
+    	menuGame.add(loadGame);
+    	menuOptions.add(replayGame);
     	menuLevel.add(startLevel1);
     	menuLevel.add(startLevel2);
 
@@ -476,6 +498,7 @@ public class GUIImp implements GUIAbstract{
 
 	private void updateDisplay() {
 
+		//UPdate Treasures collected.
 		treasuresFigureLabel.setText(String.valueOf(game.getTotalTreasures()-game.getCollectedTreasures()));
 		if(game.isLevelComplete()) {
 			levelCompleted();
@@ -535,10 +558,15 @@ public class GUIImp implements GUIAbstract{
     protected void countdown() {
         timer = new Timer(1001, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
+            	//For every tick
             	timeFigureLabel.setText(String.valueOf(timeRemaining--));
             	boardRender.updateOnTick();
             	saveXML.updateTime(timeRemaining);
+            	boardRender.updateChap();
+            	Game.instance.tick();
 
+            	//When time expires
             	if(timeRemaining <= 0) {
             		doTimeExpired();
             	}
@@ -550,13 +578,14 @@ public class GUIImp implements GUIAbstract{
 
 	private void doTimeExpired() {
 
-    	//stop game
+    	//stop game end recording
     	timer.stop();
-
     	RecReplay.endRecording();
 
+    	//Pop up message
     	JOptionPane.showMessageDialog(null, "Time has expired, you have lost :(");
 
+    	//End Level Protocols
     	levelOver();
 
 	}
@@ -665,7 +694,6 @@ public class GUIImp implements GUIAbstract{
 
 
 }
-
 
 
 
