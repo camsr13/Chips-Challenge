@@ -17,6 +17,14 @@ import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * Class to handle all functionality for recording and replaying the game.
+ *
+ * SudentID: 300399907
+ * @author Hazel Schapel
+ */
+
+
 public class RecReplay {
 
     private static Queue<String> moveHistory = new ArrayDeque<>();
