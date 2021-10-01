@@ -33,8 +33,6 @@ public class FuzzTest {
         new int[] {M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M},
         new int[] {M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M},
     };
-    private final Set<Pair> level1doors = Set.of(new Pair(6, 3), new Pair(6, 9),
-        new Pair(3, 12), new Pair(9, 12), new Pair(9, 18));
 
     private final int[][] level2grid = new int[][] {
         new int[] {M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M},
@@ -67,15 +65,13 @@ public class FuzzTest {
         new int[] {M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, M},
         new int[] {M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M}
     };
-    private final Set<Pair> level2doors = Set.of(new Pair(6, 6), new Pair(6, 9),
-        new Pair(6, 12), new Pair(6, 17), new Pair(27, 15));
 
     private final int MOVES = 9999999;
     /**
      * The number of seconds the random exploration should run (at the most).
      */
-    private final int TIMEOUT = 30;
-    private final int MOVE_DELAY = 1000;
+    private final int TIMEOUT = 28;
+    private final int MOVE_DELAY = 300;
 
     /**
      * Converts a specified direction to the Runnable used to move in that direction.
@@ -138,10 +134,12 @@ public class FuzzTest {
             int value = grid[pair.row][pair.col];
 
             // TODO: implement repeated move block
-//            boolean repeatedMoves = threeMoveHistory.stream().allMatch(i -> i.equals(threeMoveHistory.peek()));
-//            if (repeatedMoves) {
-//                continue;
-//            }
+
+            if (threeMoveHistory.size() == 3) {
+                Direction d = threeMoveHistory.peek();
+                boolean uniformHistory = threeMoveHistory.stream().allMatch(i -> i.equals(d));
+                if (uniformHistory && entry.getKey() == d) continue;
+            }
 
             if (level.closedDoors.contains(pair)) {
                 if (unvisited.isEmpty()) {
@@ -278,6 +276,7 @@ public class FuzzTest {
         // Load level
         GUIImp gui = new GUIImp(level.XMLFile);
         gui.getMainWindow().setVisible(true);
+        gui.setTimer(0);
 
         // Setup directional actions
         north = gui::doNorthMove;
@@ -307,6 +306,12 @@ public class FuzzTest {
      */
     @Test
     void test1() {
+        Set<Pair> level1doors = new HashSet<>();
+        level1doors.add(new Pair(6, 3));
+        level1doors.add(new Pair(6, 9));
+        level1doors.add(new Pair(3, 12));
+        level1doors.add(new Pair(9, 12));
+        level1doors.add(new Pair(9, 18));
         Level level = new Level(level1grid, 9, 3, "levels/level1.xml", level1doors);
         testLevel(level);
 
@@ -318,6 +323,12 @@ public class FuzzTest {
      */
     @Test
     void test2() {
+        Set<Pair> level2doors = new HashSet<>();
+        level2doors.add(new Pair(6, 6));
+        level2doors.add(new Pair(6, 9));
+        level2doors.add(new Pair(6, 12));
+        level2doors.add(new Pair(6, 17));
+        level2doors.add(new Pair(27, 15));
         Level level = new Level(level2grid, 8, 9, "levels/level2.xml", level2doors);
         testLevel(level);
 
