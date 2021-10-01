@@ -13,7 +13,7 @@ public class ReadFileTests {
     public void testReadTestMap_01() throws JDOMException, IOException {
         new Game();
         ReadXML readXML = new ReadXML();
-        readXML.readXMLFile();
+        readXML.readXMLFile("levels/testMap.xml");
         //get the created tilemap from Game and print it
         Tile[][] tilemap = Game.instance.getTilemap();
         for(int y = 0; y < tilemap[0].length; y++){
@@ -124,6 +124,21 @@ public class ReadFileTests {
 
         assert (player.getLocation().getX() == 9);
         assert (player.getLocation().getY() == 8);
+    }
+
+    @Test
+    public void testReadCurrentSave_01() throws JDOMException, IOException {
+        new Game();
+        ReadXML readXML = new ReadXML();
+        readXML.readXMLFile("levels/currentSave.xml");
+        //get the created tilemap from Game and print it
+        Tile[][] tilemap = Game.instance.getTilemap();
+        for (int y = 0; y < tilemap[0].length; y++) {
+            for (Tile[] tiles : tilemap) {
+                System.out.print(tiles[y].toChar() + "");
+            }
+            System.out.println();
+        }
     }
 
 }

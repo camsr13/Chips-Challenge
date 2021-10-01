@@ -5,6 +5,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +34,20 @@ public class ReadXML {
      *
      */
     public void readXMLFile() throws JDOMException, IOException {
-        readXMLFile("levels/testMap.xml");
+        String directory = fileChooser();
+        while(!directory.endsWith(".xml")){
+            directory = fileChooser();
+        }
+        readXMLFile(directory);
+    }
+
+    private String fileChooser(){
+        JFileChooser fileDir = new JFileChooser();
+        fileDir.showOpenDialog(null);
+        File file = fileDir.getSelectedFile();
+        String fileName = file.getAbsolutePath();
+
+        return fileName;
     }
 
     /**
@@ -134,7 +148,14 @@ public class ReadXML {
                 count+= 1;
             }
         }
-        Game.instance.setupGame(tilemap, player, keysHeld, totalTreasure, collectedTreasures, (ExitLockTile) tilemap[exitLockX][exitLockY], actors);
+        //in case loading a save file that does not have the exit lock
+        ExitLockTile exitLTile;
+        if(tilemap[exitLockX][exitLockY] instanceof ExitLockTile){
+            exitLTile = (ExitLockTile)tilemap[exitLockX][exitLockY];
+        }else{
+            exitLTile = new ExitLockTile(new Location(0,0));
+        }
+        Game.instance.setupGame(tilemap, player, keysHeld, totalTreasure, collectedTreasures, exitLTile, actors);
     }
 
     /**
