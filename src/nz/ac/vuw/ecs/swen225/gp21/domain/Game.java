@@ -254,7 +254,10 @@ public class Game {
 	 * @param keyColour
 	 * @return Then number of keys held
 	 */
-	public int geyKeys(Game.KeyColour keyColour) {
+	public int getKeys(Game.KeyColour keyColour) {
+		if (keyColour == null) {
+			return 0;
+		}
 		return keysHeld.get(keyColour);
 	}
 }

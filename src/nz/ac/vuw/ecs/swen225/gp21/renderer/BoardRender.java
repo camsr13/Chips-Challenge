@@ -27,7 +27,7 @@ public class BoardRender {
 	private JLayeredPane basePane = new JLayeredPane();
 	private ChapRender chapIcon;
 	private Game game;
-	private boolean isAnimating = false;
+	private boolean isAnimating = true;
 	
 	/**
 	 * Size of the tiles in the image file (pixels)
@@ -132,17 +132,22 @@ public class BoardRender {
 		return invDir;
 	}
 	
+	/**
+	 * Disables the animations for fuzz
+	 */
+	public void disableAnimations() {;
+		isAnimating = false;
+	}
 	
 	/**
 	 * Updates and animates chaps position
 	 */
 	public void updateChap() {
-		if (!isAnimating) {
+		if (isAnimating) {
 			int[] chapMove = chapIcon.getMoved();
 		
 			//board animation
 			if(chapMove != null) {
-				isAnimating = true;
 				
 				Timer timer = new Timer();
 				timer.scheduleAtFixedRate(new TimerTask() {
@@ -166,7 +171,6 @@ public class BoardRender {
 						frames++;
 						if(frames == totalFrames) {
 							this.cancel();
-							isAnimating = false;
 							chapIcon.refreshLocation();
 							boardPanel.setOffsets(0, 0);
 							boardPanel.updateChapPos();
@@ -177,6 +181,11 @@ public class BoardRender {
 			
 			
 			}
+		} else {
+			
+			chapIcon.refreshLocation();
+			chapIcon.update();
+			boardPanel.updateChapPos();
 		}
 		
 		boardPanel.revalidate();
