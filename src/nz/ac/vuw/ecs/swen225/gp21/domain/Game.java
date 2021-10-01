@@ -248,4 +248,13 @@ public class Game {
 			o.levelEnd();
 		}
 	}
+
+	/**
+	 * Returns the number of keys held of the specified colour.
+	 * @param keyColour
+	 * @return Then number of keys held
+	 */
+	public int geyKeys(Game.KeyColour keyColour) {
+		return keysHeld.get(keyColour);
+	}
 }
