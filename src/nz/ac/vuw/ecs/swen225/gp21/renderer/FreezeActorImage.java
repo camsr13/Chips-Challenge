@@ -26,8 +26,9 @@ public class FreezeActorImage extends ActorImage {
 	private int tileSize;
 	private static final String sheetName = "images/Freeze_Actor_Sheet.png";
 	private static  ArrayList<BufferedImage> images = null;
-	protected FreezeActorImage(FreezeActor actor, int tileSize) {
+	protected FreezeActorImage(Game game, FreezeActor actor, int tileSize) {
 		this.actor = actor;
+		this.game = game;
 		this.tileSize = tileSize;
 		if(images == null) {
 			loadImages();
