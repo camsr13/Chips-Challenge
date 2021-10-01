@@ -13,6 +13,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
 
 /**
  * ActorImage that renders a Freeze actor onto the board of the game
+ * SudentID: 300511942
  * @author Jac Clarke
  */
 class FreezeActorImage extends ActorImage {

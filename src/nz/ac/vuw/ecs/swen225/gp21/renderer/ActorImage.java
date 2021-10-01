@@ -16,6 +16,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
 
 /**
  * Base abstract class to store and update actor images on the board from
+ * SudentID: 300511942
  * @author Jac Clarke
  *
  */

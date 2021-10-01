@@ -15,6 +15,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
 /**
  * Main rendered class responsible for initialising all sub classes
  * and returning the final assembled render to the app package
+ * SudentID: 300511942
  * @author Jac Clarke
  *
  */

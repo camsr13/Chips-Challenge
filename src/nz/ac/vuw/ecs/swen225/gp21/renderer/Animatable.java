@@ -15,6 +15,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
 /**
  * A Modified JLabel base which can be used for objects that aren't part of the board
  * and animate when they move.
+ * SudentID: 300511942
  * @author Jac Clarke
  *
  */

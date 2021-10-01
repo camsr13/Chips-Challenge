@@ -33,6 +33,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.WallTile;
 
 /**
  * A Modified JPanel which paints the current board tiles into a panel
+ * SudentID: 300511942
  * @author Jac Clarke
  *
  */

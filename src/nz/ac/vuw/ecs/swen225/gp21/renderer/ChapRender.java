@@ -15,6 +15,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
 /**
  * An extended JLable which handles the rendering and animation of the players character "Chap".
  * Chap needs to be animated separate from the board so uses Animatable as a template
+ * SudentID: 300511942
  * @author Jac Clarke
  *
  */
