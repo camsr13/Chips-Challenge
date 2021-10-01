@@ -6,9 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
@@ -18,6 +15,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
 /**
  * An extended JLable which handles the rendering and animation of the players character "Chap".
  * Chap needs to be animated separate from the board so uses Animatable as a template
+ * SudentID: 300511942
  * @author Jac Clarke
  *
  */
@@ -31,10 +29,10 @@ class ChapRender extends Animatable {
 	
 	private static final int chapFrames = 4;
 	/**
-	 * Creates a JPanel type object which represents the player
-	 * @param game
-	 * @param scale 
-	 * @param tileSize 
+	 * Creates a JLabel type object which represents the player
+	 * @param game the game the player is part of
+	 * @param scale the initial scale to render at
+	 * @param tileSize the size of the tiles in the board
 	 */
 	protected ChapRender(Game game, double scale, int tileSize) {
 		super.frames = chapFrames;
@@ -51,16 +49,12 @@ class ChapRender extends Animatable {
 		update();
 	}
 	
-	@Override
-	void setBounds(){
-		
-	}
 	
 	/**
 	 * Loads the sprite sheet for chap
 	 */
 	@Override
-	void loadImages() {
+	protected void loadImages() {
 		BufferedImage sheet = null;
 		URL nameUrl = this.getClass().getResource(sheetName);
 		
@@ -89,9 +83,11 @@ class ChapRender extends Animatable {
 		
 	}
 
-
+	/**
+	 * Gets the players location
+	 */
 	@Override
-	Location getBoardLocation() {
+	protected Location getBoardLocation() {
 		return game.getPlayer().getLocation();
 	}
 

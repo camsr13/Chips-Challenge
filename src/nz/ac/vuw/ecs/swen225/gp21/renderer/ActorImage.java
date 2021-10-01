@@ -9,19 +9,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Actor;
-import nz.ac.vuw.ecs.swen225.gp21.domain.FreezeActor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Location;
-import nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction;;
 
+/**
+ * Base abstract class to store and update actor images on the board from
+ * SudentID: 300511942
+ * @author Jac Clarke
+ *
+ */
 abstract class ActorImage {
-	//private List<BufferedImage> images = new ArrayList<BufferedImage>();
-	private Actor actor;
 	private int tileSize;
-	private static final int numDirs = Direction.values().length;
 	private int frame = 0;
 	private int totalFrames;
+	/**
+	 * The current image of the actor
+	 */
 	protected BufferedImage image;
 	
 	/**
@@ -31,7 +36,7 @@ abstract class ActorImage {
 	 * @param totalFrames the number of frames in the sheet for each direction
 	 */
 	protected ActorImage(Actor actor,int tileSize, int totalFrames){
-		this.actor = actor;
+		//this.actor = actor;
 		this.tileSize = tileSize;
 		this.totalFrames = totalFrames;
 	}
@@ -42,9 +47,10 @@ abstract class ActorImage {
 	 */
 	protected abstract List<BufferedImage> getImages();
 	
-	/*
+	/**
 	 * Gets the current direction to display the image of as an integer
-	 * (Up = 0, Down = 1, Left = 2, Right = 3
+	 * (Up = 0, Down = 1, Left = 2, Right = 3)
+	 * @return integer (0-3) indicating direction
 	 */
 	protected abstract int getCurDirection();
 	
@@ -52,8 +58,10 @@ abstract class ActorImage {
 	 * Draws the actor relative to chaps position, if the actor has a location
 	 * @param g the graphic object to draw to
 	 * @param chapPos the position of the player
+	 * @param offsets sets the offset for the player
+	 * @param board the board to assign the images to
 	 */
-	abstract void drawActor(Graphics2D g, Location chapPos);
+	abstract void drawActor(Graphics2D g, Location chapPos,int[] offsets, JPanel board);
 	
 	/**Gets the next frame of the animation
 	 * @return true if the next frame is the start frame
@@ -66,6 +74,12 @@ abstract class ActorImage {
 			return true;
 		}
 		return false;
+	}
+	/**
+	 * Sets the image to frame one of the current direction
+	 */
+	protected void setImageByDir() {
+		image = this.getImages().get((totalFrames* getCurDirection()));
 	}
 	
 	
@@ -102,5 +116,7 @@ abstract class ActorImage {
 		}
 		return images;
 	}
+
+	
 	
 }
