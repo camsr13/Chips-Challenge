@@ -94,21 +94,6 @@ public class RecReplay {
 
 
     /**
-     * //TODO waiting for cam to change
-     * @throws JDOMException
-     * @throws IOException
-     */
-    public static void saveConfirmDialogue() throws JDOMException, IOException {
-        int result = JOptionPane.showConfirmDialog(null,
-                "Do you want to save a recording?", "Save recording: ",JOptionPane.YES_NO_OPTION);
-
-        if (result == JOptionPane.OK_OPTION) {
-            saveRecording();
-        }
-    }
-
-
-    /**
      * Dialogue for user to select replay mode.
      */
     public static void selectModeDialogue() {
