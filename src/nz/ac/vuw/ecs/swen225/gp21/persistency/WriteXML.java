@@ -3,6 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp21.persistency;
 import nz.ac.vuw.ecs.swen225.gp21.domain.*;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 import java.io.FileOutputStream;
@@ -37,7 +38,7 @@ public class WriteXML {
      */
     public void writeXMLFile(Document document, String fileDirectory){
         //Set outputStream and write generated XML file
-        XMLOutputter xmlOutputter = new XMLOutputter();
+        XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
         try(FileOutputStream fileOutputStream = new FileOutputStream(fileDirectory)){
             xmlOutputter.output(document, fileOutputStream);
         } catch (IOException e) {

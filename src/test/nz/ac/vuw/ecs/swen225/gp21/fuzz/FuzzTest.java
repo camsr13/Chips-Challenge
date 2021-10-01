@@ -18,56 +18,58 @@ public class FuzzTest {
     private final int M = Integer.MAX_VALUE;
 
     private final int[][] grid1 = new int[][] {
-        new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        new int[] {0, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, 0},
-        new int[] {0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0},
-        new int[] {0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0},
-        new int[] {0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0},
-        new int[] {0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0},
-        new int[] {0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0},
-        new int[] {0, M, M, M, 0, M, M, M, M, M, 0, M, M, M, M, M, M, M, M, M, 0},
-        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0},
-        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0},
-        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0},
-        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0},
-        new int[] {0, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, 0},
-        new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+        new int[] {M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M},
+        new int[] {M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M},
+        new int[] {M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M},
+        new int[] {M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M},
+        new int[] {M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M},
+        new int[] {M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M},
+        new int[] {M, M, M, 0, M, M, M, M, M, 0, M, M, M, M, M, M, M, M, M},
+        new int[] {M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M},
+        new int[] {M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M},
+        new int[] {M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        new int[] {M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M},
+        new int[] {M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M},
+        new int[] {M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M},
     };
     private final int[][] grid2 = new int[][] {
-        new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        new int[] {0, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, 0, M, M, M, M, M, M, M, M, M, M, M, M, 0},
-        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, M, 0, M, 0, 0, 0, M, 0, 0, 0, M, 0},
-        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, M, 0, M, M, M, 0, M, 0, 0, 0, M, 0, M, 0, M, M, M, 0, 0, 0, M, 0},
-        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, M, 0, M, 0, M, 0, M, 0, 0, 0, M, 0, M, 0, M, 0, 0, 0, 0, 0, M, 0},
-        new int[] {0, M, 0, M, M, M, M, M, 0, M, 0, M, 0, M, 0, M, M, 0, M, M, 0, 0, 0, M, 0, M, M, M, M, M, 0},
-        new int[] {0, M, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, M, 0, M, 0, 0, 0, 0, 0, M, 0, M, 0, M, 0, 0, 0, M, 0},
-        new int[] {0, M, 0, M, 0, M, M, M, M, M, 0, M, M, M, 0, M, M, M, M, M, M, M, 0, M, 0, M, 0, M, 0, M, 0},
-        new int[] {0, M, 0, M, 0, 0, 0, M, 0, 0, 0, M, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, M, 0, M, 0},
-        new int[] {0, M, 0, M, M, M, 0, M, 0, M, M, M, 0, M, 0, M, 0, M, M, M, 0, M, M, M, M, M, 0, M, M, M, 0},
-        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, M, 0, M, 0, M, 0, 0, 0, M, 0, M, 0, 0, 0, M, 0, 0, 0, M, 0},
-        new int[] {0, M, M, M, M, M, M, M, M, M, 0, M, 0, M, M, M, M, M, 0, M, M, M, 0, M, 0, M, M, M, 0, M, 0},
-        new int[] {0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, M, 0, 0, 0, 0, 0, M, 0},
-        new int[] {0, M, 0, M, M, M, M, M, 0, M, M, M, M, M, 0, M, 0, M, M, M, 0, M, 0, M, M, M, M, M, M, M, 0},
-        new int[] {0, M, 0, M, 0, 0, 0, M, 0, M, 0, 0, 0, M, 0, 0, 0, M, 0, M, 0, M, 0, 0, 0, 0, 0, 0, 0, M, 0},
-        new int[] {0, M, 0, M, 0, M, 0, M, M, M, 0, M, 0, M, M, M, M, M, 0, M, 0, M, M, M, M, M, M, M, 0, M, 0},
-        new int[] {0, M, 0, 0, 0, M, 0, 0, 0, M, 0, M, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0},
-        new int[] {0, M, 0, M, M, M, M, M, 0, M, M, M, 0, M, M, M, M, M, 0, M, 0, M, 0, M, M, M, M, M, M, M, 0},
-        new int[] {0, M, 0, M, 0, 0, 0, M, 0, M, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, M, 0, M, 0, 0, 0, 0, 0, M, 0},
-        new int[] {0, M, 0, M, 0, M, 0, M, 0, M, 0, M, M, M, M, M, M, M, M, M, 0, M, 0, M, 0, M, M, M, 0, M, 0},
-        new int[] {0, M, 0, M, 0, M, 0, 0, 0, M, 0, M, 0, 0, 0, 0, 0, 0, 0, M, 0, M, 0, 0, 0, M, 0, 0, 0, M, 0},
-        new int[] {0, M, 0, M, M, M, M, M, 0, M, 0, M, 0, M, 0, 0, 0, 0, 0, M, M, M, M, M, M, M, 0, M, 0, M, 0},
-        new int[] {0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, M, 0},
-        new int[] {0, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, 0},
-        new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,}
+        new int[] {M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M},
+        new int[] {M, M, 0, M, 0, 0, 0, 0, M, 0, M, 0, 0, 0, 0, M, 0, 0, 0, M},
+        new int[] {M, 0, 0, M, 0, 0, 0, 0, M, 0, M, 0, 0, 0, 0, M, 0, 0, 0, M},
+        new int[] {M, M, 0, M, 0, 0, 0, 0, M, 0, M, 0, 0, 0, 0, M, 0, 0, 0, M},
+        new int[] {M, M, 0, M, 0, 0, 0, 0, M, 0, M, 0, 0, 0, 0, M, 0, 0, 0, M},
+        new int[] {M, M, 0, M, 0, 0, 0, 0, M, 0, M, 0, 0, 0, 0, M, 0, 0, 0, M},
+        new int[] {M, M, 0, M, M, M, 0, M, M, 0, M, M, 0, M, M, M, M, 0, M, M},
+        new int[] {M, M, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M},
+        new int[] {M, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M},
+        new int[] {M, M, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M},
+        new int[] {M, M, 0, M, 0, M, M, M, M, 0, M, M, M, M, M, M, 0, 0, 0, M},
+        new int[] {M, M, 0, M, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, M},
+        new int[] {M, M, 0, M, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, M},
+        new int[] {M, M, 0, M, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, 0, M},
+        new int[] {M, 0, 0, M, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, M, 0, M},
+        new int[] {M, M, M, M, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, M, M, M, M},
+        new int[] {M, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, M, 0, M, M},
+        new int[] {M, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, 0, 0, M, M},
+        new int[] {M, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, M, 0, M, M},
+        new int[] {M, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, M, 0, M, M},
+        new int[] {M, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, M, 0, M, M},
+        new int[] {M, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, M, 0, M, M},
+        new int[] {M, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, M, 0, M, M},
+        new int[] {M, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, M, 0, 0, M},
+        new int[] {M, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, M, 0, M, M},
+        new int[] {M, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, M, 0, M, M},
+        new int[] {M, 0, 0, 0, 0, M, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, M, 0, M, M},
+        new int[] {M, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, M, M},
+        new int[] {M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M}
     };
 
     private final int MOVES = 9999999;
     /**
      * The number of seconds the random exploration should run (at the most).
      */
-    private final int TIMEOUT = 20;
-    private final int MOVE_DELAY = 20;
+    private final int TIMEOUT = 30;
+    private final int MOVE_DELAY = 900;
 
     /**
      * Converts a specified direction to the Runnable used to move in that direction.
@@ -239,7 +241,7 @@ public class FuzzTest {
      */
     @Test
     void test1() {
-        Level level = new Level(grid1, 10, 4, "levels/level1.xml");
+        Level level = new Level(grid1, 9, 3, "levels/level1.xml");
         testLevel(level);
 
         System.out.println(level);
@@ -250,7 +252,7 @@ public class FuzzTest {
      */
     @Test
     void test2() {
-        Level level = new Level(grid2, 21, 16, "levels/level2.xml");
+        Level level = new Level(grid2, 8, 9, "levels/level2.xml");
         testLevel(level);
 
         System.out.println(level);
