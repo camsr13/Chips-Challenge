@@ -1,7 +1,7 @@
 package test.nz.ac.vuw.ecs.swen225.gp21.domain;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.*;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;

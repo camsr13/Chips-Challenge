@@ -12,6 +12,8 @@
 	<keysHeld>
 		<key colour = "blue">0</key>
 		<key colour = "yellow">0</key>
+		<key colour = "green">0</key>
+		<key colour = "red">0</key>
 	</keysHeld>
 	<player>
 		<location>15</location>
