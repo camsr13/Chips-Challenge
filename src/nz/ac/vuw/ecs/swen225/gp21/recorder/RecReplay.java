@@ -39,9 +39,11 @@ public class RecReplay {
     private static Queue<String> moveHistory = new ArrayDeque<>();
     private static boolean isRunning;
     private static boolean isRecording;
-    private static int DELAY = 200;
+    private static int DELAY = 1500;
     static GUIImp GUI;
     static Thread thread;
+    static WriteXML xmlWriter;
+    static Document curSaveDoc;
 
     public enum Direction {
         UP, DOWN, LEFT, RIGHT
@@ -193,7 +195,7 @@ public class RecReplay {
         JPanel panel = new JPanel();
         JLabel label = new JLabel("Select custom speed: ");
         JSpinner spinner = new JSpinner();
-        spinner.setValue(200);
+        spinner.setValue(DELAY);
 
         // Setup
         panel.add(label);
@@ -220,6 +222,8 @@ public class RecReplay {
     public static void newRecording() {
         isRecording = true;
         moveHistory.clear();
+        xmlWriter = new WriteXML();
+        curSaveDoc = xmlWriter.generateDocument();
         // TODO populates moveHistory
 /*        Direction[] arr = new Direction[]{Direction.LEFT, Direction.UP, Direction.UP, Direction.RIGHT};
         for (Direction d : arr) {
@@ -234,13 +238,14 @@ public class RecReplay {
      * @throws TransformerException
      */
     public static void saveRecording() {
-        WriteXML xmlWriter = new WriteXML();
-        Document document = xmlWriter.generateDocument();
+/*        WriteXML xmlWriter = new WriteXML();
+        Document document = xmlWriter.generateDocument();*/
+
         //creates new document and root element
         //Document document = new Document();
         //Element root = new Element("recorded");
         //document.setRootElement(root);
-        Element root = document.getRootElement();
+        Element root = curSaveDoc.getRootElement();
 
         // player moves
         Element playerMovesElem = new Element("playerMoves");
@@ -257,7 +262,7 @@ public class RecReplay {
         root.addContent(levelInfoElem);
         addLevelElement(levelInfoElem, "1");
 
-        fileSelectDialogue(document, xmlWriter);
+        fileSelectDialogue(curSaveDoc, xmlWriter);
         //writeSaveXML(document, filePath);
 
         endRecording(); // clean up
@@ -313,7 +318,12 @@ public class RecReplay {
 
     public static void onReplay() throws JDOMException, IOException {
         //TODO
-        selectReplayFileDialogue();
+        //selectReplayFileDialogue();
+        moveHistory.clear();
+        String fp = ReadXML.fileChooser();
+        ReadXML xmlReader = new ReadXML();
+        xmlReader.readXMLFile(fp);
+        loadRecording(fp);
         selectModeDialogue();
     }
 
@@ -378,6 +388,7 @@ public class RecReplay {
      */
     public static void runReplay() {
         // FIXME
+        isRunning = true;
         Runnable run = () -> {
             while (isRunning && moveHistory.size() > 0) {
                 try {

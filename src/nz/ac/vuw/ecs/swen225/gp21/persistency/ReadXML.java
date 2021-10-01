@@ -41,7 +41,12 @@ public class ReadXML {
         readXMLFile(directory);
     }
 
-    private String fileChooser(){
+    /**
+     * Allows the user to select the directory for a level xml
+     *
+     * @return directory string
+     */
+    public static String fileChooser(){
         JFileChooser fileDir = new JFileChooser();
         fileDir.showOpenDialog(null);
         File file = fileDir.getSelectedFile();
