@@ -503,31 +503,22 @@ public class GUIImp implements GUIAbstract{
 
 	public void doWestMove() {
 		if(canMove) {
-			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.LEFT);
-			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.LEFT);
-			boardRender.updateChap();
-			updateDisplay();
-			freezeMovement();
+			lastMove = Game.Direction.LEFT;
+			canMove = false;
 		}
 	}
 
 	public void doEastMove() {
 		if(canMove) {
-			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.RIGHT);
-			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.RIGHT);
-			boardRender.updateChap();
-			updateDisplay();
-			freezeMovement();
+			lastMove = Game.Direction.RIGHT;
+			canMove = false;
 		}
 	}
 
 	public void doSouthMove() {
 		if(canMove) {
-			game.inputDirection(nz.ac.vuw.ecs.swen225.gp21.domain.Game.Direction.DOWN);
-			RecReplay.addAction(nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay.Direction.DOWN);
-			boardRender.updateChap();
-			updateDisplay();
-			freezeMovement();
+			lastMove = Game.Direction.DOWN;
+			canMove = false;
 		}
 	}
 
@@ -604,14 +595,12 @@ public class GUIImp implements GUIAbstract{
 
             		halfTick = false;
 
-	            	canMove = true;
-
             		if(lastMove != null) {
-
-            			boardRender.updateChap();
-
+            			canMove = true;
             			game.inputDirection(lastMove);
 
+            			boardRender.updateChap();
+            			
                 		switch(lastMove) {
                 			case DOWN :
                 				RecReplay.addAction(RecReplay.Direction.DOWN);
@@ -626,6 +615,7 @@ public class GUIImp implements GUIAbstract{
                 				RecReplay.addAction(RecReplay.Direction.RIGHT);
                 				break;
                 		}
+                		lastMove = null;
             		}
 
             	}else {
