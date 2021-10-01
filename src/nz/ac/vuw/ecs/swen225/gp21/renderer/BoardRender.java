@@ -173,7 +173,7 @@ public class BoardRender {
 						}
 					}
 					
-				}, 14, 14);
+				}, 28, 28);
 			
 			
 			}
