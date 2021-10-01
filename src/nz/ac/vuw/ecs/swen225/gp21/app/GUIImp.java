@@ -12,6 +12,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -32,6 +34,7 @@ import javax.xml.transform.TransformerException;
 import org.jdom2.JDOMException;
 
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
+import nz.ac.vuw.ecs.swen225.gp21.domain.Game.KeyColour;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.ReadXML;
 import nz.ac.vuw.ecs.swen225.gp21.persistency.WriteXML;
 import nz.ac.vuw.ecs.swen225.gp21.recorder.RecReplay;
@@ -202,6 +205,12 @@ public class GUIImp implements GUIAbstract{
 		    }
 		});
 
+    	JMenuItem help = new JMenuItem(new AbstractAction("Help") {
+		    public void actionPerformed(ActionEvent ae) {
+		    	help();
+		    }
+		});
+
     	JMenuItem loadGame = new JMenuItem(new AbstractAction("Load Game") {
 		    public void actionPerformed(ActionEvent ae) {
 		    	try {
@@ -299,6 +308,7 @@ public class GUIImp implements GUIAbstract{
     	menuOptions.add(replayGame);
     	menuLevel.add(startLevel1);
     	menuLevel.add(startLevel2);
+    	menuHelp.add(help);
 
 		//Add menu items to menubar
 		menuBar.add(menuGame);
@@ -342,13 +352,14 @@ public class GUIImp implements GUIAbstract{
 
 
     	levelPanel.add(levelLabel);
+    	levelPanel.add(levelFigureLabel);
     	timePanel.add(timeTitleLabel);
     	timePanel.add(timeFigureLabel);
-    	keysPanel.add(keysLabel);
-    	keysPanel.add(redKeysLabel);
-    	keysPanel.add(greenKeysLabel);
-    	keysPanel.add(blueKeysLabel);
-    	keysPanel.add(yellowKeysLabel);
+    	keysPanel.add(keysLabel, BorderLayout.WEST);
+    	keysPanel.add(redKeysLabel, BorderLayout.EAST);
+    	keysPanel.add(greenKeysLabel, BorderLayout.EAST);
+    	keysPanel.add(blueKeysLabel, BorderLayout.EAST);
+    	keysPanel.add(yellowKeysLabel, BorderLayout.EAST);
     	treasuresPanel.add(treasuresLabel);
     	treasuresPanel.add(treasuresFigureLabel);
 
@@ -361,7 +372,8 @@ public class GUIImp implements GUIAbstract{
     	timePanel.setBackground(Color.BLACK);
     	keysPanel.setBackground(Color.BLACK);
     	treasuresPanel.setBackground(Color.BLACK);
-
+    	movePanel.setBackground(Color.GREEN);
+    	pausePanel.setBackground(Color.GREEN);
 
 
     	//add parts parts to sideBarSouth
@@ -469,6 +481,7 @@ public class GUIImp implements GUIAbstract{
      *
      */
     protected void doStartLevel2() {
+    	levelFigureLabel.setText("2");
 		currFile = "levels/level2.xml";
 		loadLevel();
 	}
@@ -478,6 +491,7 @@ public class GUIImp implements GUIAbstract{
 	 */
 	protected void doStartLevel1() {
 
+		levelFigureLabel.setText("1");
 		currFile = "levels/level1.xml";
 		loadLevel();
 
@@ -488,6 +502,7 @@ public class GUIImp implements GUIAbstract{
 	 */
 	protected void doStartTest() {
 
+		levelFigureLabel.setText("Test");
 		currFile = "levels/testMap.xml";
 		loadLevel();
 
@@ -542,6 +557,7 @@ public class GUIImp implements GUIAbstract{
     	switch(n){
     		case 0:
     			doResumeFromPause();
+    			break;
     		case 1:
     			doExitGameS();
     			break;
@@ -608,10 +624,19 @@ public class GUIImp implements GUIAbstract{
 		treasuresFigureLabel.setText(String.valueOf(game.getTotalTreasures()-game.getCollectedTreasures()));
 
 		//Update keys
-		//redKeysLabel.setText("Red Keys =" + game.geyKeys(Game.KeyColour.RED));
-		//redKeysLabel.setText("Blue Keys =" + game.geyKeys(Game.KeyColour.BLUE));
-		//redKeysLabel.setText("Yellow Keys =" + game.geyKeys(Game.KeyColour.YELLOW));
-		//redKeysLabel.setText("Green Keys =" + game.geyKeys(Game.KeyColour.GREEN));
+		HashMap<KeyColour, Integer> keyMap = game.getKeysHeld();
+
+		Integer redCount = 0;
+		Integer blueCount = 0;
+		Integer greenCount = 0;
+		Integer yellowCount = 0;
+
+
+
+		redKeysLabel.setText("Red Keys =" + game.getKeys(Game.KeyColour.RED));
+		blueKeysLabel.setText("Blue Keys =" + game.getKeys(Game.KeyColour.BLUE));
+		yellowKeysLabel.setText("Yellow Keys =" + game.getKeys(Game.KeyColour.YELLOW));
+		greenKeysLabel.setText("Green Keys =" + game.getKeys(Game.KeyColour.GREEN));
 
 
 		if(game.isLevelComplete()) {
@@ -841,6 +866,14 @@ public class GUIImp implements GUIAbstract{
 	 */
 	public void setTimer(int i) {
 		countdownInt = i;
+	}
+
+	private void help() {
+
+		JOptionPane.showMessageDialog(null, "This is Chaps Challenge! Navigate around with the movement buttons,"
+				+ "to solve the maze. You will need keys to pass through locked doors. Collect treasures along"
+				+ "the way, but watch out for traps and enemies");
+
 	}
 
 }
