@@ -4,6 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.*;
 import org.junit.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FreezeActorTests {
 
@@ -20,8 +21,9 @@ public class FreezeActorTests {
         FreezeActor actor = new FreezeActor(new Location(2, 0), Game.Direction.RIGHT);
         ArrayList<Actor> actors = new ArrayList<Actor>();
         actors.add(actor);
-        game.setupGame(tilemap, player, null, 0, 0, null, actors);
-        Game.instance.tick();
+        HashMap<Game.KeyColour, Integer> keysHeld = new HashMap<>();
+        ExitLockTile exitLock = new ExitLockTile(new Location(0, 0));
+        Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);        Game.instance.tick();
 
         assert (actor.getLocation().getX() == 3);
         Game.instance.tick();
@@ -44,9 +46,11 @@ public class FreezeActorTests {
         FreezeActor actor = new FreezeActor(new Location(0, 2), Game.Direction.DOWN);
         ArrayList<Actor> actors = new ArrayList<Actor>();
         actors.add(actor);
-        game.setupGame(tilemap, player, null, 0, 0, null, actors);
-        Game.instance.tick();
+        HashMap<Game.KeyColour, Integer> keysHeld = new HashMap<>();
+        ExitLockTile exitLock = new ExitLockTile(new Location(0, 0));
+        Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);
 
+        Game.instance.tick();
         assert (actor.getLocation().getY() == 3);
         Game.instance.tick();
         assert (actor.getLocation().getY() == 3);
@@ -58,19 +62,24 @@ public class FreezeActorTests {
     @Test
     public void freezeTest(){
         Game game = new Game();
-        Player player = new Player(new Location(0, 0), 0);
+        Player player = new Player(new Location(2, 0), 0);
         Tile[][] tilemap = new Tile[5][1];
         for (int i =1; i < 4; i++){
             tilemap[i][0] = new FreeTile(new Location(i, 0));
         }
         tilemap[0][0] = new WallTile(new Location(0, 0));
         tilemap[4][0] = new WallTile(new Location(0, 0));
-        FreezeActor actor = new FreezeActor(new Location(2, 0), Game.Direction.RIGHT);
+        FreezeActor actor = new FreezeActor(new Location(1, 0), Game.Direction.RIGHT);
         ArrayList<Actor> actors = new ArrayList<Actor>();
         actors.add(actor);
-        game.setupGame(tilemap, player, null, 0, 0, null, actors);
+        HashMap<Game.KeyColour, Integer> keysHeld = new HashMap<>();
+        ExitLockTile exitLock = new ExitLockTile(new Location(0, 0));
+        Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);
 
-        // TODO: the test
+        assert player.getTimeFrozen() == 0;
+        Game.instance.tick();
+        assert player.getTimeFrozen() > 0;
+        assert Game.instance.getActors().isEmpty();
     }
 
 }

@@ -4,6 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ExitTileTests {
 
@@ -14,7 +15,11 @@ public class ExitTileTests {
         Tile[][] tilemap = new Tile[2][1];
         tilemap[0][0] = new FreeTile(new Location(0, 0));
         tilemap[1][0] = new ExitTile(new Location(1, 0));
-        game.setupGame(tilemap, player, null, 0, 0, null, new ArrayList<Actor>());
+        HashMap<Game.KeyColour, Integer> keysHeld = new HashMap<>();
+        ArrayList<Actor> actors = new ArrayList<>();
+        ExitLockTile exitLock = new ExitLockTile(new Location(0, 0));
+        Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);
+
         player.move(Game.Direction.RIGHT);
         assert player.getLocation().getX() == 1;
         assert Game.instance.isLevelComplete();

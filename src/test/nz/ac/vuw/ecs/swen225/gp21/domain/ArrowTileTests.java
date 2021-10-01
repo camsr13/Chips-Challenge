@@ -4,6 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp21.domain.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ArrowTileTests {
 
@@ -15,7 +16,10 @@ public class ArrowTileTests {
         tilemap[0][0] = new FreeTile(new Location(0, 0));
         tilemap[1][0] = new ArrowTile(new Location(1, 0), Game.Direction.RIGHT);
         tilemap[2][0] = new ArrowTile(new Location(2, 0), Game.Direction.LEFT);
-        game.setupGame(tilemap, player, null, 0, 0, null, new ArrayList<Actor>());
+        HashMap<Game.KeyColour, Integer> keysHeld = new HashMap<>();
+        ArrayList<Actor> actors = new ArrayList<>();
+        ExitLockTile exitLock = new ExitLockTile(new Location(0, 0));
+        Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);
 
         Game.instance.tick();
         assert (player.getLocation().getX() == 2);
@@ -32,7 +36,10 @@ public class ArrowTileTests {
         tilemap[1][0] = new ArrowTile(new Location(1, 0), Game.Direction.DOWN);
         tilemap[1][1] = new ArrowTile(new Location(1, 1), Game.Direction.LEFT);
         tilemap[0][1] = new ArrowTile(new Location(0, 1), Game.Direction.UP);
-        game.setupGame(tilemap, player, null, 0, 0, null, new ArrayList<Actor>());
+        HashMap<Game.KeyColour, Integer> keysHeld = new HashMap<>();
+        ArrayList<Actor> actors = new ArrayList<>();
+        ExitLockTile exitLock = new ExitLockTile(new Location(0, 0));
+        Game.instance.setupGame(tilemap, player, keysHeld, 2, 0, exitLock, actors);
 
         Game.instance.tick();
         assert (player.getLocation().getX() == 1);
