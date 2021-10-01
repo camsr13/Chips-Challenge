@@ -173,7 +173,12 @@ public class GUIImp implements GUIAbstract{
 
     	JMenuItem loadGame = new JMenuItem(new AbstractAction("Load Game") {
 		    public void actionPerformed(ActionEvent ae) {
-		    	readXMLFile();
+		    	try {
+					currXML.readXMLFile();
+				} catch (JDOMException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		    }
 		});
 
