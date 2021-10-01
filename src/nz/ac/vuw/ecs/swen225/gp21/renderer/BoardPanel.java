@@ -14,10 +14,12 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import nz.ac.vuw.ecs.swen225.gp21.domain.Actor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.ArrowTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.ExitLockTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.ExitTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.FreeTile;
+import nz.ac.vuw.ecs.swen225.gp21.domain.FreezeActor;
 import nz.ac.vuw.ecs.swen225.gp21.domain.FreezeTile;
 import nz.ac.vuw.ecs.swen225.gp21.domain.Game;
 import nz.ac.vuw.ecs.swen225.gp21.domain.InfoTile;
@@ -45,12 +47,13 @@ class BoardPanel extends JPanel {
 	private static final int[] colourOrder = {1, 3, 0, 2};
 	
 	//Number of sprites to load
-	private static final int numTiles = 16;
+	private static final int numTiles = 19;
 	
 	private static final Class<?>[] tileOrder = { FreeTile.class, KeyTile.class, KeyTile.class, KeyTile.class,
 											KeyTile.class, TreasureTile.class, FreezeTile.class, InfoTile.class,
 											WallTile.class, LockTile.class, LockTile.class, LockTile.class,
-											LockTile.class, ExitLockTile.class, ExitTile.class, ArrowTile.class
+											LockTile.class, ExitLockTile.class, ExitTile.class, ArrowTile.class,
+											ArrowTile.class, ArrowTile.class, ArrowTile.class
 											};
 
 	/**
@@ -82,7 +85,16 @@ class BoardPanel extends JPanel {
 		this.game = game;
 		chapPos = game.getPlayer().getLocation();
 		loadTileSprites();
+		createActors();
 	};
+	
+	private void createActors() {
+		for(Actor a : game.getActors()) {
+			if(a instanceof FreezeActor) {
+				
+			}
+		}
+	}
 	
 	/**
 	 * offsets the board for animation
@@ -161,6 +173,10 @@ class BoardPanel extends JPanel {
 					System.out.println("error: No tile image for:" + paintTile.getClass());
 					System.out.println("Defaulting to no image");
 					toPaint = images.get(null).get(0);
+				} else if(paintTile instanceof ArrowTile) {
+					ArrowTile tile = (ArrowTile) paintTile;
+					int dir = tile.getDirection().ordinal();
+					toPaint = images.get(paintTile.getClass()).get(dir);
 				} else {
 					toPaint = images.get(paintTile.getClass()).get(0);
 				} 	

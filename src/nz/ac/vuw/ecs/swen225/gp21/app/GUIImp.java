@@ -3,6 +3,8 @@ package nz.ac.vuw.ecs.swen225.gp21.app;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -52,13 +54,15 @@ public class GUIImp implements GUIAbstract{
 	private final JFrame frame = new JFrame("Game");
 
 	//SideBar to house clock, level and chips count
-	private final JPanel sideBar = new CustomPanel(250, 700);
-	private final JPanel sidebarNorth = new CustomPanel(250, 400);
-	private final JPanel sidebarSouth = new CustomPanel(250, 400);
-	private final JPanel levelPanel = new CustomPanel(250, 100);
-	private final JPanel timePanel = new CustomPanel(250, 100);
+	private final JPanel sideBar = new CustomPanel(300, 500);
+	private final JPanel sidebarNorth = new CustomPanel(250, 250);
+	private final JPanel sidebarSouth = new CustomPanel(250, 250);
+	private final JPanel levelPanel = new CustomPanel(250, 30);
+	private final JPanel timePanel = new CustomPanel(250, 30);
 	private final JPanel keysPanel = new CustomPanel(250, 100);
-	private final JPanel treasuresPanel = new CustomPanel(250, 100);
+	private final JPanel treasuresPanel = new CustomPanel(250, 30);
+	private final JPanel movePanel = new CustomPanel(250, 100);
+	private final JPanel pausePanel = new CustomPanel(250, 30);
 
 	//Sidebar Labels
 	JTextArea levelLabel = new JTextArea("Level");
@@ -98,23 +102,29 @@ public class GUIImp implements GUIAbstract{
 
 
 	//Content Panel
-	private final JPanel area = new CustomPanel(700, 500);
+	private final JPanel area = new CustomPanel(800, 500);
+	GridBagConstraints gbc = new GridBagConstraints();
 
 	private final RecReplay recorder = new RecReplay();
+
+	//Colours
+	Color backgroundColor = new Color(10,10,255);
+	Color panelsColor = new Color(10,10,255);
+	Color buttonsColor = new Color(10,10,255);
 
     public GUIImp() {
 		initGUI();
 	}
 
-		public GUIImp(String file) {
-    	this.currFile = file;
-    	loadLevel();
-			initFrame();
-			initMenu();
-			initBoard();
-			initSideBar();
-			countdown();
-		}
+	public GUIImp(String file) {
+	this.currFile = file;
+	loadLevel();
+		initFrame();
+		initMenu();
+		initBoard();
+		initSideBar();
+		countdown();
+	}
 
     protected void initGUI(){
 
@@ -126,40 +136,18 @@ public class GUIImp implements GUIAbstract{
 
     }
 
-    protected void startPopUp() {
-
-    	Object[] options = {"Load Level 1",
-                "Load Level 2",
-                "Load TestFile", };
-
-    	int n = JOptionPane.showOptionDialog(frame,
-    		    "Welcome",
-    		    "Hello",
-    		    JOptionPane.YES_NO_CANCEL_OPTION,
-    		    JOptionPane.QUESTION_MESSAGE,
-    		    null,
-    		    options,
-    		    options[0]);
-
-    	switch(n){
-    		case 0:
-    			doStartLevel1();
-    			break;
-    		case 1:
-    			doStartLevel2();
-    			break;
-    		case 2:
-    			doStartTest();
-    			break;
-    	}
-	}
-
 	protected void initFrame() {
+
 		frame.setResizable(true);
 		frame.setContentPane(area);
+		area.setBackground(Color.BLACK);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationByPlatform(true);
 		frame.pack();
+		area.setLayout(new BorderLayout(3, 3));
+		area.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+
 	}
 
 
@@ -191,7 +179,12 @@ public class GUIImp implements GUIAbstract{
 
     	JMenuItem loadGame = new JMenuItem(new AbstractAction("Load Game") {
 		    public void actionPerformed(ActionEvent ae) {
-
+		    	try {
+					currXML.readXMLFile();
+				} catch (JDOMException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		    }
 		});
 
@@ -296,54 +289,26 @@ public class GUIImp implements GUIAbstract{
 
 
 
-
-	protected void doStartLevel2() {
-		currFile = "levels/level2.xml";
-		loadLevel();
-	}
-
-	protected void doStartLevel1() {
-
-		currFile = "levels/level1.xml";
-		loadLevel();
-
-	}
-
-	protected void doStartTest() {
-
-		currFile = "levels/testMap.xml";
-		loadLevel();
-
-	}
-
-	protected void doResumeGame() {
-		timer.start();
-
-	}
-
-	protected void doExitGameS() {
-		saveXML.writeXMLFile(saveXML.generateDocument(), "levels/currentSave.xml");
-
-
-	}
-
-	protected void doExitGameX() {
-		System.exit(0);
-	}
-
 	protected void initBoard(){
 
     	//padding around the board
-		area.setLayout(new BorderLayout(3, 3));
-		area.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		board.setBackground(Color.PINK);
-
-	    area.add(gameBoard);
+		gameBoard.setBackground(Color.PINK);
+		gameBoard.setBorder(new EmptyBorder(5, 5, 5, 5));
+	    area.add(gameBoard, BorderLayout.WEST);
 
     }
 
     protected void initSideBar(){
+
+    	//add sidebar to content frame
+    	area.add(sideBar, BorderLayout.EAST);
+    	sideBar.setBackground(Color.GREEN);
+    	sidebarSouth.setBackground(Color.GREEN);
+    	sidebarNorth.setBackground(Color.GREEN);
+    	sideBar.add(sidebarNorth, BorderLayout.NORTH);
+		sideBar.add(sidebarSouth, BorderLayout.SOUTH);
+		movePanel.setLayout(new GridBagLayout());
+
 
     	levelPanel.add(levelLabel);
     	timePanel.add(timeTitleLabel);
@@ -353,19 +318,38 @@ public class GUIImp implements GUIAbstract{
     	treasuresPanel.add(treasuresLabel);
     	treasuresPanel.add(treasuresFigureLabel);
 
+    	levelPanel.setBorder(new EmptyBorder(7, 7, 7, 7));
+    	timePanel.setBorder(new EmptyBorder(7, 7, 7, 7));
+    	keysPanel.setBorder(new EmptyBorder(7, 7, 7, 7));
+    	treasuresPanel.setBorder(new EmptyBorder(7, 7, 7, 7));
+
     	//add parts parts to sideBarSouth
-		sidebarNorth.setBackground(Color.WHITE);
 		sidebarNorth.add(levelPanel, BorderLayout.NORTH);
 		sidebarNorth.add(timePanel, BorderLayout.CENTER);
-		sidebarNorth.add(keysPanel, BorderLayout.SOUTH);
 		sidebarNorth.add(treasuresPanel, BorderLayout.SOUTH);
+		sidebarNorth.add(keysPanel, BorderLayout.SOUTH);
+		sidebarSouth.add(movePanel, BorderLayout.NORTH);
+		sidebarSouth.add(pausePanel, BorderLayout.SOUTH);
 
-		//add buttons to sidebar
-		sidebarSouth.add(north, new MoveButtonConstraints(2, 1));
-		sidebarSouth.add(south, new MoveButtonConstraints(0, 1));
-		sidebarSouth.add(east, new MoveButtonConstraints(1, 2));
-		sidebarSouth.add(west, new MoveButtonConstraints(1, 0));
-		sidebarSouth.add(pause, new MoveButtonConstraints(1, 4));
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		movePanel.add(north, gbc);
+
+		gbc.gridx = 1;
+		gbc.gridy = 2;
+		movePanel.add(south, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		movePanel.add(west, gbc);
+
+		gbc.gridx = 2;
+		gbc.gridy = 1;
+		movePanel.add(east, gbc);
+
+		//gbc.gridx = 1;
+		//gbc.gridy = 4;
+		pausePanel.add(pause);
 
 		//hotkeys
 		south.setMnemonic(KeyEvent.VK_DOWN);
@@ -407,12 +391,69 @@ public class GUIImp implements GUIAbstract{
 			}
 		});
 
-		//add sidebar to content frame
-		sideBar.add(sidebarNorth);
-		sideBar.add(sidebarSouth);
-    	area.add(sideBar, BorderLayout.LINE_END);
-
     }
+
+    protected void startPopUp() {
+
+    	Object[] options = {"Load Level 1",
+                "Load Level 2",
+                "Load TestFile", };
+
+    	int n = JOptionPane.showOptionDialog(frame,
+    		    "Welcome",
+    		    "Hello",
+    		    JOptionPane.YES_NO_CANCEL_OPTION,
+    		    JOptionPane.QUESTION_MESSAGE,
+    		    null,
+    		    options,
+    		    options[0]);
+
+    	switch(n){
+    		case 0:
+    			doStartLevel1();
+    			break;
+    		case 1:
+    			doStartLevel2();
+    			break;
+    		case 2:
+    			doStartTest();
+    			break;
+    	}
+	}
+
+    protected void doStartLevel2() {
+		currFile = "levels/level2.xml";
+		loadLevel();
+	}
+
+	protected void doStartLevel1() {
+
+		currFile = "levels/level1.xml";
+		loadLevel();
+
+	}
+
+	protected void doStartTest() {
+
+		currFile = "levels/testMap.xml";
+		loadLevel();
+
+	}
+
+	protected void doResumeGame() {
+		timer.start();
+
+	}
+
+	protected void doExitGameS() {
+		saveXML.writeXMLFile(saveXML.generateDocument(), "levels/currentSave.xml");
+
+
+	}
+
+	protected void doExitGameX() {
+		System.exit(0);
+	}
 
     protected void doPauseGame() {
 		// TODO Auto-generated method stub
@@ -694,6 +735,4 @@ public class GUIImp implements GUIAbstract{
 
 
 }
-
-
 

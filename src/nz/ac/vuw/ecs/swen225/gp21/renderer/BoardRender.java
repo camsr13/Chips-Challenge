@@ -3,6 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp21.renderer;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class BoardRender {
 	private JLayeredPane basePane = new JLayeredPane();
 	private ChapRender chapIcon;
 	private Game game;
+	private boolean isAnimating = false;
 	
 	/**
 	 * Size of the tiles in the image file (pixels)
@@ -95,6 +97,7 @@ public class BoardRender {
 		
 		basePane.add(boardPanel,JLayeredPane.DEFAULT_LAYER);
 		basePane.add(chapIcon,JLayeredPane.MODAL_LAYER);
+		basePane.setPreferredSize(new Dimension(scaledTile * 9,scaledTile * 9));
 		basePane.setVisible(true);
 		return scaledTile * boardWidth;
 	}
@@ -124,47 +127,51 @@ public class BoardRender {
 		return invDir;
 	}
 	
+	
 	/**
 	 * Updates and animates chaps position
 	 */
 	public void updateChap() {
-		int[] chapMove = chapIcon.getMoved();
-		
-		//board animation
-		if(chapMove != null) {
-			
-			
-		Timer timer = new Timer();
-		timer.scheduleAtFixedRate(new TimerTask() {
-			int totalFrames = 16;
-			int frames = 0;
-			int increment = 0;
+		if (!isAnimating) {
 			int[] chapMove = chapIcon.getMoved();
-			@Override
-			public void run() {
+		
+			//board animation
+			if(chapMove != null) {
+				isAnimating = true;
+				
+				Timer timer = new Timer();
+				timer.scheduleAtFixedRate(new TimerTask() {
+					int totalFrames = 16;
+					int frames = 0;
+					int increment = 0;
+					int[] chapMove = chapIcon.getMoved();
+					@Override
+					public void run() {
+							
+						increment += tileSize/totalFrames;
+						boardPanel.setOffsets(-(increment * chapMove[0]), -(increment * chapMove[1]));
+						boardPanel.revalidate();
+						boardPanel.repaint();
+							
+							
+						if (frames % (totalFrames/4) == 0) {
+							chapIcon.update();
+						}
+							
+						frames++;
+						if(frames == totalFrames) {
+							this.cancel();
+							isAnimating = false;
+							chapIcon.refreshLocation();
+							boardPanel.setOffsets(0, 0);
+							boardPanel.updateChapPos();
+						}
+					}
 					
-				increment += tileSize/totalFrames;
-				boardPanel.setOffsets(-(increment * chapMove[0]), -(increment * chapMove[1]));
-				boardPanel.revalidate();
-				boardPanel.repaint();
-					
-					
-				if (frames % (totalFrames/4) == 0) {
-					chapIcon.update();
-				}
-					
-				frames++;
-				if(frames == totalFrames) {
-					this.cancel();
-					chapIcon.refreshLocation();
-					boardPanel.setOffsets(0, 0);
-					boardPanel.updateChapPos();
-				}
-			}
+				}, 14, 14);
 			
-		}, 28, 28);
-		
-		
+			
+			}
 		}
 		
 		boardPanel.revalidate();
@@ -200,6 +207,7 @@ public class BoardRender {
 		chapIcon.setScale(scale);
 		boardPanel.setScale(scale);
 		boardPanel.setBounds(0,0, scaledTile * (boardWidth - 2), scaledTile * (boardWidth - 2));
+		basePane.setPreferredSize(new Dimension(scaledTile * 9,scaledTile * 9));
 		return scaledTile * (boardWidth - 2);
 	}
 	
